@@ -27,6 +27,7 @@ public interface IDCRDetailView : IView
     void SetAttachments(IEnumerable<AttachmentDto> attachments);
     void SetAvailableActions(IEnumerable<ApprovalAction> actions);
     void SetMode(DetailMode mode);
+    void SetSubmitVisible(bool visible);
 
     // ── Events ────────────────────────────────────────────────────────────────
     event EventHandler SaveRequested;
@@ -82,6 +83,7 @@ public class DCRDetailPresenter
         _view.SetWorkflowHistory([]);
         _view.SetAttachments([]);
         _view.SetAvailableActions([]);
+        _view.SetSubmitVisible(false);
     }
 
     public async Task InitViewAsync(int dcrId)
@@ -89,6 +91,7 @@ public class DCRDetailPresenter
         _mode = DetailMode.View;
         await LoadDcrAsync(dcrId);
         _view.SetMode(DetailMode.View);
+        _view.SetSubmitVisible(CanSubmitCurrentDcr());
     }
 
     public async Task InitEditAsync(int dcrId)
@@ -96,6 +99,7 @@ public class DCRDetailPresenter
         _mode = DetailMode.Edit;
         await LoadDcrAsync(dcrId);
         _view.SetMode(DetailMode.Edit);
+        _view.SetSubmitVisible(false);
     }
 
     // ─── Private handlers ─────────────────────────────────────────────────────
@@ -155,6 +159,7 @@ public class DCRDetailPresenter
             // Switch to view mode after save
             _mode = DetailMode.View;
             _view.SetMode(DetailMode.View);
+            _view.SetSubmitVisible(CanSubmitCurrentDcr());
             RefreshWorkflowButtons();
             DataChanged?.Invoke(this, EventArgs.Empty);
         }
@@ -206,6 +211,8 @@ public class DCRDetailPresenter
 
             _view.ShowInfo("DCR submitted for review successfully.", "Submitted");
             await LoadDcrAsync(_currentDcr.Id);
+            _view.SetMode(DetailMode.View);
+            _view.SetSubmitVisible(CanSubmitCurrentDcr());
             DataChanged?.Invoke(this, EventArgs.Empty);
         }
         finally
@@ -342,8 +349,6 @@ public class DCRDetailPresenter
         if (status == DCRStatus.Draft || status == DCRStatus.Rejected)
         {
             if (role is UserRole.Engineer or UserRole.Admin)
-                candidates.Add(ApprovalAction.Submit);
-            if (role is UserRole.Engineer or UserRole.Admin)
                 candidates.Add(ApprovalAction.Cancel);
         }
         if (status == DCRStatus.PendingReview)
@@ -376,6 +381,15 @@ public class DCRDetailPresenter
         }
 
         return candidates;
+    }
+
+    private bool CanSubmitCurrentDcr()
+    {
+        if (_currentDcr is null)
+            return false;
+
+        return SessionContext.Instance.CanCreateDCR
+            && (_currentDcr.Status == DCRStatus.Draft || _currentDcr.Status == DCRStatus.Rejected);
     }
 
     private bool ValidateFields()

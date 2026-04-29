@@ -13,7 +13,7 @@ static class Program
     public static IServiceProvider ServiceProvider { get; private set; } = null!;
 
     [STAThread]
-    static async Task Main()
+    static void Main()
     {
         ApplicationConfiguration.Initialize();
 
@@ -41,7 +41,7 @@ static class Program
         using (var scope = ServiceProvider.CreateScope())
         {
             var seeder = scope.ServiceProvider.GetRequiredService<DbSeeder>();
-            await seeder.SeedAsync();
+            seeder.SeedAsync().GetAwaiter().GetResult();
         }
 
         var loginForm = ServiceProvider.GetRequiredService<LoginForm>();

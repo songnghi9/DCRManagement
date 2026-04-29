@@ -56,7 +56,7 @@ public partial class MainForm : BaseForm, IMainView
         WireEvents();
 
         // Default view: DCR List
-        ShowDCRListRequested?.Invoke(this, EventArgs.Empty);
+        _ = ShowDCRListAsync();
     }
 
     // ─── Private ──────────────────────────────────────────────────────────────
@@ -80,14 +80,12 @@ public partial class MainForm : BaseForm, IMainView
         Close();
     }
 
-    private void OnNavigateRequested(object? sender, string destination)
+    private async void OnNavigateRequested(object? sender, string destination)
     {
         switch (destination)
         {
             case "DCRList":
-                var listForm = Program.ServiceProvider.GetRequiredService<DCRListForm>();
-                NavigateTo(listForm);
-                _ = listForm.LoadAsync();
+                await ShowDCRListAsync();
                 break;
 
             case "UserManagement":
@@ -99,7 +97,40 @@ public partial class MainForm : BaseForm, IMainView
 
     private void OpenCreateDCR()
     {
-        // Phase 5 — DCRDetailForm
-        ShowInfo("Create DCR form coming in Phase 5.", "Coming Soon");
+        var detailForm = Program.ServiceProvider.GetRequiredService<DCRDetailForm>();
+        detailForm.CloseRequested += async (s, e) => await ShowDCRListAsync();
+
+        NavigateTo(detailForm);
+        detailForm.OpenCreate();
+    }
+
+    private async Task ShowDCRListAsync()
+    {
+        var listForm = Program.ServiceProvider.GetRequiredService<DCRListForm>();
+
+        listForm.CreateRequested += (s, e) => OpenCreateDCR();
+        listForm.ViewRequested += async (s, id) => await OpenViewDCRAsync(id);
+        listForm.EditRequested += async (s, id) => await OpenEditDCRAsync(id);
+
+        NavigateTo(listForm);
+        await listForm.LoadAsync();
+    }
+
+    private async Task OpenViewDCRAsync(int dcrId)
+    {
+        var detailForm = Program.ServiceProvider.GetRequiredService<DCRDetailForm>();
+        detailForm.CloseRequested += async (s, e) => await ShowDCRListAsync();
+
+        NavigateTo(detailForm);
+        await detailForm.OpenViewAsync(dcrId);
+    }
+
+    private async Task OpenEditDCRAsync(int dcrId)
+    {
+        var detailForm = Program.ServiceProvider.GetRequiredService<DCRDetailForm>();
+        detailForm.CloseRequested += async (s, e) => await ShowDCRListAsync();
+
+        NavigateTo(detailForm);
+        await detailForm.OpenEditAsync(dcrId);
     }
 }

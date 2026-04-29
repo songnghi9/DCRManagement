@@ -4,6 +4,7 @@ using DCRManagement.Domain.Enums;
 using DCRManagement.UI.Common;
 using DCRManagement.UI.Presenters;
 using Microsoft.Extensions.Logging;
+using System.Drawing;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace DCRManagement.UI.Forms;
@@ -12,6 +13,10 @@ public partial class DCRDetailForm : BaseUserControl, IDCRDetailView
 {
     private readonly DCRDetailPresenter _presenter;
     private bool _hasUnsavedChanges;
+
+    // Image gallery panels for multiple images support
+    private ImageGalleryPanel _galleryBefore;
+    private ImageGalleryPanel _galleryAfter;
 
     public event EventHandler? DataChanged;
 
@@ -88,6 +93,17 @@ public partial class DCRDetailForm : BaseUserControl, IDCRDetailView
         _presenter.DataChanged += (s, e) => DataChanged?.Invoke(this, EventArgs.Empty);
 
         WireEvents();
+    }
+
+    protected override void OnLoad(EventArgs e)
+    {
+        base.OnLoad(e);
+
+        // Set SplitterDistance after layout is complete to avoid constraint violations
+        if (_splitMain.Width > _splitMain.Panel1MinSize + _splitMain.Panel2MinSize)
+        {
+            _splitMain.SplitterDistance = 580;
+        }
     }
 
     // ─── Public init (called by MainForm/DCRListForm) ─────────────────────────
@@ -169,7 +185,6 @@ public partial class DCRDetailForm : BaseUserControl, IDCRDetailView
         {
             bool isEditing = mode is DetailMode.Create or DetailMode.Edit;
             bool isView = mode == DetailMode.View;
-            bool isCreate = mode == DetailMode.Create;
 
             // Field editability
             _txtTitle.ReadOnly = isView;
@@ -180,6 +195,10 @@ public partial class DCRDetailForm : BaseUserControl, IDCRDetailView
             _cmbPriority.Enabled = isEditing;
             _dtpTargetDate.Enabled = isEditing;
             _chkNoTargetDate.Enabled = isEditing;
+
+            // Image gallery editability
+            _galleryBefore?.SetReadOnly(isView);
+            _galleryAfter?.SetReadOnly(isView);
 
             // Background tint for read-only fields
             var bg = isView
@@ -195,11 +214,17 @@ public partial class DCRDetailForm : BaseUserControl, IDCRDetailView
             _btnSave.Visible = isEditing;
             _btnEdit.Visible = isView &&
                 SessionContext.Instance.CanCreateDCR;
-            _btnSubmit.Visible = isView &&
-                SessionContext.Instance.CanCreateDCR &&
-                !isCreate;
+            _btnSubmit.Visible = false;
 
             _hasUnsavedChanges = false;
+        });
+    }
+
+    public void SetSubmitVisible(bool visible)
+    {
+        InvokeIfRequired(() =>
+        {
+            _btnSubmit.Visible = visible;
         });
     }
 
@@ -232,6 +257,17 @@ public partial class DCRDetailForm : BaseUserControl, IDCRDetailView
                 RemoveAttachmentRequested?.Invoke(this, att.Id);
         };
 
+        // Initialize image galleries
+        _galleryBefore = new ImageGalleryPanel();
+        _galleryAfter = new ImageGalleryPanel();
+
+        // Replace old picture boxes with galleries in layout
+        ReplaceBeforeAfterControls();
+
+        // Gallery event handlers
+        _galleryBefore.ImagesChanged += (s, e) => MarkDirty(null, EventArgs.Empty);
+        _galleryAfter.ImagesChanged += (s, e) => MarkDirty(null, EventArgs.Empty);
+
         // Dirty tracking
         _txtTitle.TextChanged += MarkDirty;
         _rtbDescription.TextChanged += MarkDirty;
@@ -243,6 +279,28 @@ public partial class DCRDetailForm : BaseUserControl, IDCRDetailView
         _chkNoTargetDate.CheckedChanged += (s, e) =>
             _dtpTargetDate.Enabled = !_chkNoTargetDate.Checked;
     }
+
+    /// <summary>Replace old PictureBox controls with ImageGalleryPanel for multiple image support.</summary>
+    private void ReplaceBeforeAfterControls()
+    {
+        if (_pnlBeforeImage == null) return;
+
+        _pnlBeforeImage.Controls.Clear();
+        _galleryBefore.Dock = DockStyle.Fill;
+        _pnlBeforeImage.Controls.Add(_galleryBefore);
+
+        if (_pnlAfterImage == null) return;
+
+        _pnlAfterImage.Controls.Clear();
+        _galleryAfter.Dock = DockStyle.Fill;
+        _pnlAfterImage.Controls.Add(_galleryAfter);
+    }
+
+    /// <summary>Get all "Before" images as a list of file paths.</summary>
+    public IEnumerable<GalleryImage> GetBeforeImages() => _galleryBefore?.GetImages() ?? [];
+
+    /// <summary>Get all "After" images as a list of file paths.</summary>
+    public IEnumerable<GalleryImage> GetAfterImages() => _galleryAfter?.GetImages() ?? [];
 
     private void MarkDirty(object? sender, EventArgs e) =>
         _hasUnsavedChanges = true;

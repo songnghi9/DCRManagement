@@ -35,9 +35,6 @@ public partial class DCRListForm : BaseUserControl, IDCRListView
         ApplyStyling();
 
         _presenter = new DCRListPresenter(this, dcrService, logger);
-        _presenter.OpenCreateRequested += (s, e) => CreateRequested?.Invoke(this, EventArgs.Empty);
-        _presenter.OpenViewRequested += (s, id) => ViewRequested?.Invoke(this, id);
-        _presenter.OpenEditRequested += (s, id) => EditRequested?.Invoke(this, id);
 
         WireEvents();
     }

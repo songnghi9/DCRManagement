@@ -37,10 +37,6 @@ public class DCRListPresenter
     private List<DCRDto> _allDcrs = [];
     private List<DCRDto> _filtered = [];
 
-    public event EventHandler<int>? OpenViewRequested;   // dcrId, view mode
-    public event EventHandler<int>? OpenEditRequested;   // dcrId, edit mode
-    public event EventHandler? OpenCreateRequested;
-
     public DCRListPresenter(
         IDCRListView view,
         DCRService dcrService,
@@ -52,9 +48,6 @@ public class DCRListPresenter
 
         _view.SearchRequested += async (s, e) => await ApplyFilterAsync();
         _view.FilterChanged += async (s, e) => { _view.CurrentPage = 1; await ApplyFilterAsync(); };
-        _view.CreateRequested += (s, e) => OpenCreateRequested?.Invoke(this, EventArgs.Empty);
-        _view.ViewRequested += (s, e) => OpenViewRequested?.Invoke(this, e);
-        _view.EditRequested += (s, e) => OpenEditRequested?.Invoke(this, e);
         _view.PageChanged += async (s, e) => await RenderCurrentPageAsync();
 
         var session = SessionContext.Instance;
@@ -87,21 +80,26 @@ public class DCRListPresenter
 
     private async Task ApplyFilterAsync()
     {
+        // Capture UI state on the UI thread before entering the background thread
+        var searchText = _view.SearchText;
+        var selectedStatus = _view.SelectedStatus;
+        var selectedPriority = _view.SelectedPriority;
+
         await Task.Run(() =>
         {
             _filtered = _allDcrs
                 .Where(d =>
                 {
-                    var matchSearch = string.IsNullOrWhiteSpace(_view.SearchText)
-                        || d.DCRNumber.Contains(_view.SearchText, StringComparison.OrdinalIgnoreCase)
-                        || d.Title.Contains(_view.SearchText, StringComparison.OrdinalIgnoreCase)
-                        || d.CreatedBy.Contains(_view.SearchText, StringComparison.OrdinalIgnoreCase);
+                    var matchSearch = string.IsNullOrWhiteSpace(searchText)
+                        || d.DCRNumber.Contains(searchText, StringComparison.OrdinalIgnoreCase)
+                        || d.Title.Contains(searchText, StringComparison.OrdinalIgnoreCase)
+                        || d.CreatedBy.Contains(searchText, StringComparison.OrdinalIgnoreCase);
 
-                    var matchStatus = _view.SelectedStatus == "All"
-                        || d.Status.ToString() == _view.SelectedStatus;
+                    var matchStatus = selectedStatus == "All"
+                        || d.Status.ToString() == selectedStatus;
 
-                    var matchPriority = _view.SelectedPriority == "All"
-                        || d.Priority == _view.SelectedPriority;
+                    var matchPriority = selectedPriority == "All"
+                        || d.Priority == selectedPriority;
 
                     return matchSearch && matchStatus && matchPriority;
                 })
