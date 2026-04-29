@@ -65,14 +65,8 @@ partial class DCRDetailForm
     private Label _lblImpactCaption;
     private Label _lblSuggestionCaption;
     private Label _lblDecisionCaption;
-    private Panel _pnlBeforeImage;
-    private Panel _pnlAfterImage;
-    private PictureBox _picBefore;
-    private PictureBox _picAfter;
-    private Button _btnInsertBefore;
-    private Button _btnClearBefore;
-    private Button _btnInsertAfter;
-    private Button _btnClearAfter;
+    private ImageGalleryControl _galleryBefore;
+    private ImageGalleryControl _galleryAfter;
     private ComboBox _cmbLeadTimeRisk;
     private ComboBox _cmbSafetyRisk;
     private ComboBox _cmbComplianceRisk;
@@ -141,14 +135,8 @@ partial class DCRDetailForm
         _lblImpactCaption = new Label();
         _lblSuggestionCaption = new Label();
         _lblDecisionCaption = new Label();
-        _pnlBeforeImage = new Panel();
-        _pnlAfterImage = new Panel();
-        _picBefore = new PictureBox();
-        _picAfter = new PictureBox();
-        _btnInsertBefore = new Button();
-        _btnClearBefore = new Button();
-        _btnInsertAfter = new Button();
-        _btnClearAfter = new Button();
+        _galleryBefore = new ImageGalleryControl();
+        _galleryAfter = new ImageGalleryControl();
         _cmbLeadTimeRisk = new ComboBox();
         _cmbSafetyRisk = new ComboBox();
         _cmbComplianceRisk = new ComboBox();
@@ -161,8 +149,6 @@ partial class DCRDetailForm
         _splitMain.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_gridHistory).BeginInit();
         ((System.ComponentModel.ISupportInitialize)_gridAttachments).BeginInit();
-        ((System.ComponentModel.ISupportInitialize)_picBefore).BeginInit();
-        ((System.ComponentModel.ISupportInitialize)_picAfter).BeginInit();
         SuspendLayout();
 
         // Form
@@ -280,8 +266,6 @@ partial class DCRDetailForm
         _splitMain.ResumeLayout(false);
         ((System.ComponentModel.ISupportInitialize)_gridHistory).EndInit();
         ((System.ComponentModel.ISupportInitialize)_gridAttachments).EndInit();
-        ((System.ComponentModel.ISupportInitialize)_picBefore).EndInit();
-        ((System.ComponentModel.ISupportInitialize)_picAfter).EndInit();
         ResumeLayout(false);
     }
 
@@ -412,60 +396,19 @@ partial class DCRDetailForm
         ConfigureSectionCaption(_lblBeforeCaption, "Before");
         ConfigureSectionCaption(_lblAfterCaption, "After");
 
-        // Build Before panel with image and buttons
-        _pnlBeforeImage.Dock = DockStyle.Fill;
-        _pnlBeforeImage.BorderStyle = BorderStyle.FixedSingle;
-        _pnlBeforeImage.BackColor = Color.FromArgb(250, 250, 250);
-        _pnlBeforeImage.Margin = new Padding(3);
+        // Configure galleries with drag-drop and multi-image support
+        _galleryBefore.Dock = DockStyle.Fill;
+        _galleryBefore.BorderStyle = BorderStyle.FixedSingle;
+        _galleryBefore.Margin = new Padding(3);
 
-        ConfigurePicturePlaceholder(_picBefore);
-        _picBefore.AllowDrop = true;
-
-        _btnInsertBefore.Text = "📁  Insert Image";
-        _btnInsertBefore.Size = new Size(120, 28);
-        _btnInsertBefore.Dock = DockStyle.Top;
-        _btnInsertBefore.Margin = new Padding(4);
-        ThemeManager.StyleSecondaryButton(_btnInsertBefore);
-
-        _btnClearBefore.Text = "🗑  Clear";
-        _btnClearBefore.Size = new Size(80, 28);
-        _btnClearBefore.Dock = DockStyle.Top;
-        _btnClearBefore.Margin = new Padding(4);
-        ThemeManager.StyleSecondaryButton(_btnClearBefore);
-
-        _pnlBeforeImage.Controls.Add(_picBefore);
-        _pnlBeforeImage.Controls.Add(_btnClearBefore);
-        _pnlBeforeImage.Controls.Add(_btnInsertBefore);
-
-        // Build After panel with image and buttons
-        _pnlAfterImage.Dock = DockStyle.Fill;
-        _pnlAfterImage.BorderStyle = BorderStyle.FixedSingle;
-        _pnlAfterImage.BackColor = Color.FromArgb(250, 250, 250);
-        _pnlAfterImage.Margin = new Padding(3);
-
-        ConfigurePicturePlaceholder(_picAfter);
-        _picAfter.AllowDrop = true;
-
-        _btnInsertAfter.Text = "📁  Insert Image";
-        _btnInsertAfter.Size = new Size(120, 28);
-        _btnInsertAfter.Dock = DockStyle.Top;
-        _btnInsertAfter.Margin = new Padding(4);
-        ThemeManager.StyleSecondaryButton(_btnInsertAfter);
-
-        _btnClearAfter.Text = "🗑  Clear";
-        _btnClearAfter.Size = new Size(80, 28);
-        _btnClearAfter.Dock = DockStyle.Top;
-        _btnClearAfter.Margin = new Padding(4);
-        ThemeManager.StyleSecondaryButton(_btnClearAfter);
-
-        _pnlAfterImage.Controls.Add(_picAfter);
-        _pnlAfterImage.Controls.Add(_btnClearAfter);
-        _pnlAfterImage.Controls.Add(_btnInsertAfter);
+        _galleryAfter.Dock = DockStyle.Fill;
+        _galleryAfter.BorderStyle = BorderStyle.FixedSingle;
+        _galleryAfter.Margin = new Padding(3);
 
         _layoutBeforeAfter.Controls.Add(_lblBeforeCaption, 0, 0);
         _layoutBeforeAfter.Controls.Add(_lblAfterCaption, 1, 0);
-        _layoutBeforeAfter.Controls.Add(_pnlBeforeImage, 0, 1);
-        _layoutBeforeAfter.Controls.Add(_pnlAfterImage, 1, 1);
+        _layoutBeforeAfter.Controls.Add(_galleryBefore, 0, 1);
+        _layoutBeforeAfter.Controls.Add(_galleryAfter, 1, 1);
     }
 
     private void BuildRiskArea()
