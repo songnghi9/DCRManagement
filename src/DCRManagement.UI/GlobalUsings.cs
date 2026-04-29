@@ -1,0 +1,10 @@
+﻿global using DCRManagement.Application.Common;
+global using DCRManagement.Application.DTOs;
+global using DCRManagement.Application.Services;
+global using DCRManagement.Domain.Enums;
+global using DCRManagement.Domain.Entities;
+global using DCRManagement.UI.Common;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Logging;
+global using System.Drawing;
+global using System.Windows.Forms;

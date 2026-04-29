@@ -32,7 +32,7 @@ public class UserService
             var user = new User
             {
                 Username = dto.Username.Trim().ToLower(),
-                PasswordHash = BCrypt.HashPassword(dto.Password),
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
                 FullName = dto.FullName.Trim(),
                 Email = dto.Email.Trim().ToLower(),
                 Role = dto.Role,
@@ -94,13 +94,13 @@ public class UserService
             if (user is null)
                 return Result.Failure("User not found.", "NOT_FOUND");
 
-            if (!BCrypt.Verify(currentPassword, user.PasswordHash))
+            if (!BCrypt.Net.BCrypt.Verify(currentPassword, user.PasswordHash))
                 return Result.Failure("Current password is incorrect.", "WRONG_PASSWORD");
 
             if (newPassword.Length < 8)
                 return Result.Failure("New password must be at least 8 characters.", "WEAK_PASSWORD");
 
-            user.PasswordHash = BCrypt.HashPassword(newPassword);
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
             user.UpdatedAt = DateTime.UtcNow;
 
             await _userRepository.UpdateAsync(user);

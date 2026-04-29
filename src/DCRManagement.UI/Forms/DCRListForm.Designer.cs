@@ -1,6 +1,4 @@
-﻿using System.Windows.Forms;
-
-namespace DCRManagement.UI.Forms;
+﻿namespace DCRManagement.UI.Forms;
 
 partial class DCRListForm
 {

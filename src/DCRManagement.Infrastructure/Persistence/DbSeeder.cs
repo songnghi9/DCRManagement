@@ -33,7 +33,7 @@ public class DbSeeder
         {
             new() {
                 Username = "admin",
-                PasswordHash = BCrypt.HashPassword("Admin@123"),
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
                 FullName = "System Administrator",
                 Email = "admin@company.com",
                 Role = UserRole.Admin,
@@ -43,7 +43,7 @@ public class DbSeeder
             },
             new() {
                 Username = "engineer01",
-                PasswordHash = BCrypt.HashPassword("Engineer@123"),
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Engineer@123"),
                 FullName = "Nguyen Van A",
                 Email = "engineer01@company.com",
                 Role = UserRole.Engineer,
@@ -54,7 +54,7 @@ public class DbSeeder
             },
             new() {
                 Username = "reviewer01",
-                PasswordHash = BCrypt.HashPassword("Reviewer@123"),
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Reviewer@123"),
                 FullName = "Tran Thi B",
                 Email = "reviewer01@company.com",
                 Role = UserRole.Reviewer,
@@ -65,7 +65,7 @@ public class DbSeeder
             },
             new() {
                 Username = "approver01",
-                PasswordHash = BCrypt.HashPassword("Approver@123"),
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Approver@123"),
                 FullName = "Le Van C",
                 Email = "approver01@company.com",
                 Role = UserRole.Approver,

@@ -30,7 +30,7 @@ public class AuthService
         {
             var user = await _userRepository.GetByUsernameAsync(username);
 
-            if (user is null || !BCrypt.Verify(password, user.PasswordHash))
+            if (user is null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
             {
                 _logger.LogWarning("Failed login attempt for username: {Username}", username);
                 return Result<UserDto>.Failure("Invalid username or password.", "INVALID_CREDENTIALS");

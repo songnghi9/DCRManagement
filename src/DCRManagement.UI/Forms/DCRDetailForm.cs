@@ -8,7 +8,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace DCRManagement.UI.Forms;
 
-public partial class DCRDetailForm : BaseForm, IDCRDetailView
+public partial class DCRDetailForm : BaseUserControl, IDCRDetailView
 {
     private readonly DCRDetailPresenter _presenter;
     private bool _hasUnsavedChanges;
@@ -219,7 +219,7 @@ public partial class DCRDetailForm : BaseForm, IDCRDetailView
         _btnSave.Click += (s, e) => SaveRequested?.Invoke(this, EventArgs.Empty);
         _btnEdit.Click += (s, e) => SetMode(DetailMode.Edit);
         _btnSubmit.Click += (s, e) => SubmitRequested?.Invoke(this, EventArgs.Empty);
-        _btnClose.Click += (s, e) => Close();
+        _btnClose.Click += (s, e) => CloseRequested?.Invoke(this, EventArgs.Empty);
 
         _btnAddAttachment.Click += (s, e) =>
             AddAttachmentRequested?.Invoke(this, EventArgs.Empty);
@@ -239,9 +239,6 @@ public partial class DCRDetailForm : BaseForm, IDCRDetailView
         _rtbReason.TextChanged += MarkDirty;
         _rtbImpactAnalysis.TextChanged += MarkDirty;
 
-        // Warn on unsaved close
-        FormClosing += OnFormClosing;
-
         // Toggle date picker
         _chkNoTargetDate.CheckedChanged += (s, e) =>
             _dtpTargetDate.Enabled = !_chkNoTargetDate.Checked;
@@ -249,15 +246,6 @@ public partial class DCRDetailForm : BaseForm, IDCRDetailView
 
     private void MarkDirty(object? sender, EventArgs e) =>
         _hasUnsavedChanges = true;
-
-    private void OnFormClosing(object? sender, FormClosingEventArgs e)
-    {
-        if (_hasUnsavedChanges &&
-            !Confirm("You have unsaved changes. Close anyway?", "Unsaved Changes"))
-        {
-            e.Cancel = true;
-        }
-    }
 
     private Button CreateWorkflowButton(ApprovalAction action)
     {

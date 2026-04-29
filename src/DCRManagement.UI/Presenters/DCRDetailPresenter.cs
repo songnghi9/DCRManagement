@@ -3,8 +3,8 @@ using DCRManagement.Application.DTOs;
 using DCRManagement.Application.Services;
 using DCRManagement.Domain.Enums;
 using DCRManagement.UI.Common;
+using DCRManagement.UI.Forms;
 using Microsoft.Extensions.Logging;
-using System.Windows.Forms;
 
 namespace DCRManagement.UI.Presenters;
 
@@ -395,4 +395,20 @@ public class DCRDetailPresenter
             _view.ShowError("Description is required.", "Validation");
             return false;
         }
-        if (_view.TargetDate.HasValue && _view.TargetDate.Value < DateTi
+        if (_view.TargetDate.HasValue && _view.TargetDate.Value < DateTime.Today)
+        {
+            _view.ShowError("Target completion date cannot be in the past.", "Validation");
+            return false;
+        }
+        return true;
+    }
+
+    private static string? PromptComment(string prompt, bool required)
+    {
+        using var frm = new CommentDialog(prompt, required);
+        return frm.ShowDialog() == DialogResult.OK ? frm.Comment : null;
+    }
+
+    private static string? NullIfEmpty(string? s) =>
+        string.IsNullOrWhiteSpace(s) ? null : s;
+}

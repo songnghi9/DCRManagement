@@ -8,9 +8,9 @@ namespace DCRManagement.UI.Forms;
 
 /// <summary>
 /// DCR list view — implements IDCRListView, delegates all logic to DCRListPresenter.
-/// Form only handles control events and data binding; zero business logic here.
+/// UserControl only handles control events and data binding; zero business logic here.
 /// </summary>
-public partial class DCRListForm : BaseForm, IDCRListView
+public partial class DCRListForm : BaseUserControl, IDCRListView
 {
     private readonly DCRListPresenter _presenter;
     private const int DEFAULT_PAGE_SIZE = 20;

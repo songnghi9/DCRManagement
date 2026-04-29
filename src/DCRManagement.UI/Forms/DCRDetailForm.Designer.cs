@@ -1,6 +1,4 @@
-﻿using static System.Net.Mime.MediaTypeNames;
-
-namespace DCRManagement.UI.Forms;
+﻿namespace DCRManagement.UI.Forms;
 
 partial class DCRDetailForm
 {
@@ -221,4 +219,125 @@ partial class DCRDetailForm
 
         _pnlFields.Controls.AddRange([
             _lblTitle, _txtTitle,
-            _lblDescription, _rtbDescri
+            _lblDescription, _rtbDescription,
+            _lblAffectedParts, _rtbAffectedParts,
+            _lblReason, _rtbReason,
+            _lblImpactAnalysis, _rtbImpactAnalysis,
+            _lblPriority, _cmbPriority,
+            _lblTargetDate, _dtpTargetDate, _chkNoTargetDate
+        ]);
+
+        _splitMain.Panel1.Controls.Add(_pnlFields);
+
+        // ── Right pane: TabControl ─────────────────────────────────────────────
+        _tabRight.Dock = DockStyle.Fill;
+        _tabRight.Font = ThemeManager.DefaultFont;
+
+        // History tab
+        _tabHistory.Text = "📋  Workflow History";
+        _tabHistory.BackColor = Color.White;
+        BuildHistoryGrid();
+        _tabHistory.Controls.Add(_gridHistory);
+
+        // Attachments tab
+        _tabAttachments.Text = "📎  Attachments";
+        _tabAttachments.BackColor = Color.White;
+
+        _pnlAttachmentToolbar.Dock = DockStyle.Top;
+        _pnlAttachmentToolbar.Height = 44;
+        _pnlAttachmentToolbar.Padding = new Padding(8, 6, 8, 6);
+        _pnlAttachmentToolbar.BackColor = Color.White;
+        _btnAddAttachment.Text = "➕  Add File";
+        _btnAddAttachment.Size = new Size(110, 30);
+        _btnAddAttachment.Location = new Point(8, 7);
+        _pnlAttachmentToolbar.Controls.Add(_btnAddAttachment);
+
+        BuildAttachmentGrid();
+        _tabAttachments.Controls.AddRange([_pnlAttachmentToolbar, _gridAttachments]);
+
+        _tabRight.TabPages.AddRange([_tabHistory, _tabAttachments]);
+        _splitMain.Panel2.Controls.Add(_tabRight);
+
+        // ── Root assembly ─────────────────────────────────────────────────────
+        Controls.Add(_splitMain);
+        Controls.Add(_pnlActions);
+        Controls.Add(_pnlHeader);
+
+        ResumeLayout(false);
+        PerformLayout();
+    }
+
+    // ── Layout helpers ────────────────────────────────────────────────────────
+
+    private void LayoutField(Label lbl, string text, int y)
+    {
+        lbl.Text = text;
+        lbl.Font = new Font("Segoe UI", 7.5f, FontStyle.Bold);
+        lbl.ForeColor = ThemeManager.TextSecondary;
+        lbl.AutoSize = true;
+        lbl.Location = new Point(0, y);
+    }
+
+    private void LayoutRtb(RichTextBox rtb, ref int y, int height)
+    {
+        rtb.Location = new Point(0, y);
+        rtb.Size = new Size(530, height);
+        rtb.Font = ThemeManager.DefaultFont;
+        rtb.BorderStyle = BorderStyle.FixedSingle;
+        rtb.ScrollBars = RichTextBoxScrollBars.Vertical;
+        y += height + 16;
+    }
+
+    private void BuildHistoryGrid()
+    {
+        _gridHistory.Dock = DockStyle.Fill;
+        ThemeManager.StyleDataGrid(_gridHistory);
+        _gridHistory.AutoGenerateColumns = false;
+        _gridHistory.Columns.AddRange(
+            new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Date",
+                DataPropertyName = "ActionDate",
+                Width = 110,
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yy HH:mm" }
+            },
+            new DataGridViewTextBoxColumn { HeaderText = "User", DataPropertyName = "ActorName", Width = 130 },
+            new DataGridViewTextBoxColumn { HeaderText = "Action", DataPropertyName = "ActionDisplay", Width = 160 },
+            new DataGridViewTextBoxColumn { HeaderText = "→ Status", DataPropertyName = "ToStatus", Width = 130 },
+            new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Comment",
+                DataPropertyName = "Comment",
+                FillWeight = 100,
+                DefaultCellStyle = new DataGridViewCellStyle { WrapMode = DataGridViewTriState.True }
+            }
+        );
+        _gridHistory.RowTemplate.Height = 40;
+    }
+
+    private void BuildAttachmentGrid()
+    {
+        _gridAttachments.Dock = DockStyle.Fill;
+        ThemeManager.StyleDataGrid(_gridAttachments);
+        _gridAttachments.AutoGenerateColumns = false;
+        _gridAttachments.Columns.AddRange(
+            new DataGridViewTextBoxColumn { HeaderText = "File Name", DataPropertyName = "FileName", FillWeight = 60 },
+            new DataGridViewTextBoxColumn { HeaderText = "Size", DataPropertyName = "FileSizeDisplay", Width = 80 },
+            new DataGridViewTextBoxColumn { HeaderText = "Uploaded By", DataPropertyName = "UploadedBy", Width = 130 },
+            new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Date",
+                DataPropertyName = "UploadedAt",
+                Width = 110,
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy" }
+            },
+            new DataGridViewButtonColumn
+            {
+                HeaderText = "",
+                Text = "🗑 Remove",
+                UseColumnTextForButtonValue = true,
+                Width = 90
+            }
+        );
+    }
+}

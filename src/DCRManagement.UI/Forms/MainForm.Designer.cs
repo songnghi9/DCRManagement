@@ -1,7 +1,4 @@
-﻿using System.Windows.Forms;
-using static System.Net.Mime.MediaTypeNames;
-
-namespace DCRManagement.UI.Forms;
+﻿namespace DCRManagement.UI.Forms;
 
 partial class MainForm
 {
