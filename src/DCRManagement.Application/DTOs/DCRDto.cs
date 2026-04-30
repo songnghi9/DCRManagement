@@ -46,7 +46,9 @@ public record CreateDCRDto(
     string? Reason,
     string? ImpactAnalysis,
     string? Priority,
-    DateTime? TargetCompletionDate
+    DateTime? TargetCompletionDate,
+    IList<System.Drawing.Image>? BeforeImages = null,
+    IList<System.Drawing.Image>? AfterImages  = null
 );
 
 public record UpdateDCRDto(
@@ -57,7 +59,9 @@ public record UpdateDCRDto(
     string? Reason,
     string? ImpactAnalysis,
     string? Priority,
-    DateTime? TargetCompletionDate
+    DateTime? TargetCompletionDate,
+    IList<System.Drawing.Image>? BeforeImages = null,
+    IList<System.Drawing.Image>? AfterImages  = null
 );
 
 public record SubmitDCRDto(

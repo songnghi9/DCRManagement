@@ -308,34 +308,37 @@ public partial class DCRDetailForm : BaseUserControl, IDCRDetailView
 
     // ─── Image gallery methods ───────────────────────────────────────────────
 
-    /// <summary>
-    /// Get all Before images from the gallery
-    /// </summary>
     public List<System.Drawing.Image> GetBeforeImages() => _galleryBefore.GetImages();
+    public List<System.Drawing.Image> GetAfterImages()  => _galleryAfter.GetImages();
 
-    /// <summary>
-    /// Get all After images from the gallery
-    /// </summary>
-    public List<System.Drawing.Image> GetAfterImages() => _galleryAfter.GetImages();
+    public void SetBeforeImages(IEnumerable<System.Drawing.Image> images)
+    {
+        InvokeIfRequired(() =>
+        {
+            _galleryBefore.ClearImages();
+            foreach (var img in images) _galleryBefore.AddImage(img);
+        });
+    }
 
-    /// <summary>
-    /// Clear all Before images
-    /// </summary>
+    public void SetAfterImages(IEnumerable<System.Drawing.Image> images)
+    {
+        InvokeIfRequired(() =>
+        {
+            _galleryAfter.ClearImages();
+            foreach (var img in images) _galleryAfter.AddImage(img);
+        });
+    }
+
+    /// <summary>Clear all Before images</summary>
     public void ClearBeforeImages() => _galleryBefore.ClearImages();
 
-    /// <summary>
-    /// Clear all After images
-    /// </summary>
+    /// <summary>Clear all After images</summary>
     public void ClearAfterImages() => _galleryAfter.ClearImages();
 
-    /// <summary>
-    /// Add an image to the Before gallery
-    /// </summary>
+    /// <summary>Add an image to the Before gallery (used for programmatic loading)</summary>
     public void AddBeforeImage(System.Drawing.Image image) => _galleryBefore.AddImage(image);
 
-    /// <summary>
-    /// Add an image to the After gallery
-    /// </summary>
+    /// <summary>Add an image to the After gallery (used for programmatic loading)</summary>
     public void AddAfterImage(System.Drawing.Image image) => _galleryAfter.AddImage(image);
 }
 

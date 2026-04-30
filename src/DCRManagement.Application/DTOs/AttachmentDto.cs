@@ -8,7 +8,9 @@ public record AttachmentDto(
     long FileSizeBytes,
     string ContentType,
     string UploadedBy,
-    DateTime UploadedAt
+    DateTime UploadedAt,
+    string? ImageType,      // "Before" | "After" | null (regular file attachment)
+    int? DisplayOrder       // 0-based order within gallery; null for regular attachments
 )
 {
     public string FileSizeDisplay => FileSizeBytes switch
@@ -17,4 +19,7 @@ public record AttachmentDto(
         < 1024 * 1024 => $"{FileSizeBytes / 1024.0:F1} KB",
         _ => $"{FileSizeBytes / (1024.0 * 1024):F1} MB"
     };
+
+    /// <summary>True when this attachment is a Before/After gallery image.</summary>
+    public bool IsGalleryImage => ImageType is "Before" or "After";
 }

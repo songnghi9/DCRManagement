@@ -1,15 +1,18 @@
-﻿using DCRManagement.Domain.Entities;
+﻿using DCRManagement.Application.Common;
+using DCRManagement.Domain.Entities;
 using DCRManagement.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Drawing.Imaging;
 
 namespace DCRManagement.Infrastructure.Services;
 
-public class AttachmentService
+public class AttachmentService : IGalleryImageService
 {
     private readonly IRepository<Attachment> _attachmentRepository;
     private readonly ILogger<AttachmentService> _logger;
     private readonly string _storageBasePath;
+    private readonly IConfiguration _configuration;
 
     private const long MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024; // 50 MB
     private static readonly string[] ALLOWED_EXTENSIONS =
@@ -29,7 +32,7 @@ public class AttachmentService
         Directory.CreateDirectory(_storageBasePath);
     }
 
-    private readonly IConfiguration _configuration;
+    // ── Regular file attachments ──────────────────────────────────────────────
 
     /// <summary>
     /// Saves a file to disk and records metadata in the database.
@@ -53,7 +56,6 @@ public class AttachmentService
             return null;
         }
 
-        // Use GUID filename on disk to prevent path traversal & collisions
         var storedFileName = $"{Guid.NewGuid()}{extension}";
         var destPath = Path.Combine(_storageBasePath, storedFileName);
 
@@ -61,14 +63,15 @@ public class AttachmentService
 
         var attachment = new Attachment
         {
-            DCRId = dcrId,
-            FileName = fileInfo.Name,
+            DCRId          = dcrId,
+            FileName       = fileInfo.Name,
             StoredFileName = storedFileName,
-            FilePath = destPath,
-            FileSizeBytes = fileInfo.Length,
-            ContentType = GetContentType(extension),
-            CreatedById = uploadedById,
-            CreatedAt = DateTime.UtcNow
+            FilePath       = destPath,
+            FileSizeBytes  = fileInfo.Length,
+            ContentType    = GetContentType(extension),
+            CreatedById    = uploadedById,
+            CreatedAt      = DateTime.UtcNow
+            // ImageType and DisplayOrder remain null → regular attachment
         };
 
         return await _attachmentRepository.AddAsync(attachment);
@@ -85,14 +88,85 @@ public class AttachmentService
         await _attachmentRepository.DeleteAsync(attachmentId);
     }
 
+    // ── Gallery image methods ─────────────────────────────────────────────────
+
+    /// <summary>
+    /// Replaces all gallery images of a given type (Before/After) for a DCR atomically:
+    /// deletes old files + DB records, then saves new images in display order.
+    /// Call inside the same unit-of-work as DCR save to keep consistency.
+    /// </summary>
+    public async Task ReplaceGalleryImagesAsync(
+        int dcrId,
+        IList<System.Drawing.Image> images,
+        string imageType,       // "Before" | "After"
+        int uploadedById)
+    {
+        // 1. Delete existing gallery images of this type
+        var existing = (await _attachmentRepository.FindAsync(
+            a => a.DCRId == dcrId && a.ImageType == imageType))
+            .ToList();
+
+        foreach (var old in existing)
+        {
+            try { if (File.Exists(old.FilePath)) File.Delete(old.FilePath); }
+            catch (Exception ex)
+            { _logger.LogWarning(ex, "Could not delete old gallery file {Path}", old.FilePath); }
+
+            await _attachmentRepository.DeleteAsync(old.Id);
+        }
+
+        // 2. Save new images in order
+        for (int i = 0; i < images.Count; i++)
+            await SaveGalleryImageAsync(dcrId, images[i], imageType, i, uploadedById);
+
+        _logger.LogInformation(
+            "Replaced {Count} {Type} images for DCR {DcrId}", images.Count, imageType, dcrId);
+    }
+
+    /// <summary>
+    /// Saves a single in-memory image as PNG to disk and records it in the database.
+    /// </summary>
+    private async Task<Attachment> SaveGalleryImageAsync(
+        int dcrId,
+        System.Drawing.Image image,
+        string imageType,
+        int displayOrder,
+        int uploadedById)
+    {
+        var storedFileName = $"{Guid.NewGuid()}.png";
+        var destPath = Path.Combine(_storageBasePath, storedFileName);
+
+        // Save as PNG — lossless, no file-handle lock after Save()
+        image.Save(destPath, ImageFormat.Png);
+        var fileInfo = new FileInfo(destPath);
+
+        var attachment = new Attachment
+        {
+            DCRId          = dcrId,
+            FileName       = $"{imageType}_{displayOrder + 1}.png",
+            StoredFileName = storedFileName,
+            FilePath       = destPath,
+            FileSizeBytes  = fileInfo.Length,
+            ContentType    = "image/png",
+            ImageType      = imageType,
+            DisplayOrder   = displayOrder,
+            CreatedById    = uploadedById,
+            CreatedAt      = DateTime.UtcNow
+        };
+
+        return await _attachmentRepository.AddAsync(attachment);
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
     private static string GetContentType(string extension) => extension switch
     {
-        ".pdf" => "application/pdf",
+        ".pdf"           => "application/pdf",
         ".doc" or ".docx" => "application/msword",
         ".xls" or ".xlsx" => "application/vnd.ms-excel",
-        ".png" => "image/png",
+        ".png"           => "image/png",
         ".jpg" or ".jpeg" => "image/jpeg",
-        ".zip" => "application/zip",
-        _ => "application/octet-stream"
+        ".zip"           => "application/zip",
+        _                => "application/octet-stream"
     };
 }

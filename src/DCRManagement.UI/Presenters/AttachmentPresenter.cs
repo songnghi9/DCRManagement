@@ -95,7 +95,9 @@ public class AttachmentPresenter
                 attachment.FileSizeBytes,
                 attachment.ContentType,
                 SessionContext.Instance.FullName,
-                attachment.CreatedAt);
+                attachment.CreatedAt,
+                ImageType: null,
+                DisplayOrder: null);
 
             _attachments.Add(dto);
             Render();

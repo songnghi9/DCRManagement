@@ -29,6 +29,12 @@ public interface IDCRDetailView : IView
     void SetMode(DetailMode mode);
     void SetSubmitVisible(bool visible);
 
+    // ── Gallery images ────────────────────────────────────────────────────────
+    List<System.Drawing.Image> GetBeforeImages();
+    List<System.Drawing.Image> GetAfterImages();
+    void SetBeforeImages(IEnumerable<System.Drawing.Image> images);
+    void SetAfterImages(IEnumerable<System.Drawing.Image> images);
+
     // ── Events ────────────────────────────────────────────────────────────────
     event EventHandler SaveRequested;
     event EventHandler SubmitRequested;
@@ -122,7 +128,9 @@ public class DCRDetailPresenter
                     NullIfEmpty(_view.Reason),
                     NullIfEmpty(_view.ImpactAnalysis),
                     NullIfEmpty(_view.Priority),
-                    _view.TargetDate));
+                    _view.TargetDate,
+                    _view.GetBeforeImages(),
+                    _view.GetAfterImages()));
             }
             else
             {
@@ -134,7 +142,9 @@ public class DCRDetailPresenter
                     NullIfEmpty(_view.Reason),
                     NullIfEmpty(_view.ImpactAnalysis),
                     NullIfEmpty(_view.Priority),
-                    _view.TargetDate));
+                    _view.TargetDate,
+                    _view.GetBeforeImages(),
+                    _view.GetAfterImages()));
             }
 
             if (!result.IsSuccess)
@@ -306,13 +316,13 @@ public class DCRDetailPresenter
 
         _currentDcr = result.Value!;
 
-        _view.DCRTitle = _currentDcr.Title;
-        _view.Description = _currentDcr.Description;
+        _view.DCRTitle     = _currentDcr.Title;
+        _view.Description  = _currentDcr.Description;
         _view.AffectedParts = _currentDcr.AffectedParts ?? string.Empty;
-        _view.Reason = _currentDcr.Reason ?? string.Empty;
+        _view.Reason       = _currentDcr.Reason ?? string.Empty;
         _view.ImpactAnalysis = _currentDcr.ImpactAnalysis ?? string.Empty;
-        _view.Priority = _currentDcr.Priority ?? string.Empty;
-        _view.TargetDate = _currentDcr.TargetCompletionDate;
+        _view.Priority     = _currentDcr.Priority ?? string.Empty;
+        _view.TargetDate   = _currentDcr.TargetCompletionDate;
 
         _view.SetHeaderInfo(
             _currentDcr.DCRNumber,
@@ -320,9 +330,45 @@ public class DCRDetailPresenter
             _currentDcr.CreatedBy,
             _currentDcr.CreatedAt);
 
+        // Only show regular file attachments in the Attachments tab
         _view.SetWorkflowHistory(_currentDcr.History);
-        _view.SetAttachments(_currentDcr.Attachments);
+        _view.SetAttachments(_currentDcr.Attachments.Where(a => !a.IsGalleryImage));
+
+        // Load Before/After gallery images from file paths
+        _view.SetBeforeImages(LoadGalleryImages(_currentDcr.Attachments, "Before"));
+        _view.SetAfterImages(LoadGalleryImages(_currentDcr.Attachments, "After"));
+
         RefreshWorkflowButtons();
+    }
+
+    /// <summary>
+    /// Loads gallery images from disk for a given type, sorted by DisplayOrder.
+    /// Skips missing files gracefully.
+    /// </summary>
+    private static IEnumerable<System.Drawing.Image> LoadGalleryImages(
+        IEnumerable<AttachmentDto> attachments, string imageType)
+    {
+        return attachments
+            .Where(a => a.ImageType == imageType)
+            .OrderBy(a => a.DisplayOrder ?? 0)
+            .Select(a =>
+            {
+                try
+                {
+                    if (!File.Exists(a.FilePath)) return null;
+                    // Load then clone to release the file handle immediately
+                    using var tmp = System.Drawing.Image.FromFile(a.FilePath);
+                    var bmp = new System.Drawing.Bitmap(
+                        tmp.Width, tmp.Height,
+                        System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    using var g = System.Drawing.Graphics.FromImage(bmp);
+                    g.DrawImage(tmp, 0, 0, tmp.Width, tmp.Height);
+                    return (System.Drawing.Image)bmp;
+                }
+                catch { return null; }
+            })
+            .Where(img => img != null)
+            .Cast<System.Drawing.Image>();
     }
 
     private void RefreshWorkflowButtons()
