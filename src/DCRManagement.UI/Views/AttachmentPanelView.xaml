@@ -1,0 +1,22 @@
+<UserControl x:Class="DCRManagement.UI.Views.AttachmentPanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <DockPanel Margin="0,0,0,8">
+            <TextBlock Text="Attachments" FontWeight="SemiBold" VerticalAlignment="Center" DockPanel.Dock="Left" />
+            <Button Content="Add File" DockPanel.Dock="Right" />
+        </DockPanel>
+        <DataGrid x:Name="AttachmentGrid" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="File" Binding="{Binding FileName}" Width="*" />
+                <DataGridTextColumn Header="Size" Binding="{Binding FileSizeDisplay}" Width="120" />
+                <DataGridTextColumn Header="Uploaded by" Binding="{Binding UploadedBy}" Width="150" />
+                <DataGridTextColumn Header="Uploaded at" Binding="{Binding UploadedAt, StringFormat=dd/MM/yyyy HH:mm}" Width="150" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

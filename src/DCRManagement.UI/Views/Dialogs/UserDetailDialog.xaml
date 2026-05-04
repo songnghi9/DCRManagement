@@ -1,0 +1,68 @@
+<ui:FluentWindow
+    x:Class="DCRManagement.UI.Views.Dialogs.UserDetailDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="User Detail"
+    Width="520"
+    Height="420"
+    MinWidth="440"
+    WindowStartupLocation="CenterOwner"
+    ExtendsContentIntoTitleBar="True">
+
+    <Border Margin="24" Background="{StaticResource SurfaceBrush}">
+        <StackPanel>
+            <TextBlock Text="User information" FontSize="16" FontWeight="SemiBold"
+                       Margin="0,0,0,20" />
+
+            <!-- Full name -->
+            <TextBlock Text="Full name" Style="{StaticResource FieldLabelStyle}" />
+            <ui:TextBox x:Name="FullNameTextBox"
+                        PlaceholderText="Enter full name"
+                        Margin="0,0,0,14" />
+
+            <!-- Email -->
+            <TextBlock Text="Email" Style="{StaticResource FieldLabelStyle}" />
+            <ui:TextBox x:Name="EmailTextBox"
+                        PlaceholderText="Enter email address"
+                        Margin="0,0,0,14" />
+
+            <!-- Role + Department -->
+            <Grid Margin="0,0,0,14">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Margin="0,0,8,0">
+                    <TextBlock Text="Role" Style="{StaticResource FieldLabelStyle}" />
+                    <ComboBox x:Name="RoleComboBox" SelectedIndex="1">
+                        <ComboBoxItem Content="Admin" />
+                        <ComboBoxItem Content="Engineer" />
+                        <ComboBoxItem Content="Reviewer" />
+                        <ComboBoxItem Content="Approver" />
+                        <ComboBoxItem Content="ReadOnly" />
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="Department" Style="{StaticResource FieldLabelStyle}" />
+                    <ui:TextBox x:Name="DepartmentTextBox" PlaceholderText="e.g. Engineering" />
+                </StackPanel>
+            </Grid>
+
+            <!-- Active toggle -->
+            <ui:ToggleSwitch x:Name="IsActiveToggle"
+                             Content="Active account"
+                             IsChecked="True"
+                             Margin="0,0,0,24" />
+
+            <!-- Actions -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <ui:Button Content="Cancel" Click="CancelButton_Click"
+                           Margin="0,0,10,0" CornerRadius="8" />
+                <ui:Button Content="Save" Click="OkButton_Click"
+                           Appearance="Primary" CornerRadius="8"
+                           Icon="{ui:SymbolIcon Save24}" />
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</ui:FluentWindow>

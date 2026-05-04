@@ -395,7 +395,8 @@ public partial class DCRDetailView : UserControl
             var reviewers = (await _userService.GetReviewersAsync()).ToList();
             var approvers = (await _userService.GetApproversAsync()).ToList();
 
-            var dialog = new Dialogs.SubmitDCRDialog { Owner = Window.GetWindow(this) };
+            var dialog = new Dialogs.SubmitDCRDialog();
+            dialog.Owner = Window.GetWindow(this);
             dialog.BindUsers(reviewers, approvers);
 
             if (dialog.ShowDialog() != true) return;

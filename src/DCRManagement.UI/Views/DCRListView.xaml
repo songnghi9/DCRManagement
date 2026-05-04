@@ -1,0 +1,118 @@
+<UserControl
+    x:Class="DCRManagement.UI.Views.DCRListView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:local="clr-namespace:DCRManagement.UI.Common">
+
+    <Grid Background="{StaticResource AppBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Filter / action toolbar -->
+        <Border Margin="0,0,0,14" Padding="16,12"
+                Background="{StaticResource SurfaceBrush}"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="1" CornerRadius="10"
+                Effect="{StaticResource ShadowXs}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="260" />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Search -->
+                <ui:TextBox x:Name="SearchTextBox"
+                            Grid.Column="0"
+                            PlaceholderText="Search DCR number, title…"
+                            Icon="{ui:SymbolIcon Search24}"
+                            TextChanged="Filter_Changed"
+                            Margin="0,0,10,0" />
+
+                <!-- Status filter -->
+                <ComboBox x:Name="StatusComboBox"
+                          Grid.Column="1"
+                          SelectionChanged="Filter_Changed"
+                          SelectedIndex="0"
+                          Margin="0,0,10,0">
+                    <ComboBoxItem Content="All Status" />
+                    <ComboBoxItem Content="Draft" />
+                    <ComboBoxItem Content="Pending Review" />
+                    <ComboBoxItem Content="Under Review" />
+                    <ComboBoxItem Content="Pending Approval" />
+                    <ComboBoxItem Content="Approved" />
+                    <ComboBoxItem Content="Rejected" />
+                    <ComboBoxItem Content="Closed" />
+                </ComboBox>
+
+                <!-- Priority filter -->
+                <ComboBox x:Name="PriorityComboBox"
+                          Grid.Column="2"
+                          SelectionChanged="Filter_Changed"
+                          SelectedIndex="0">
+                    <ComboBoxItem Content="All Priority" />
+                    <ComboBoxItem Content="Low" />
+                    <ComboBoxItem Content="Medium" />
+                    <ComboBoxItem Content="High" />
+                    <ComboBoxItem Content="Critical" />
+                </ComboBox>
+
+                <!-- Action buttons -->
+                <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
+                    <ui:Button Content="Refresh" Click="RefreshButton_Click"
+                               Margin="0,0,8,0" CornerRadius="8"
+                               Icon="{ui:SymbolIcon ArrowSync24}" />
+                    <ui:Button Content="View" Click="ViewButton_Click"
+                               Margin="0,0,8,0" CornerRadius="8"
+                               Icon="{ui:SymbolIcon Eye24}" />
+                    <ui:Button Content="Edit" Click="EditButton_Click"
+                               Margin="0,0,8,0" CornerRadius="8"
+                               Icon="{ui:SymbolIcon Edit24}" />
+                    <ui:Button Content="New DCR" Click="CreateButton_Click"
+                               Appearance="Primary" CornerRadius="8"
+                               Icon="{ui:SymbolIcon Add24}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- DCR grid -->
+        <Border Grid.Row="1"
+                Background="{StaticResource SurfaceBrush}"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="1" CornerRadius="10"
+                ClipToBounds="True"
+                Effect="{StaticResource ShadowXs}">
+            <DataGrid x:Name="DcrGrid"
+                      AutoGenerateColumns="False"
+                      BorderThickness="0"
+                      CanUserAddRows="False"
+                      IsReadOnly="True"
+                      MouseDoubleClick="DcrGrid_MouseDoubleClick">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="DCR no."    Binding="{Binding DCRNumber}"  Width="130" />
+                    <DataGridTextColumn Header="Title"      Binding="{Binding Title}"       Width="*" />
+                    <DataGridTemplateColumn Header="Status" Width="160">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border CornerRadius="12" Padding="8,3"
+                                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                                        Background="{Binding StatusDisplay, Converter={x:Static local:StatusColorConverter.Instance}}">
+                                    <TextBlock Text="{Binding StatusDisplay}"
+                                               Foreground="White" FontSize="11" FontWeight="SemiBold" />
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Priority"   Binding="{Binding Priority}"   Width="100" />
+                    <DataGridTextColumn Header="Created by" Binding="{Binding CreatedBy}"  Width="150" />
+                    <DataGridTextColumn Header="Created at" Binding="{Binding CreatedAt, StringFormat=dd/MM/yyyy HH:mm}" Width="150" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</UserControl>

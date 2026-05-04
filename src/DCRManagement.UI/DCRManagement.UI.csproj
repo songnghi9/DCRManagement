@@ -3,9 +3,23 @@
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net8.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
-		<UseWindowsForms>true</UseWindowsForms>
+		<UseWPF>true</UseWPF>
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- WinForms legacy files — excluded from WPF build -->
+		<Compile Remove="Common\BaseForm.cs" />
+		<Compile Remove="Common\BaseUserControl.cs" />
+		<Compile Remove="Common\ControlExtensions.cs" />
+		<Compile Remove="Common\ThemeManager.cs" />
+		<Compile Remove="Forms\**\*.cs" />
+		<Compile Remove="Presenters\**\*.cs" />
+		<Compile Remove="Program.cs" />
+		<Compile Remove="GlobalUsings.cs" />
+		<EmbeddedResource Remove="Forms\**\*.resx" />
+		<None Remove="Forms\**\*.resx" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
@@ -13,6 +27,7 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+		<PackageReference Include="WPF-UI" Version="3.0.5" />
 	</ItemGroup>
 
 	<ItemGroup>
