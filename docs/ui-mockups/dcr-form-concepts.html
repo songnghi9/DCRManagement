@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DCR Form UI Concepts</title>
+  <style>
+    :root {
+      --bg: #eef2f6;
+      --surface: #ffffff;
+      --line: #d7dde6;
+      --line-strong: #bdc7d5;
+      --text: #17202a;
+      --muted: #5b6778;
+      --blue: #2463a6;
+      --blue-strong: #184d84;
+      --green: #17845f;
+      --amber: #b97300;
+      --red: #bf2f2f;
+      --field: #f7f9fc;
+      --shadow: 0 8px 24px rgba(23, 32, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+
+    button, input, textarea, select {
+      font: inherit;
+    }
+
+    .page {
+      max-width: 1680px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .concept-nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .concept-nav button,
+    .action-btn,
+    .icon-btn {
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 6px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    .concept-nav button.active,
+    .action-btn.primary {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+    }
+
+    .concept {
+      display: none;
+      min-height: calc(100vh - 72px);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .concept.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+      min-height: 68px;
+      padding: 12px 16px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .titleline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .dcr-number {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--blue-strong);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      background: var(--green);
+    }
+
+    .subtitle {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: minmax(620px, 1fr) 320px;
+      min-height: 0;
+      flex: 1;
+    }
+
+    .work-area {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      min-height: 0;
+      border-right: 1px solid var(--line);
+    }
+
+    .form-strip {
+      display: grid;
+      grid-template-columns: 0.75fr 0.85fr 1.8fr 1.8fr 0.85fr 0.85fr;
+      gap: 10px;
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      background: #fcfdff;
+    }
+
+    .field {
+      min-width: 0;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .value,
+    input,
+    select,
+    textarea {
+      width: 100%;
+      min-height: 34px;
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      background: var(--field);
+      padding: 7px 9px;
+      color: var(--text);
+    }
+
+    textarea {
+      resize: none;
+      min-height: 72px;
+    }
+
+    .reason-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .image-stage {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      flex: 1;
+      min-height: 460px;
+      background: var(--line);
+    }
+
+    .image-panel {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      min-height: 0;
+      background: #f4f7fb;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      height: 42px;
+      padding: 8px 10px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      font-weight: 700;
+    }
+
+    .image-box {
+      position: relative;
+      flex: 1;
+      min-height: 360px;
+      margin: 10px;
+      border: 1px dashed #aab6c5;
+      border-radius: 8px;
+      background:
+        linear-gradient(45deg, #f8fafc 25%, transparent 25%),
+        linear-gradient(-45deg, #f8fafc 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #f8fafc 75%),
+        linear-gradient(-45deg, transparent 75%, #f8fafc 75%),
+        #edf2f8;
+      background-size: 24px 24px;
+      background-position: 0 0, 0 12px, 12px -12px, -12px 0;
+      overflow: hidden;
+    }
+
+    .image-placeholder {
+      position: absolute;
+      inset: 28px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #c7d1dd;
+      background: rgba(255, 255, 255, 0.8);
+      color: #495669;
+      text-align: center;
+      border-radius: 6px;
+    }
+
+    .thumbs {
+      display: flex;
+      gap: 8px;
+      padding: 0 10px 10px;
+      overflow: hidden;
+    }
+
+    .thumb {
+      width: 78px;
+      height: 54px;
+      border: 1px solid var(--line-strong);
+      border-radius: 5px;
+      background: #dce5ef;
+    }
+
+    .side-panel {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: #fbfcfe;
+    }
+
+    .side-section {
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .side-section h3,
+    .log-header h3 {
+      margin: 0 0 10px;
+      font-size: 14px;
+    }
+
+    .risk-item {
+      display: grid;
+      gap: 5px;
+      margin-bottom: 12px;
+    }
+
+    .risk-title {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 64px;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .money-input {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 84px;
+      gap: 6px;
+    }
+
+    .inline-field {
+      display: grid;
+      grid-template-columns: 118px minmax(0, 1fr);
+      align-items: center;
+      gap: 8px;
+    }
+
+    .inline-field label {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .decision {
+      display: grid;
+      gap: 8px;
+      margin-top: auto;
+      padding: 12px;
+    }
+
+    .approval-log {
+      border-top: 1px solid var(--line);
+      background: #fff;
+      transition: max-height 180ms ease;
+      max-height: 220px;
+      overflow: hidden;
+    }
+
+    .approval-log.collapsed {
+      max-height: 44px;
+    }
+
+    .log-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 44px;
+      padding: 0 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .log-grid {
+      display: grid;
+      grid-template-columns: 160px 130px 110px 1fr;
+      gap: 1px;
+      padding: 1px;
+      background: var(--line);
+    }
+
+    .log-grid > div {
+      min-height: 32px;
+      padding: 7px 9px;
+      background: #fff;
+    }
+
+    .log-grid .head {
+      background: #f2f5f9;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .layout-b .main-grid {
+      grid-template-columns: 280px minmax(520px, 1fr) 300px;
+    }
+
+    .layout-b .details-rail {
+      border-right: 1px solid var(--line);
+      background: #fbfcfe;
+      overflow: auto;
+    }
+
+    .layout-b .image-stage {
+      grid-template-columns: 1fr;
+    }
+
+    .compare-switch {
+      display: flex;
+      gap: 6px;
+    }
+
+    .compare-switch button {
+      padding: 5px 9px;
+      border-radius: 5px;
+      border: 1px solid var(--line-strong);
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .compare-switch button.active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+    }
+
+    .layout-c .main-grid {
+      grid-template-columns: minmax(760px, 1fr) 360px;
+    }
+
+    .layout-c .image-stage {
+      min-height: 620px;
+    }
+
+    .compact-details {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      background: #fcfdff;
+    }
+
+    .compact-details .wide {
+      grid-column: span 2;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 1100px) {
+      .main-grid,
+      .layout-b .main-grid,
+      .layout-c .main-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .side-panel,
+      .layout-b .details-rail {
+        border-top: 1px solid var(--line);
+      }
+
+      .form-strip,
+      .compact-details {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .reason-row,
+      .image-stage {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="concept-nav" aria-label="Concept selector">
+      <button class="active" data-target="concept-a">Concept A: Image-first split</button>
+      <button data-target="concept-b">Concept B: Review cockpit</button>
+      <button data-target="concept-c">Concept C: Maximum image area</button>
+    </div>
+
+    <section id="concept-a" class="concept active">
+      <header class="topbar">
+        <div>
+          <div class="titleline">
+            <span class="dcr-number">DCR no. 2102DC01</span>
+            <span class="badge">Approved</span>
+            <span class="hint">Category: Safety | Raised: 10/Oct/25 | Machine: JSV6-EMU, JCU3</span>
+          </div>
+          <div class="subtitle">Handrail dimension change from 1300mm to 1280mm</div>
+        </div>
+        <div class="actions">
+          <button class="action-btn">Save Draft</button>
+          <button class="action-btn">Approve / Reject</button>
+          <button class="action-btn primary">Submit to DCR</button>
+        </div>
+      </header>
+
+      <div class="main-grid">
+        <main class="work-area">
+          <div class="form-strip">
+            <div class="field"><label>Change log no.</label><div class="value">2510-999</div></div>
+            <div class="field"><label>Category</label><select><option>Safety</option><option>Quality</option><option>Service</option><option>Productivity</option></select></div>
+            <div class="field"><label>Drawing no.</label><input value="12100520, 12090532"></div>
+            <div class="field"><label>Machine Model/No.</label><input value="JSV6-EMU, JCU3"></div>
+            <div class="field"><label>Raised by</label><div class="value">Phong T</div></div>
+            <div class="field"><label>Raised date</label><div class="value">10/Oct/25</div></div>
+          </div>
+          <div class="reason-row">
+            <div class="field"><label>Reason for change request</label><textarea>When fitted, it touches frame.</textarea></div>
+            <div class="field"><label>Action</label><textarea>The overall dimension of handrail from 1300mm to 1280mm.</textarea></div>
+          </div>
+          <div class="image-stage">
+            <section class="image-panel">
+              <div class="panel-head">
+                <span>Before</span>
+                <div class="actions"><button class="icon-btn">Add</button><button class="icon-btn">Crop</button></div>
+              </div>
+              <div class="image-box"><div class="image-placeholder">Large before image canvas<br>Zoom, pan, paste or attach screenshots</div></div>
+              <div class="thumbs"><div class="thumb"></div><div class="thumb"></div><div class="thumb"></div></div>
+            </section>
+            <section class="image-panel">
+              <div class="panel-head">
+                <span>After</span>
+                <div class="actions"><button class="icon-btn">Add</button><button class="icon-btn">Crop</button></div>
+              </div>
+              <div class="image-box"><div class="image-placeholder">Large after image canvas<br>Side-by-side technical comparison</div></div>
+              <div class="thumbs"><div class="thumb"></div><div class="thumb"></div><div class="thumb"></div></div>
+            </section>
+          </div>
+        </main>
+
+        <aside class="side-panel">
+          <section class="side-section">
+            <h3>Risk Assessment</h3>
+            <div class="risk-item">
+              <div class="risk-title"><span>1. Nagative impact to leadtime</span><select><option></option><option>Yes</option><option>No</option></select></div>
+              <textarea>6wk to 4 wk</textarea>
+            </div>
+            <div class="risk-item">
+              <div class="risk-title"><span>2. Nagative impact to safety</span><select><option></option><option>Yes</option><option>No</option></select></div>
+              <textarea>Enhance safety</textarea>
+            </div>
+            <div class="risk-item">
+              <div class="risk-title"><span>3. Break compliance of any standards</span><select><option></option><option>Yes</option><option>No</option></select></div>
+              <textarea>It is part of AS 1100, and the change has no impact.</textarea>
+            </div>
+            <div class="metrics">
+              <div class="field">
+                <label>Saving</label>
+                <div class="money-input"><input value="100"><select><option>Mvnd</option><option>USD</option><option>VND</option><option>AUD</option></select></div>
+              </div>
+              <div class="field">
+                <label>Cost to change</label>
+                <div class="money-input"><input value="50"><select><option>Mvnd</option><option>USD</option><option>VND</option><option>AUD</option></select></div>
+              </div>
+            </div>
+          </section>
+          <section class="side-section">
+            <h3>DCR Decision</h3>
+            <div class="field"><label>Suggestion to raise DCR</label><textarea>Raise DCR. Impact safety, need DCR.</textarea></div>
+            <div class="field"><label>Select Consultant</label><select><option>Toan T</option><option>Shane H</option><option>Glenn B</option><option>Kerenn M</option></select></div>
+            <div class="metrics">
+              <div class="field"><label>Consultant decision</label><select><option>Approved</option><option>Rejected</option><option>Pending</option></select></div>
+              <div class="field"><label>Date</label><input value="10/Oct/25"></div>
+            </div>
+            <div class="field"><label>Comment</label><textarea>Impact safety, need DCR.</textarea></div>
+          </section>
+          <div class="decision">
+            <div class="inline-field"><label>DCR Decision</label><select><option>No</option><option>Yes</option></select></div>
+            <button class="action-btn">Save</button>
+            <button class="action-btn primary">Submit to DCR</button>
+          </div>
+        </aside>
+      </div>
+
+      <section class="approval-log collapsed" data-log>
+        <div class="log-header">
+          <h3>Approval / Comments</h3>
+          <button class="icon-btn" data-collapse>Expand</button>
+        </div>
+        <div class="log-grid">
+          <div class="head">Role</div><div class="head">Approver</div><div class="head">Status</div><div class="head">Comment</div>
+          <div>Operation</div><div>Kien K</div><div>Approved</div><div>All good</div>
+          <div>Quality</div><div>Shane H</div><div>Approved</div><div>Safety cause is clear</div>
+          <div>Engineering</div><div>Nhat N</div><div>Rejected</div><div>Change cause safety absolutely</div>
+          <div>GM</div><div>Glenn B</div><div>Pending</div><div>How about JSV3?</div>
+        </div>
+      </section>
+    </section>
+
+    <section id="concept-b" class="concept layout-b">
+      <header class="topbar">
+        <div>
+          <div class="titleline"><span class="dcr-number">2102DC01</span><span class="badge">Waiting Approval</span></div>
+          <div class="subtitle">Review cockpit: details left, image focus center, risk and actions right</div>
+        </div>
+        <div class="actions"><button class="action-btn">Save</button><button class="action-btn primary">Submit to DCR</button></div>
+      </header>
+      <div class="main-grid">
+        <aside class="details-rail">
+          <section class="side-section"><h3>Request Info</h3>
+            <div class="field"><label>Change log no.</label><input value="2510-999"></div>
+            <div class="field"><label>Raised by</label><input value="Phong T"></div>
+            <div class="field"><label>Category</label><select><option>Safety</option><option>Quality</option><option>Service</option><option>Productivity</option></select></div>
+            <div class="field"><label>Drawing no.</label><textarea>12100520, 12090532</textarea></div>
+            <div class="field"><label>Reason</label><textarea>When fitted, it touches frame.</textarea></div>
+            <div class="field"><label>Action</label><textarea>Handrail dimension 1300mm to 1280mm.</textarea></div>
+          </section>
+        </aside>
+        <main class="work-area">
+          <div class="panel-head">
+            <span>Image Review</span>
+            <div class="compare-switch"><button class="active">Before</button><button>After</button><button>Compare</button></div>
+          </div>
+          <div class="image-stage">
+            <section class="image-panel">
+              <div class="image-box"><div class="image-placeholder">Single large image viewer<br>Best when reviewers inspect drawing details</div></div>
+              <div class="thumbs"><div class="thumb"></div><div class="thumb"></div><div class="thumb"></div><div class="thumb"></div><div class="thumb"></div></div>
+            </section>
+          </div>
+        </main>
+        <aside class="side-panel">
+          <section class="side-section"><h3>Approval Queue</h3>
+            <div class="field"><label>Operation</label><select><option>Kien K - Approved</option></select></div>
+            <div class="field"><label>Quality</label><select><option>Shane H - Pending</option></select></div>
+            <div class="field"><label>Engineering</label><select><option>Nhat N - Pending</option></select></div>
+            <div class="field"><label>GM</label><select><option>Glenn B - Pending</option></select></div>
+          </section>
+          <section class="side-section"><h3>Risk Summary</h3>
+            <div class="field"><label>Leadtime impact</label><select><option>Yes</option><option>No</option></select></div>
+            <div class="field"><label>Safety impact</label><select><option>No</option><option>Yes</option></select></div>
+            <div class="field"><label>Standard compliance</label><select><option>No</option><option>Yes</option></select></div>
+          </section>
+          <div class="decision"><button class="action-btn">Reject</button><button class="action-btn primary">Approve</button></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="concept-c" class="concept layout-c">
+      <header class="topbar">
+        <div>
+          <div class="titleline"><span class="dcr-number">DCR no. 2102DC01</span><span class="badge">Draft</span></div>
+          <div class="subtitle">Maximum image area: metadata compressed into one line, approval hidden until needed</div>
+        </div>
+        <div class="actions"><button class="action-btn">Save Draft</button><button class="action-btn primary">Submit</button></div>
+      </header>
+      <div class="main-grid">
+        <main class="work-area">
+          <div class="compact-details">
+            <div class="field"><label>Raised by</label><div class="value">Phong T</div></div>
+            <div class="field"><label>Category</label><div class="value">Safety</div></div>
+            <div class="field"><label>Date</label><div class="value">10/Oct/25</div></div>
+            <div class="field"><label>Machine</label><div class="value">JSV6-EMU</div></div>
+            <div class="field wide"><label>Drawing no.</label><div class="value">12100520, 12090532</div></div>
+          </div>
+          <div class="image-stage">
+            <section class="image-panel">
+              <div class="panel-head"><span>Before</span><button class="icon-btn">Fullscreen</button></div>
+              <div class="image-box"><div class="image-placeholder">Before image dominates the screen</div></div>
+            </section>
+            <section class="image-panel">
+              <div class="panel-head"><span>After</span><button class="icon-btn">Fullscreen</button></div>
+              <div class="image-box"><div class="image-placeholder">After image dominates the screen</div></div>
+            </section>
+          </div>
+        </main>
+        <aside class="side-panel">
+          <section class="side-section"><h3>Reason / Action</h3>
+            <div class="field"><label>Reason</label><textarea>When fitted, it touches frame.</textarea></div>
+            <div class="field"><label>Action</label><textarea>The overall dimension of handrail from 1300mm to 1280mm.</textarea></div>
+          </section>
+          <section class="side-section"><h3>Decision Gate</h3>
+            <div class="field"><label>Leadtime</label><select><option></option><option>Yes</option><option>No</option></select></div>
+            <div class="field"><label>DCR Decision</label><select><option></option><option>Yes</option><option>No</option></select></div>
+            <div class="field"><label>Consultant</label><select><option>Toan T</option></select></div>
+          </section>
+          <div class="decision"><button class="action-btn primary">Submit to DCR</button><button class="action-btn">Show Approval Log</button></div>
+        </aside>
+      </div>
+      <section class="approval-log collapsed" data-log>
+        <div class="log-header">
+          <h3>Approval / Comments</h3>
+          <button class="icon-btn" data-collapse>Expand</button>
+        </div>
+        <div class="log-grid">
+          <div class="head">Role</div><div class="head">Approver</div><div class="head">Status</div><div class="head">Comment</div>
+          <div>Operation</div><div>Kien K</div><div>Approved</div><div>All good</div>
+          <div>Quality</div><div>Shane H</div><div>Pending</div><div></div>
+        </div>
+      </section>
+    </section>
+  </div>
+
+  <script>
+    document.querySelectorAll(".concept-nav button").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".concept-nav button").forEach((item) => item.classList.remove("active"));
+        document.querySelectorAll(".concept").forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+        document.getElementById(button.dataset.target).classList.add("active");
+      });
+    });
+
+    document.querySelectorAll("[data-collapse]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const log = button.closest("[data-log]");
+        const collapsed = log.classList.toggle("collapsed");
+        button.textContent = collapsed ? "Expand" : "Collapse";
+      });
+    });
+  </script>
+</body>
+</html>
