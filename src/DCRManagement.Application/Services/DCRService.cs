@@ -66,11 +66,13 @@ public class DCRService
             // Save Before/After gallery images if provided
             if (dto.BeforeImages?.Count > 0)
                 await _galleryImageService.ReplaceGalleryImagesAsync(
-                    dcr.Id, dto.BeforeImages, "Before", currentUserId);
+                    dcr.Id, dto.BeforeImages, "Before", currentUserId,
+                    dto.BeforeThumbnailWidth, dto.BeforeThumbnailHeight);
 
             if (dto.AfterImages?.Count > 0)
                 await _galleryImageService.ReplaceGalleryImagesAsync(
-                    dcr.Id, dto.AfterImages, "After", currentUserId);
+                    dcr.Id, dto.AfterImages, "After", currentUserId,
+                    dto.AfterThumbnailWidth, dto.AfterThumbnailHeight);
 
             _logger.LogInformation("Created DCR {DCRNumber} by user {UserId}", dcrNumber, currentUserId);
 
@@ -121,11 +123,13 @@ public class DCRService
             // Replace gallery images if provided (null = no change, empty list = clear all)
             if (dto.BeforeImages != null)
                 await _galleryImageService.ReplaceGalleryImagesAsync(
-                    dcr.Id, dto.BeforeImages, "Before", SessionContext.Instance.UserId);
+                    dcr.Id, dto.BeforeImages, "Before", SessionContext.Instance.UserId,
+                    dto.BeforeThumbnailWidth, dto.BeforeThumbnailHeight);
 
             if (dto.AfterImages != null)
                 await _galleryImageService.ReplaceGalleryImagesAsync(
-                    dcr.Id, dto.AfterImages, "After", SessionContext.Instance.UserId);
+                    dcr.Id, dto.AfterImages, "After", SessionContext.Instance.UserId,
+                    dto.AfterThumbnailWidth, dto.AfterThumbnailHeight);
 
             return await MapToDtoAsync(dcr);
         }
@@ -249,7 +253,9 @@ public class DCRService
             creator?.FullName ?? "Unknown",
             a.CreatedAt,
             a.ImageType,
-            a.DisplayOrder)) ?? [];
+            a.DisplayOrder,
+            a.ThumbnailWidth,
+            a.ThumbnailHeight)) ?? [];
 
         return new DCRDto(
             dcr.Id, dcr.DCRNumber, dcr.Title, dcr.Description,

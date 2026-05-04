@@ -98,8 +98,10 @@ public class AttachmentService : IGalleryImageService
     public async Task ReplaceGalleryImagesAsync(
         int dcrId,
         IList<System.Drawing.Image> images,
-        string imageType,       // "Before" | "After"
-        int uploadedById)
+        string imageType,
+        int uploadedById,
+        int thumbnailWidth  = 140,
+        int thumbnailHeight = 140)
     {
         // 1. Delete existing gallery images of this type
         var existing = (await _attachmentRepository.FindAsync(
@@ -115,12 +117,14 @@ public class AttachmentService : IGalleryImageService
             await _attachmentRepository.DeleteAsync(old.Id);
         }
 
-        // 2. Save new images in order
+        // 2. Save new images in order, persisting the user's chosen thumbnail size
         for (int i = 0; i < images.Count; i++)
-            await SaveGalleryImageAsync(dcrId, images[i], imageType, i, uploadedById);
+            await SaveGalleryImageAsync(dcrId, images[i], imageType, i,
+                                        thumbnailWidth, thumbnailHeight, uploadedById);
 
         _logger.LogInformation(
-            "Replaced {Count} {Type} images for DCR {DcrId}", images.Count, imageType, dcrId);
+            "Replaced {Count} {Type} images for DCR {DcrId} at {W}x{H}px",
+            images.Count, imageType, dcrId, thumbnailWidth, thumbnailHeight);
     }
 
     /// <summary>
@@ -131,27 +135,30 @@ public class AttachmentService : IGalleryImageService
         System.Drawing.Image image,
         string imageType,
         int displayOrder,
+        int thumbnailWidth,
+        int thumbnailHeight,
         int uploadedById)
     {
         var storedFileName = $"{Guid.NewGuid()}.png";
         var destPath = Path.Combine(_storageBasePath, storedFileName);
 
-        // Save as PNG — lossless, no file-handle lock after Save()
         image.Save(destPath, ImageFormat.Png);
         var fileInfo = new FileInfo(destPath);
 
         var attachment = new Attachment
         {
-            DCRId          = dcrId,
-            FileName       = $"{imageType}_{displayOrder + 1}.png",
-            StoredFileName = storedFileName,
-            FilePath       = destPath,
-            FileSizeBytes  = fileInfo.Length,
-            ContentType    = "image/png",
-            ImageType      = imageType,
-            DisplayOrder   = displayOrder,
-            CreatedById    = uploadedById,
-            CreatedAt      = DateTime.UtcNow
+            DCRId           = dcrId,
+            FileName        = $"{imageType}_{displayOrder + 1}.png",
+            StoredFileName  = storedFileName,
+            FilePath        = destPath,
+            FileSizeBytes   = fileInfo.Length,
+            ContentType     = "image/png",
+            ImageType       = imageType,
+            DisplayOrder    = displayOrder,
+            ThumbnailWidth  = thumbnailWidth,
+            ThumbnailHeight = thumbnailHeight,
+            CreatedById     = uploadedById,
+            CreatedAt       = DateTime.UtcNow
         };
 
         return await _attachmentRepository.AddAsync(attachment);

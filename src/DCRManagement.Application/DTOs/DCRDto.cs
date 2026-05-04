@@ -48,7 +48,11 @@ public record CreateDCRDto(
     string? Priority,
     DateTime? TargetCompletionDate,
     IList<System.Drawing.Image>? BeforeImages = null,
-    IList<System.Drawing.Image>? AfterImages  = null
+    IList<System.Drawing.Image>? AfterImages  = null,
+    int BeforeThumbnailWidth  = 140,
+    int BeforeThumbnailHeight = 140,
+    int AfterThumbnailWidth   = 140,
+    int AfterThumbnailHeight  = 140
 );
 
 public record UpdateDCRDto(
@@ -61,7 +65,11 @@ public record UpdateDCRDto(
     string? Priority,
     DateTime? TargetCompletionDate,
     IList<System.Drawing.Image>? BeforeImages = null,
-    IList<System.Drawing.Image>? AfterImages  = null
+    IList<System.Drawing.Image>? AfterImages  = null,
+    int BeforeThumbnailWidth  = 140,
+    int BeforeThumbnailHeight = 140,
+    int AfterThumbnailWidth   = 140,
+    int AfterThumbnailHeight  = 140
 );
 
 public record SubmitDCRDto(

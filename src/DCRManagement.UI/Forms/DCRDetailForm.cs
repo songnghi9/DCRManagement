@@ -311,6 +311,19 @@ public partial class DCRDetailForm : BaseUserControl, IDCRDetailView
     public List<System.Drawing.Image> GetBeforeImages() => _galleryBefore.GetImages();
     public List<System.Drawing.Image> GetAfterImages()  => _galleryAfter.GetImages();
 
+    public (int Width, int Height) GetBeforeThumbnailSize() => _galleryBefore.GetCurrentSize();
+    public (int Width, int Height) GetAfterThumbnailSize()  => _galleryAfter.GetCurrentSize();
+
+    public void SetBeforeThumbnailSize(int width, int height)
+    {
+        InvokeIfRequired(() => _galleryBefore.SetSize(width, height));
+    }
+
+    public void SetAfterThumbnailSize(int width, int height)
+    {
+        InvokeIfRequired(() => _galleryAfter.SetSize(width, height));
+    }
+
     public void SetBeforeImages(IEnumerable<System.Drawing.Image> images)
     {
         InvokeIfRequired(() =>

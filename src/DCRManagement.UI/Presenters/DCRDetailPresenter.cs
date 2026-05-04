@@ -35,6 +35,15 @@ public interface IDCRDetailView : IView
     void SetBeforeImages(IEnumerable<System.Drawing.Image> images);
     void SetAfterImages(IEnumerable<System.Drawing.Image> images);
 
+    /// <summary>Current thumbnail size set by the user in the Before gallery size spinners.</summary>
+    (int Width, int Height) GetBeforeThumbnailSize();
+    /// <summary>Current thumbnail size set by the user in the After gallery size spinners.</summary>
+    (int Width, int Height) GetAfterThumbnailSize();
+    /// <summary>Restore the Before gallery spinner values (called on load).</summary>
+    void SetBeforeThumbnailSize(int width, int height);
+    /// <summary>Restore the After gallery spinner values (called on load).</summary>
+    void SetAfterThumbnailSize(int width, int height);
+
     // ── Events ────────────────────────────────────────────────────────────────
     event EventHandler SaveRequested;
     event EventHandler SubmitRequested;
@@ -121,6 +130,8 @@ public class DCRDetailPresenter
 
             if (_mode == DetailMode.Create)
             {
+                var (bw, bh) = _view.GetBeforeThumbnailSize();
+                var (aw, ah) = _view.GetAfterThumbnailSize();
                 result = await _dcrService.CreateAsync(new CreateDCRDto(
                     _view.DCRTitle,
                     _view.Description,
@@ -130,10 +141,13 @@ public class DCRDetailPresenter
                     NullIfEmpty(_view.Priority),
                     _view.TargetDate,
                     _view.GetBeforeImages(),
-                    _view.GetAfterImages()));
+                    _view.GetAfterImages(),
+                    bw, bh, aw, ah));
             }
             else
             {
+                var (bw, bh) = _view.GetBeforeThumbnailSize();
+                var (aw, ah) = _view.GetAfterThumbnailSize();
                 result = await _dcrService.UpdateAsync(new UpdateDCRDto(
                     _currentDcr!.Id,
                     _view.DCRTitle,
@@ -144,7 +158,8 @@ public class DCRDetailPresenter
                     NullIfEmpty(_view.Priority),
                     _view.TargetDate,
                     _view.GetBeforeImages(),
-                    _view.GetAfterImages()));
+                    _view.GetAfterImages(),
+                    bw, bh, aw, ah));
             }
 
             if (!result.IsSuccess)
@@ -333,6 +348,23 @@ public class DCRDetailPresenter
         // Only show regular file attachments in the Attachments tab
         _view.SetWorkflowHistory(_currentDcr.History);
         _view.SetAttachments(_currentDcr.Attachments.Where(a => !a.IsGalleryImage));
+
+        // Restore thumbnail size from the first gallery image of each type
+        // (all images in a gallery share the same size — set by the size spinners)
+        var firstBefore = _currentDcr.Attachments
+            .Where(a => a.ImageType == "Before")
+            .OrderBy(a => a.DisplayOrder ?? 0)
+            .FirstOrDefault();
+        var firstAfter = _currentDcr.Attachments
+            .Where(a => a.ImageType == "After")
+            .OrderBy(a => a.DisplayOrder ?? 0)
+            .FirstOrDefault();
+
+        if (firstBefore?.ThumbnailWidth > 0)
+            _view.SetBeforeThumbnailSize(firstBefore.ThumbnailWidth!.Value, firstBefore.ThumbnailHeight!.Value);
+
+        if (firstAfter?.ThumbnailWidth > 0)
+            _view.SetAfterThumbnailSize(firstAfter.ThumbnailWidth!.Value, firstAfter.ThumbnailHeight!.Value);
 
         // Load Before/After gallery images from file paths
         _view.SetBeforeImages(LoadGalleryImages(_currentDcr.Attachments, "Before"));

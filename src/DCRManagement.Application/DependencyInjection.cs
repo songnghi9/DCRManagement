@@ -11,6 +11,7 @@ public static class DependencyInjection
         services.AddScoped<DCRService>();
         services.AddScoped<WorkflowService>();
         services.AddScoped<UserService>();
+        services.AddScoped<DCRImageService>();
         return services;
     }
 }

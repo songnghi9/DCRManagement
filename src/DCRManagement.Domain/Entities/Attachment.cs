@@ -21,6 +21,12 @@ public class Attachment : BaseEntity
     /// </summary>
     public int? DisplayOrder { get; set; }
 
+    /// <summary>Thumbnail display width in pixels. Null for regular file attachments.</summary>
+    public int? ThumbnailWidth { get; set; }
+
+    /// <summary>Thumbnail display height in pixels. Null for regular file attachments.</summary>
+    public int? ThumbnailHeight { get; set; }
+
     // Navigation
     public DCR DCR { get; set; } = null!;
 }

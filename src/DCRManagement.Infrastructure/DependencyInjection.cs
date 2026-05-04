@@ -28,6 +28,7 @@ public static class DependencyInjection
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<AttachmentService>();
         services.AddScoped<IGalleryImageService>(sp => sp.GetRequiredService<AttachmentService>());
+        services.AddScoped<IDCRImageRepository, DCRImageRepository>();
         services.AddScoped<DbSeeder>();
 
         return services;

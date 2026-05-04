@@ -331,6 +331,31 @@ public class ImageGalleryControl : UserControl
 
     public List<Image> GetImages() => _images.Select(t => t.GetImage()).ToList();
 
+    /// <summary>Returns the current W×H from the size spinners.</summary>
+    public (int Width, int Height) GetCurrentSize() =>
+        ((int)_nudWidth.Value, (int)_nudHeight.Value);
+
+    /// <summary>
+    /// Restores the size spinners and resizes all existing thumbnails.
+    /// Called when loading a saved DCR so the gallery looks identical to when it was saved.
+    /// </summary>
+    public void SetSize(int width, int height)
+    {
+        _suppressSizeEvents = true;
+        _nudWidth.Value  = Math.Max(MinThumbSize, Math.Min(MaxThumbSize, width));
+        _nudHeight.Value = Math.Max(MinThumbSize, Math.Min(MaxThumbSize, height));
+        _suppressSizeEvents = false;
+
+        // Update preset combo to match (or show Custom)
+        var match = Array.FindIndex(Presets, p => p.W == width && p.H == height && p.W != 0);
+        _suppressSizeEvents = true;
+        _cmbPreset.SelectedIndex = match >= 0 ? match : Presets.Length - 1;
+        _suppressSizeEvents = false;
+
+        // Resize all existing thumbnails to the restored size
+        ApplySizeToAll(width, height);
+    }
+
     // ── Private helpers ───────────────────────────────────────────────────────
 
     /// <summary>

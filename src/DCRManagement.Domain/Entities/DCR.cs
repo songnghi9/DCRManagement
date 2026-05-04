@@ -25,4 +25,5 @@ public class DCR : BaseEntity
     public User? AssignedApprover { get; set; }
     public ICollection<ApprovalHistory> ApprovalHistories { get; set; } = [];
     public ICollection<Attachment> Attachments { get; set; } = [];
+    public ICollection<DCRImage> Images { get; set; } = [];
 }
