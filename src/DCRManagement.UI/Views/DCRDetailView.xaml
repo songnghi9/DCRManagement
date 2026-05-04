@@ -102,13 +102,12 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Form strip (52px, 6 equal columns) -->
+                    <!-- Form strip (72px, 6 equal columns) -->
                     <Border Grid.Row="0"
-                            Height="52"
                             BorderThickness="0,0,0,1"
                             BorderBrush="{StaticResource BorderBrush}"
                             Background="{StaticResource SurfaceMutedBrush}"
-                            Padding="14,8">
+                            Padding="14,10">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -122,16 +121,19 @@
                             <!-- Change log no. -->
                             <StackPanel Grid.Column="0" Margin="0,0,8,0">
                                 <TextBlock Text="Change log no." Style="{StaticResource FieldLabelStyle}"/>
-                                <TextBlock x:Name="ChangeLogText"
-                                           FontSize="13"
-                                           Foreground="{StaticResource TextBrush}"
-                                           VerticalAlignment="Center"/>
+                                <Border Style="{StaticResource ReadOnlyFieldStyle}">
+                                    <TextBlock x:Name="ChangeLogText"
+                                               FontSize="13"
+                                               Foreground="{StaticResource TextBrush}"
+                                               VerticalAlignment="Center"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </Border>
                             </StackPanel>
 
                             <!-- Category -->
                             <StackPanel Grid.Column="1" Margin="0,0,8,0">
                                 <TextBlock Text="Category" Style="{StaticResource FieldLabelStyle}"/>
-                                <ComboBox x:Name="CategoryComboBox" MinHeight="0" Height="24" FontSize="12" Padding="6,2">
+                                <ComboBox x:Name="CategoryComboBox">
                                     <ComboBoxItem Content="Safety"/>
                                     <ComboBoxItem Content="Quality"/>
                                     <ComboBoxItem Content="Service"/>
@@ -142,38 +144,42 @@
                             <!-- Drawing no. -->
                             <StackPanel Grid.Column="2" Margin="0,0,8,0">
                                 <TextBlock Text="Drawing no." Style="{StaticResource FieldLabelStyle}"/>
-                                <TextBox x:Name="DrawingNoTextBox" MinHeight="0" Height="24" FontSize="12" Padding="6,2" VerticalContentAlignment="Center"/>
+                                <TextBox x:Name="DrawingNoTextBox"/>
                             </StackPanel>
 
                             <!-- Machine Model -->
                             <StackPanel Grid.Column="3" Margin="0,0,8,0">
                                 <TextBlock Text="Machine Model" Style="{StaticResource FieldLabelStyle}"/>
-                                <TextBox x:Name="MachineTextBox" MinHeight="0" Height="24" FontSize="12" Padding="6,2" VerticalContentAlignment="Center"/>
+                                <TextBox x:Name="MachineTextBox"/>
                             </StackPanel>
 
                             <!-- Raised by -->
                             <StackPanel Grid.Column="4" Margin="0,0,8,0">
                                 <TextBlock Text="Raised by" Style="{StaticResource FieldLabelStyle}"/>
-                                <TextBlock x:Name="RaisedByText"
-                                           FontSize="13"
-                                           Foreground="{StaticResource TextBrush}"
-                                           VerticalAlignment="Center"/>
+                                <Border Style="{StaticResource ReadOnlyFieldStyle}">
+                                    <TextBlock x:Name="RaisedByText"
+                                               FontSize="13"
+                                               Foreground="{StaticResource TextBrush}"
+                                               VerticalAlignment="Center"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </Border>
                             </StackPanel>
 
                             <!-- Raised date -->
                             <StackPanel Grid.Column="5">
                                 <TextBlock Text="Raised date" Style="{StaticResource FieldLabelStyle}"/>
-                                <TextBlock x:Name="RaisedDateText"
-                                           FontSize="13"
-                                           Foreground="{StaticResource TextBrush}"
-                                           VerticalAlignment="Center"/>
+                                <Border Style="{StaticResource ReadOnlyFieldStyle}">
+                                    <TextBlock x:Name="RaisedDateText"
+                                               FontSize="13"
+                                               Foreground="{StaticResource TextBrush}"
+                                               VerticalAlignment="Center"/>
+                                </Border>
                             </StackPanel>
                         </Grid>
                     </Border>
 
-                    <!-- Reason row (130px, 2 cols) -->
+                    <!-- Reason row (150px, 2 cols) -->
                     <Border Grid.Row="1"
-                            Height="130"
                             BorderThickness="0,0,0,1"
                             BorderBrush="{StaticResource BorderBrush}"
                             Padding="14,10">
@@ -186,21 +192,23 @@
                             <StackPanel Grid.Column="0" Margin="0,0,8,0">
                                 <TextBlock Text="Reason for change" Style="{StaticResource FieldLabelStyle}"/>
                                 <TextBox x:Name="ReasonTextBox"
-                                         Height="90"
+                                         Height="100"
                                          AcceptsReturn="True"
                                          TextWrapping="Wrap"
                                          VerticalContentAlignment="Top"
-                                         VerticalScrollBarVisibility="Auto"/>
+                                         VerticalScrollBarVisibility="Auto"
+                                         Padding="10,8"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="1">
                                 <TextBlock Text="Action" Style="{StaticResource FieldLabelStyle}"/>
                                 <TextBox x:Name="ActionTextBox"
-                                         Height="90"
+                                         Height="100"
                                          AcceptsReturn="True"
                                          TextWrapping="Wrap"
                                          VerticalContentAlignment="Top"
-                                         VerticalScrollBarVisibility="Auto"/>
+                                         VerticalScrollBarVisibility="Auto"
+                                         Padding="10,8"/>
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -283,95 +291,82 @@
                                                Style="{StaticResource SectionHeaderStyle}"/>
 
                                     <!-- 1. Leadtime -->
-                                    <StackPanel Margin="0,0,0,10">
-                                        <DockPanel LastChildFill="True">
+                                    <StackPanel Margin="0,0,0,12">
+                                        <DockPanel LastChildFill="False" Margin="0,0,0,6">
                                             <TextBlock Text="1. Leadtime impact"
                                                        Style="{StaticResource FieldLabelStyle}"
                                                        DockPanel.Dock="Left"
                                                        VerticalAlignment="Center"
-                                                       Margin="0,0,0,0"/>
+                                                       Margin="0"/>
                                             <ComboBox x:Name="LeadTimeComboBox"
                                                       DockPanel.Dock="Right"
-                                                      Width="80"
-                                                      HorizontalAlignment="Right"
-                                                      MinHeight="0"
-                                                      Height="26"
-                                                      FontSize="12"
-                                                      Padding="6,2">
+                                                      Width="90">
                                                 <ComboBoxItem Content=""/>
                                                 <ComboBoxItem Content="Yes"/>
                                                 <ComboBoxItem Content="No"/>
                                             </ComboBox>
                                         </DockPanel>
                                         <TextBox x:Name="LeadTimeMemoBox"
-                                                 Height="60"
+                                                 Height="64"
                                                  AcceptsReturn="True"
                                                  TextWrapping="Wrap"
                                                  VerticalContentAlignment="Top"
                                                  VerticalScrollBarVisibility="Auto"
-                                                 Margin="0,4,0,0"/>
+                                                 Padding="10,8"/>
                                     </StackPanel>
 
                                     <!-- 2. Safety -->
-                                    <StackPanel Margin="0,0,0,10">
-                                        <DockPanel LastChildFill="True">
+                                    <StackPanel Margin="0,0,0,12">
+                                        <DockPanel LastChildFill="False" Margin="0,0,0,6">
                                             <TextBlock Text="2. Safety impact"
                                                        Style="{StaticResource FieldLabelStyle}"
                                                        DockPanel.Dock="Left"
-                                                       VerticalAlignment="Center"/>
+                                                       VerticalAlignment="Center"
+                                                       Margin="0"/>
                                             <ComboBox x:Name="SafetyComboBox"
                                                       DockPanel.Dock="Right"
-                                                      Width="80"
-                                                      HorizontalAlignment="Right"
-                                                      MinHeight="0"
-                                                      Height="26"
-                                                      FontSize="12"
-                                                      Padding="6,2">
+                                                      Width="90">
                                                 <ComboBoxItem Content=""/>
                                                 <ComboBoxItem Content="Yes"/>
                                                 <ComboBoxItem Content="No"/>
                                             </ComboBox>
                                         </DockPanel>
                                         <TextBox x:Name="SafetyMemoBox"
-                                                 Height="60"
+                                                 Height="64"
                                                  AcceptsReturn="True"
                                                  TextWrapping="Wrap"
                                                  VerticalContentAlignment="Top"
                                                  VerticalScrollBarVisibility="Auto"
-                                                 Margin="0,4,0,0"/>
+                                                 Padding="10,8"/>
                                     </StackPanel>
 
                                     <!-- 3. Compliance -->
-                                    <StackPanel Margin="0,0,0,10">
-                                        <DockPanel LastChildFill="True">
+                                    <StackPanel Margin="0,0,0,12">
+                                        <DockPanel LastChildFill="False" Margin="0,0,0,6">
                                             <TextBlock Text="3. Compliance break"
                                                        Style="{StaticResource FieldLabelStyle}"
                                                        DockPanel.Dock="Left"
-                                                       VerticalAlignment="Center"/>
+                                                       VerticalAlignment="Center"
+                                                       Margin="0"/>
                                             <ComboBox x:Name="ComplianceComboBox"
                                                       DockPanel.Dock="Right"
-                                                      Width="80"
-                                                      HorizontalAlignment="Right"
-                                                      MinHeight="0"
-                                                      Height="26"
-                                                      FontSize="12"
-                                                      Padding="6,2">
+                                                      Width="90">
                                                 <ComboBoxItem Content=""/>
                                                 <ComboBoxItem Content="Yes"/>
                                                 <ComboBoxItem Content="No"/>
                                             </ComboBox>
                                         </DockPanel>
                                         <TextBox x:Name="ComplianceMemoBox"
-                                                 Height="60"
+                                                 Height="64"
                                                  AcceptsReturn="True"
                                                  TextWrapping="Wrap"
                                                  VerticalContentAlignment="Top"
                                                  VerticalScrollBarVisibility="Auto"
-                                                 Margin="0,4,0,0"/>
+                                                 Padding="10,8"/>
                                     </StackPanel>
 
                                     <!-- Saving + Cost metrics -->
-                                    <Grid Margin="0,8,0,0">
+                                    <Grid Margin="0,4,0,0">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
@@ -383,22 +378,13 @@
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="80"/>
+                                                    <ColumnDefinition Width="76"/>
                                                 </Grid.ColumnDefinitions>
                                                 <TextBox x:Name="SavingTextBox"
                                                          Grid.Column="0"
-                                                         MinHeight="0"
-                                                         Height="28"
-                                                         FontSize="12"
-                                                         Padding="6,2"
-                                                         VerticalContentAlignment="Center"
                                                          Margin="0,0,4,0"/>
                                                 <ComboBox x:Name="SavingCurrencyComboBox"
-                                                          Grid.Column="1"
-                                                          MinHeight="0"
-                                                          Height="28"
-                                                          FontSize="12"
-                                                          Padding="4,2">
+                                                          Grid.Column="1">
                                                     <ComboBoxItem Content="Mvnd"/>
                                                     <ComboBoxItem Content="USD"/>
                                                     <ComboBoxItem Content="VND"/>
@@ -413,22 +399,13 @@
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="80"/>
+                                                    <ColumnDefinition Width="76"/>
                                                 </Grid.ColumnDefinitions>
                                                 <TextBox x:Name="CostTextBox"
                                                          Grid.Column="0"
-                                                         MinHeight="0"
-                                                         Height="28"
-                                                         FontSize="12"
-                                                         Padding="6,2"
-                                                         VerticalContentAlignment="Center"
                                                          Margin="0,0,4,0"/>
                                                 <ComboBox x:Name="CostCurrencyComboBox"
-                                                          Grid.Column="1"
-                                                          MinHeight="0"
-                                                          Height="28"
-                                                          FontSize="12"
-                                                          Padding="4,2">
+                                                          Grid.Column="1">
                                                     <ComboBoxItem Content="Mvnd"/>
                                                     <ComboBoxItem Content="USD"/>
                                                     <ComboBoxItem Content="VND"/>
@@ -471,11 +448,7 @@
                                         </Grid.ColumnDefinitions>
                                         <StackPanel Grid.Column="0" Margin="0,0,6,0">
                                             <TextBlock Text="Decision" Style="{StaticResource FieldLabelStyle}"/>
-                                            <ComboBox x:Name="ConsultantDecisionComboBox"
-                                                      MinHeight="0"
-                                                      Height="28"
-                                                      FontSize="12"
-                                                      Padding="6,2">
+                                            <ComboBox x:Name="ConsultantDecisionComboBox">
                                                 <ComboBoxItem Content=""/>
                                                 <ComboBoxItem Content="Approve"/>
                                                 <ComboBoxItem Content="Reject"/>
@@ -484,10 +457,7 @@
                                         </StackPanel>
                                         <StackPanel Grid.Column="1">
                                             <TextBlock Text="Date" Style="{StaticResource FieldLabelStyle}"/>
-                                            <DatePicker x:Name="DecisionDatePicker"
-                                                        MinHeight="0"
-                                                        Height="28"
-                                                        FontSize="12"/>
+                                            <DatePicker x:Name="DecisionDatePicker"/>
                                         </StackPanel>
                                     </Grid>
 
