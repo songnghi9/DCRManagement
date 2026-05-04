@@ -1,0 +1,601 @@
+<UserControl x:Class="DCRManagement.UI.Views.DCRDetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:DCRManagement.UI.Views">
+
+    <Border Style="{StaticResource CardBorderStyle}" ClipToBounds="True">
+        <Grid Background="{StaticResource SurfaceBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition x:Name="ApprovalLogRow" Height="44"/>
+            </Grid.RowDefinitions>
+
+            <!-- ═══════════════════════════════════════════════════════════════
+                 ROW 0 — TOPBAR (68px)
+            ════════════════════════════════════════════════════════════════ -->
+            <Border Grid.Row="0"
+                    Height="68"
+                    Background="{StaticResource SurfaceMutedBrush}"
+                    BorderThickness="0,0,0,1"
+                    BorderBrush="{StaticResource BorderBrush}">
+                <DockPanel LastChildFill="False" Margin="16,0">
+
+                    <!-- Left: DCR number + badge + hint -->
+                    <StackPanel DockPanel.Dock="Left"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                        <TextBlock x:Name="DcrNumberText"
+                                   FontSize="22"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource PrimaryDarkBrush}"/>
+                        <Border x:Name="StatusBadge"
+                                Margin="10,0,0,0"
+                                Padding="10,3"
+                                CornerRadius="999"
+                                VerticalAlignment="Center"
+                                Background="{StaticResource MutedTextBrush}">
+                            <TextBlock x:Name="StatusBadgeText"
+                                       Foreground="White"
+                                       FontSize="12"
+                                       FontWeight="SemiBold"
+                                       LineHeight="16"/>
+                        </Border>
+                        <TextBlock x:Name="HintText"
+                                   Margin="14,0,0,0"
+                                   FontSize="12"
+                                   Foreground="{StaticResource MutedTextBrush}"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Right: workflow + action buttons -->
+                    <StackPanel x:Name="TopbarActionsPanel"
+                                DockPanel.Dock="Right"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                        <!-- Dynamic workflow buttons injected by code-behind -->
+                        <StackPanel x:Name="WorkflowActionsPanel" Orientation="Horizontal"/>
+
+                        <Button x:Name="SaveButton"
+                                Content="Save Draft"
+                                MinHeight="34"
+                                Padding="14,0"
+                                Margin="8,0,0,0"
+                                Click="SaveButton_Click"/>
+                        <Button x:Name="EditButton"
+                                Content="Edit"
+                                MinHeight="34"
+                                Padding="14,0"
+                                Margin="8,0,0,0"
+                                Click="EditButton_Click"/>
+                        <Button x:Name="SubmitButton"
+                                Content="Submit to DCR"
+                                MinHeight="34"
+                                Padding="14,0"
+                                Margin="8,0,0,0"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Click="SubmitButton_Click"/>
+                        <Button x:Name="CloseButton"
+                                Content="Close"
+                                MinHeight="34"
+                                Padding="14,0"
+                                Margin="8,0,0,0"
+                                Click="CloseButton_Click"/>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+            <!-- ═══════════════════════════════════════════════════════════════
+                 ROW 1 — MAIN GRID (work area + side panel)
+            ════════════════════════════════════════════════════════════════ -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="320"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- ─── WORK AREA (col 0) ─────────────────────────────────── -->
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Form strip (52px, 6 equal columns) -->
+                    <Border Grid.Row="0"
+                            Height="52"
+                            BorderThickness="0,0,0,1"
+                            BorderBrush="{StaticResource BorderBrush}"
+                            Background="{StaticResource SurfaceMutedBrush}"
+                            Padding="14,8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Change log no. -->
+                            <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                <TextBlock Text="Change log no." Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBlock x:Name="ChangeLogText"
+                                           FontSize="13"
+                                           Foreground="{StaticResource TextBrush}"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Category -->
+                            <StackPanel Grid.Column="1" Margin="0,0,8,0">
+                                <TextBlock Text="Category" Style="{StaticResource FieldLabelStyle}"/>
+                                <ComboBox x:Name="CategoryComboBox" MinHeight="0" Height="24" FontSize="12" Padding="6,2">
+                                    <ComboBoxItem Content="Safety"/>
+                                    <ComboBoxItem Content="Quality"/>
+                                    <ComboBoxItem Content="Service"/>
+                                    <ComboBoxItem Content="Productivity"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Drawing no. -->
+                            <StackPanel Grid.Column="2" Margin="0,0,8,0">
+                                <TextBlock Text="Drawing no." Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBox x:Name="DrawingNoTextBox" MinHeight="0" Height="24" FontSize="12" Padding="6,2" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Machine Model -->
+                            <StackPanel Grid.Column="3" Margin="0,0,8,0">
+                                <TextBlock Text="Machine Model" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBox x:Name="MachineTextBox" MinHeight="0" Height="24" FontSize="12" Padding="6,2" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Raised by -->
+                            <StackPanel Grid.Column="4" Margin="0,0,8,0">
+                                <TextBlock Text="Raised by" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBlock x:Name="RaisedByText"
+                                           FontSize="13"
+                                           Foreground="{StaticResource TextBrush}"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Raised date -->
+                            <StackPanel Grid.Column="5">
+                                <TextBlock Text="Raised date" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBlock x:Name="RaisedDateText"
+                                           FontSize="13"
+                                           Foreground="{StaticResource TextBrush}"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Reason row (130px, 2 cols) -->
+                    <Border Grid.Row="1"
+                            Height="130"
+                            BorderThickness="0,0,0,1"
+                            BorderBrush="{StaticResource BorderBrush}"
+                            Padding="14,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                <TextBlock Text="Reason for change" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBox x:Name="ReasonTextBox"
+                                         Height="90"
+                                         AcceptsReturn="True"
+                                         TextWrapping="Wrap"
+                                         VerticalContentAlignment="Top"
+                                         VerticalScrollBarVisibility="Auto"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Action" Style="{StaticResource FieldLabelStyle}"/>
+                                <TextBox x:Name="ActionTextBox"
+                                         Height="90"
+                                         AcceptsReturn="True"
+                                         TextWrapping="Wrap"
+                                         VerticalContentAlignment="Top"
+                                         VerticalScrollBarVisibility="Auto"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Image stage (* height, 2 cols) -->
+                    <Grid Grid.Row="2" Background="{StaticResource BorderBrush}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Before panel -->
+                        <Border Grid.Column="0"
+                                Style="{StaticResource ImageCanvasStyle}"
+                                Margin="0,0,1,0">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="42"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Border Grid.Row="0"
+                                        Background="White"
+                                        BorderThickness="0,0,0,1"
+                                        BorderBrush="{StaticResource BorderBrush}">
+                                    <DockPanel Margin="12,0" LastChildFill="False">
+                                        <TextBlock Text="Before"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"
+                                                   DockPanel.Dock="Left"/>
+                                    </DockPanel>
+                                </Border>
+                                <local:DCRImagePanelView x:Name="BeforeImagePanel" Grid.Row="1"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- After panel -->
+                        <Border Grid.Column="1"
+                                Style="{StaticResource ImageCanvasStyle}"
+                                Margin="0">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="42"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Border Grid.Row="0"
+                                        Background="White"
+                                        BorderThickness="0,0,0,1"
+                                        BorderBrush="{StaticResource BorderBrush}">
+                                    <DockPanel Margin="12,0" LastChildFill="False">
+                                        <TextBlock Text="After"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"
+                                                   DockPanel.Dock="Left"/>
+                                    </DockPanel>
+                                </Border>
+                                <local:DCRImagePanelView x:Name="AfterImagePanel" Grid.Row="1"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+
+                <!-- ─── SIDE PANEL (col 1) ────────────────────────────────── -->
+                <Border Grid.Column="1"
+                        BorderThickness="1,0,0,0"
+                        BorderBrush="{StaticResource BorderBrush}"
+                        Background="{StaticResource SurfaceMutedBrush}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Scrollable content -->
+                        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+                            <StackPanel Margin="14">
+
+                                <!-- ── Risk Assessment ── -->
+                                <StackPanel Margin="0,0,0,16">
+                                    <TextBlock Text="Risk Assessment"
+                                               Style="{StaticResource SectionHeaderStyle}"/>
+
+                                    <!-- 1. Leadtime -->
+                                    <StackPanel Margin="0,0,0,10">
+                                        <DockPanel LastChildFill="True">
+                                            <TextBlock Text="1. Leadtime impact"
+                                                       Style="{StaticResource FieldLabelStyle}"
+                                                       DockPanel.Dock="Left"
+                                                       VerticalAlignment="Center"
+                                                       Margin="0,0,0,0"/>
+                                            <ComboBox x:Name="LeadTimeComboBox"
+                                                      DockPanel.Dock="Right"
+                                                      Width="80"
+                                                      HorizontalAlignment="Right"
+                                                      MinHeight="0"
+                                                      Height="26"
+                                                      FontSize="12"
+                                                      Padding="6,2">
+                                                <ComboBoxItem Content=""/>
+                                                <ComboBoxItem Content="Yes"/>
+                                                <ComboBoxItem Content="No"/>
+                                            </ComboBox>
+                                        </DockPanel>
+                                        <TextBox x:Name="LeadTimeMemoBox"
+                                                 Height="60"
+                                                 AcceptsReturn="True"
+                                                 TextWrapping="Wrap"
+                                                 VerticalContentAlignment="Top"
+                                                 VerticalScrollBarVisibility="Auto"
+                                                 Margin="0,4,0,0"/>
+                                    </StackPanel>
+
+                                    <!-- 2. Safety -->
+                                    <StackPanel Margin="0,0,0,10">
+                                        <DockPanel LastChildFill="True">
+                                            <TextBlock Text="2. Safety impact"
+                                                       Style="{StaticResource FieldLabelStyle}"
+                                                       DockPanel.Dock="Left"
+                                                       VerticalAlignment="Center"/>
+                                            <ComboBox x:Name="SafetyComboBox"
+                                                      DockPanel.Dock="Right"
+                                                      Width="80"
+                                                      HorizontalAlignment="Right"
+                                                      MinHeight="0"
+                                                      Height="26"
+                                                      FontSize="12"
+                                                      Padding="6,2">
+                                                <ComboBoxItem Content=""/>
+                                                <ComboBoxItem Content="Yes"/>
+                                                <ComboBoxItem Content="No"/>
+                                            </ComboBox>
+                                        </DockPanel>
+                                        <TextBox x:Name="SafetyMemoBox"
+                                                 Height="60"
+                                                 AcceptsReturn="True"
+                                                 TextWrapping="Wrap"
+                                                 VerticalContentAlignment="Top"
+                                                 VerticalScrollBarVisibility="Auto"
+                                                 Margin="0,4,0,0"/>
+                                    </StackPanel>
+
+                                    <!-- 3. Compliance -->
+                                    <StackPanel Margin="0,0,0,10">
+                                        <DockPanel LastChildFill="True">
+                                            <TextBlock Text="3. Compliance break"
+                                                       Style="{StaticResource FieldLabelStyle}"
+                                                       DockPanel.Dock="Left"
+                                                       VerticalAlignment="Center"/>
+                                            <ComboBox x:Name="ComplianceComboBox"
+                                                      DockPanel.Dock="Right"
+                                                      Width="80"
+                                                      HorizontalAlignment="Right"
+                                                      MinHeight="0"
+                                                      Height="26"
+                                                      FontSize="12"
+                                                      Padding="6,2">
+                                                <ComboBoxItem Content=""/>
+                                                <ComboBoxItem Content="Yes"/>
+                                                <ComboBoxItem Content="No"/>
+                                            </ComboBox>
+                                        </DockPanel>
+                                        <TextBox x:Name="ComplianceMemoBox"
+                                                 Height="60"
+                                                 AcceptsReturn="True"
+                                                 TextWrapping="Wrap"
+                                                 VerticalContentAlignment="Top"
+                                                 VerticalScrollBarVisibility="Auto"
+                                                 Margin="0,4,0,0"/>
+                                    </StackPanel>
+
+                                    <!-- Saving + Cost metrics -->
+                                    <Grid Margin="0,8,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Saving -->
+                                        <StackPanel Grid.Column="0" Margin="0,0,6,0">
+                                            <TextBlock Text="Saving" Style="{StaticResource FieldLabelStyle}"/>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="80"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBox x:Name="SavingTextBox"
+                                                         Grid.Column="0"
+                                                         MinHeight="0"
+                                                         Height="28"
+                                                         FontSize="12"
+                                                         Padding="6,2"
+                                                         VerticalContentAlignment="Center"
+                                                         Margin="0,0,4,0"/>
+                                                <ComboBox x:Name="SavingCurrencyComboBox"
+                                                          Grid.Column="1"
+                                                          MinHeight="0"
+                                                          Height="28"
+                                                          FontSize="12"
+                                                          Padding="4,2">
+                                                    <ComboBoxItem Content="Mvnd"/>
+                                                    <ComboBoxItem Content="USD"/>
+                                                    <ComboBoxItem Content="VND"/>
+                                                    <ComboBoxItem Content="AUD"/>
+                                                </ComboBox>
+                                            </Grid>
+                                        </StackPanel>
+
+                                        <!-- Cost -->
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Cost" Style="{StaticResource FieldLabelStyle}"/>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="80"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBox x:Name="CostTextBox"
+                                                         Grid.Column="0"
+                                                         MinHeight="0"
+                                                         Height="28"
+                                                         FontSize="12"
+                                                         Padding="6,2"
+                                                         VerticalContentAlignment="Center"
+                                                         Margin="0,0,4,0"/>
+                                                <ComboBox x:Name="CostCurrencyComboBox"
+                                                          Grid.Column="1"
+                                                          MinHeight="0"
+                                                          Height="28"
+                                                          FontSize="12"
+                                                          Padding="4,2">
+                                                    <ComboBoxItem Content="Mvnd"/>
+                                                    <ComboBoxItem Content="USD"/>
+                                                    <ComboBoxItem Content="VND"/>
+                                                    <ComboBoxItem Content="AUD"/>
+                                                </ComboBox>
+                                            </Grid>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+
+                                <!-- Separator -->
+                                <Border Height="1"
+                                        Background="{StaticResource BorderBrush}"
+                                        Margin="0,0,0,16"/>
+
+                                <!-- ── DCR Decision ── -->
+                                <StackPanel>
+                                    <TextBlock Text="DCR Decision"
+                                               Style="{StaticResource SectionHeaderStyle}"/>
+
+                                    <!-- Suggestion -->
+                                    <TextBlock Text="Suggestion" Style="{StaticResource FieldLabelStyle}"/>
+                                    <TextBox x:Name="SuggestionTextBox"
+                                             Height="72"
+                                             AcceptsReturn="True"
+                                             TextWrapping="Wrap"
+                                             VerticalContentAlignment="Top"
+                                             VerticalScrollBarVisibility="Auto"
+                                             Margin="0,0,0,10"/>
+
+                                    <!-- Consultant -->
+                                    <TextBlock Text="Consultant" Style="{StaticResource FieldLabelStyle}"/>
+                                    <ComboBox x:Name="ConsultantComboBox" Margin="0,0,0,10"/>
+
+                                    <!-- Decision + Date -->
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" Margin="0,0,6,0">
+                                            <TextBlock Text="Decision" Style="{StaticResource FieldLabelStyle}"/>
+                                            <ComboBox x:Name="ConsultantDecisionComboBox"
+                                                      MinHeight="0"
+                                                      Height="28"
+                                                      FontSize="12"
+                                                      Padding="6,2">
+                                                <ComboBoxItem Content=""/>
+                                                <ComboBoxItem Content="Approve"/>
+                                                <ComboBoxItem Content="Reject"/>
+                                                <ComboBoxItem Content="Pending"/>
+                                            </ComboBox>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Date" Style="{StaticResource FieldLabelStyle}"/>
+                                            <DatePicker x:Name="DecisionDatePicker"
+                                                        MinHeight="0"
+                                                        Height="28"
+                                                        FontSize="12"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <!-- Comment -->
+                                    <TextBlock Text="Comment" Style="{StaticResource FieldLabelStyle}"/>
+                                    <TextBox x:Name="DecisionCommentTextBox"
+                                             Height="72"
+                                             AcceptsReturn="True"
+                                             TextWrapping="Wrap"
+                                             VerticalContentAlignment="Top"
+                                             VerticalScrollBarVisibility="Auto"/>
+                                </StackPanel>
+
+                            </StackPanel>
+                        </ScrollViewer>
+
+                        <!-- Bottom bar (fixed) -->
+                        <Border Grid.Row="1"
+                                BorderThickness="0,1,0,0"
+                                BorderBrush="{StaticResource BorderBrush}"
+                                Padding="14,10"
+                                Background="White">
+                            <StackPanel>
+                                <TextBlock Text="DCR Decision" Style="{StaticResource FieldLabelStyle}"/>
+                                <ComboBox x:Name="DcrDecisionComboBox" Margin="0,0,0,10">
+                                    <ComboBoxItem Content=""/>
+                                    <ComboBoxItem Content="Yes — Raise DCR"/>
+                                    <ComboBoxItem Content="No — Reject"/>
+                                </ComboBox>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button x:Name="SaveSideButton"
+                                            Grid.Column="0"
+                                            Content="Save"
+                                            MinHeight="34"
+                                            Margin="0,0,6,0"
+                                            Click="SaveSideButton_Click"/>
+                                    <Button x:Name="SubmitSideButton"
+                                            Grid.Column="1"
+                                            Content="Submit to DCR"
+                                            MinHeight="34"
+                                            Style="{StaticResource PrimaryButtonStyle}"
+                                            Click="SubmitSideButton_Click"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- ═══════════════════════════════════════════════════════════════
+                 ROW 2 — APPROVAL / COMMENTS (collapsible)
+            ════════════════════════════════════════════════════════════════ -->
+            <Border Grid.Row="2"
+                    BorderThickness="0,1,0,0"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    Background="White">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="44"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Header row -->
+                    <DockPanel Grid.Row="0" Margin="14,0">
+                        <TextBlock Text="Approval / Comments"
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center"
+                                   DockPanel.Dock="Left"/>
+                        <Button x:Name="ToggleApprovalButton"
+                                Content="Expand"
+                                MinHeight="28"
+                                Padding="12,0"
+                                DockPanel.Dock="Right"
+                                Click="ToggleApprovalButton_Click"/>
+                    </DockPanel>
+
+                    <!-- DataGrid -->
+                    <DataGrid x:Name="ApprovalGrid"
+                              Grid.Row="1"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              IsReadOnly="True"
+                              BorderThickness="0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Actor"
+                                                Binding="{Binding ActorName}"
+                                                Width="150"/>
+                            <DataGridTextColumn Header="Role"
+                                                Binding="{Binding ActorRole}"
+                                                Width="120"/>
+                            <DataGridTextColumn Header="Action"
+                                                Binding="{Binding ActionDisplay}"
+                                                Width="160"/>
+                            <DataGridTextColumn Header="Date"
+                                                Binding="{Binding ActionDate, StringFormat=dd/MM/yyyy HH:mm}"
+                                                Width="150"/>
+                            <DataGridTextColumn Header="Comment"
+                                                Binding="{Binding Comment}"
+                                                Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+
+        </Grid>
+    </Border>
+</UserControl>
