@@ -192,11 +192,9 @@ public partial class DCRDetailForm : BaseUserControl, IDCRDetailView
             _dtpTargetDate.Enabled = isEditing;
             _chkNoTargetDate.Enabled = isEditing;
 
-            // Image button visibility
-            _btnInsertBefore.Enabled = isEditing;
-            _btnClearBefore.Enabled = isEditing;
-            _btnInsertAfter.Enabled = isEditing;
-            _btnClearAfter.Enabled = isEditing;
+            // Gallery editability
+            _galleryBefore.Enabled = isEditing;
+            _galleryAfter.Enabled = isEditing;
 
             // Background tint for read-only fields
             var bg = isView
@@ -255,19 +253,11 @@ public partial class DCRDetailForm : BaseUserControl, IDCRDetailView
                 RemoveAttachmentRequested?.Invoke(this, att.Id);
         };
 
-        // Image handling events
-        _btnInsertBefore.Click += (s, e) => InsertImage(_picBefore);
-        _btnClearBefore.Click += (s, e) => ClearImage(_picBefore);
-        _btnInsertAfter.Click += (s, e) => InsertImage(_picAfter);
-        _btnClearAfter.Click += (s, e) => ClearImage(_picAfter);
-
-        _picBefore.DragOver += (s, e) => e.Effect = e.Data?.GetDataPresent(DataFormats.FileDrop) == true ? DragDropEffects.Copy : DragDropEffects.None;
-        _picBefore.DragDrop += (s, e) => HandleImageDrop(e, _picBefore);
-        _picBefore.KeyDown += (s, e) => HandleImagePaste(e, _picBefore);
-
-        _picAfter.DragOver += (s, e) => e.Effect = e.Data?.GetDataPresent(DataFormats.FileDrop) == true ? DragDropEffects.Copy : DragDropEffects.None;
-        _picAfter.DragDrop += (s, e) => HandleImageDrop(e, _picAfter);
-        _picAfter.KeyDown += (s, e) => HandleImagePaste(e, _picAfter);
+        // Image gallery events - track changes and update dirty flag
+        _galleryBefore.ImageAdded += (s, e) => MarkDirty(null, EventArgs.Empty);
+        _galleryBefore.ImageRemoved += (s, e) => MarkDirty(null, EventArgs.Empty);
+        _galleryAfter.ImageAdded += (s, e) => MarkDirty(null, EventArgs.Empty);
+        _galleryAfter.ImageRemoved += (s, e) => MarkDirty(null, EventArgs.Empty);
 
         // Dirty tracking
         _txtTitle.TextChanged += MarkDirty;
@@ -316,94 +306,52 @@ public partial class DCRDetailForm : BaseUserControl, IDCRDetailView
         return btn;
     }
 
-    // ─── Image handling ───────────────────────────────────────────────────────
+    // ─── Image gallery methods ───────────────────────────────────────────────
 
-    private void InsertImage(PictureBox targetPicture)
+    public List<System.Drawing.Image> GetBeforeImages() => _galleryBefore.GetImages();
+    public List<System.Drawing.Image> GetAfterImages()  => _galleryAfter.GetImages();
+
+    public (int Width, int Height) GetBeforeThumbnailSize() => _galleryBefore.GetCurrentSize();
+    public (int Width, int Height) GetAfterThumbnailSize()  => _galleryAfter.GetCurrentSize();
+
+    public void SetBeforeThumbnailSize(int width, int height)
     {
-        using (var openFileDialog = new OpenFileDialog())
-        {
-            openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png, *.bmp, *.gif)|*.jpg;*.jpeg;*.png;*.bmp;*.gif|All files (*.*)|*.*";
-            openFileDialog.Title = "Select an image";
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    var image = System.Drawing.Image.FromFile(openFileDialog.FileName);
-                    targetPicture.Image?.Dispose();
-                    targetPicture.Image = image;
-                    MarkDirty(null, EventArgs.Empty);
-                }
-                catch (Exception ex)
-                {
-                    ShowError($"Failed to load image: {ex.Message}", "Error");
-                }
-            }
-        }
+        InvokeIfRequired(() => _galleryBefore.SetSize(width, height));
     }
 
-    private void ClearImage(PictureBox targetPicture)
+    public void SetAfterThumbnailSize(int width, int height)
     {
-        if (targetPicture.Image != null)
-        {
-            targetPicture.Image.Dispose();
-            targetPicture.Image = null;
-            MarkDirty(null, EventArgs.Empty);
-        }
+        InvokeIfRequired(() => _galleryAfter.SetSize(width, height));
     }
 
-    private void HandleImageDrop(DragEventArgs e, PictureBox targetPicture)
+    public void SetBeforeImages(IEnumerable<System.Drawing.Image> images)
     {
-        if (e.Data?.GetDataPresent(DataFormats.FileDrop) == true)
+        InvokeIfRequired(() =>
         {
-            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (files.Length > 0)
-            {
-                var filePath = files[0];
-                var validImageExtensions = new[] { ".jpg", ".jpeg", ".png", ".bmp", ".gif" };
-                var extension = Path.GetExtension(filePath).ToLower();
-
-                if (validImageExtensions.Contains(extension))
-                {
-                    try
-                    {
-                        var image = System.Drawing.Image.FromFile(filePath);
-                        targetPicture.Image?.Dispose();
-                        targetPicture.Image = image;
-                        MarkDirty(null, EventArgs.Empty);
-                    }
-                    catch (Exception ex)
-                    {
-                        ShowError($"Failed to load image: {ex.Message}", "Error");
-                    }
-                }
-                else
-                {
-                    ShowError("Please drop a valid image file (jpg, png, bmp, gif)", "Invalid file");
-                }
-            }
-        }
+            _galleryBefore.ClearImages();
+            foreach (var img in images) _galleryBefore.AddImage(img);
+        });
     }
 
-    private void HandleImagePaste(KeyEventArgs e, PictureBox targetPicture)
+    public void SetAfterImages(IEnumerable<System.Drawing.Image> images)
     {
-        if (e.Control && e.KeyCode == Keys.V)
+        InvokeIfRequired(() =>
         {
-            try
-            {
-                if (Clipboard.ContainsImage())
-                {
-                    var image = Clipboard.GetImage();
-                    targetPicture.Image?.Dispose();
-                    targetPicture.Image = image;
-                    MarkDirty(null, EventArgs.Empty);
-                    e.Handled = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                ShowError($"Failed to paste image: {ex.Message}", "Error");
-            }
-        }
+            _galleryAfter.ClearImages();
+            foreach (var img in images) _galleryAfter.AddImage(img);
+        });
     }
+
+    /// <summary>Clear all Before images</summary>
+    public void ClearBeforeImages() => _galleryBefore.ClearImages();
+
+    /// <summary>Clear all After images</summary>
+    public void ClearAfterImages() => _galleryAfter.ClearImages();
+
+    /// <summary>Add an image to the Before gallery (used for programmatic loading)</summary>
+    public void AddBeforeImage(System.Drawing.Image image) => _galleryBefore.AddImage(image);
+
+    /// <summary>Add an image to the After gallery (used for programmatic loading)</summary>
+    public void AddAfterImage(System.Drawing.Image image) => _galleryAfter.AddImage(image);
 }
+

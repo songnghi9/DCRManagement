@@ -1,4 +1,5 @@
-﻿using DCRManagement.Domain.Interfaces;
+﻿using DCRManagement.Application.Common;
+using DCRManagement.Domain.Interfaces;
 using DCRManagement.Infrastructure.Persistence;
 using DCRManagement.Infrastructure.Persistence.Repositories;
 using DCRManagement.Infrastructure.Services;
@@ -26,6 +27,8 @@ public static class DependencyInjection
 
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<AttachmentService>();
+        services.AddScoped<IGalleryImageService>(sp => sp.GetRequiredService<AttachmentService>());
+        services.AddScoped<IDCRImageRepository, DCRImageRepository>();
         services.AddScoped<DbSeeder>();
 
         return services;

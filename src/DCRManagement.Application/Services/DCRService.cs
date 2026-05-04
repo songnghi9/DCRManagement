@@ -13,6 +13,7 @@ public class DCRService
     private readonly IUserRepository _userRepository;
     private readonly IApprovalHistoryRepository _historyRepository;
     private readonly WorkflowService _workflowService;
+    private readonly IGalleryImageService _galleryImageService;
     private readonly ILogger<DCRService> _logger;
 
     public DCRService(
@@ -20,13 +21,15 @@ public class DCRService
         IUserRepository userRepository,
         IApprovalHistoryRepository historyRepository,
         WorkflowService workflowService,
+        IGalleryImageService galleryImageService,
         ILogger<DCRService> logger)
     {
-        _dcrRepository = dcrRepository;
-        _userRepository = userRepository;
-        _historyRepository = historyRepository;
-        _workflowService = workflowService;
-        _logger = logger;
+        _dcrRepository       = dcrRepository;
+        _userRepository      = userRepository;
+        _historyRepository   = historyRepository;
+        _workflowService     = workflowService;
+        _galleryImageService = galleryImageService;
+        _logger              = logger;
     }
 
     /// <summary>
@@ -59,6 +62,17 @@ public class DCRService
             };
 
             await _dcrRepository.AddAsync(dcr);
+
+            // Save Before/After gallery images if provided
+            if (dto.BeforeImages?.Count > 0)
+                await _galleryImageService.ReplaceGalleryImagesAsync(
+                    dcr.Id, dto.BeforeImages, "Before", currentUserId,
+                    dto.BeforeThumbnailWidth, dto.BeforeThumbnailHeight);
+
+            if (dto.AfterImages?.Count > 0)
+                await _galleryImageService.ReplaceGalleryImagesAsync(
+                    dcr.Id, dto.AfterImages, "After", currentUserId,
+                    dto.AfterThumbnailWidth, dto.AfterThumbnailHeight);
 
             _logger.LogInformation("Created DCR {DCRNumber} by user {UserId}", dcrNumber, currentUserId);
 
@@ -105,6 +119,17 @@ public class DCRService
             dcr.UpdatedById = SessionContext.Instance.UserId;
 
             await _dcrRepository.UpdateAsync(dcr);
+
+            // Replace gallery images if provided (null = no change, empty list = clear all)
+            if (dto.BeforeImages != null)
+                await _galleryImageService.ReplaceGalleryImagesAsync(
+                    dcr.Id, dto.BeforeImages, "Before", SessionContext.Instance.UserId,
+                    dto.BeforeThumbnailWidth, dto.BeforeThumbnailHeight);
+
+            if (dto.AfterImages != null)
+                await _galleryImageService.ReplaceGalleryImagesAsync(
+                    dcr.Id, dto.AfterImages, "After", SessionContext.Instance.UserId,
+                    dto.AfterThumbnailWidth, dto.AfterThumbnailHeight);
 
             return await MapToDtoAsync(dcr);
         }
@@ -226,7 +251,11 @@ public class DCRService
             a.Id, a.DCRId, a.FileName, a.FilePath, a.FileSizeBytes,
             a.ContentType,
             creator?.FullName ?? "Unknown",
-            a.CreatedAt)) ?? [];
+            a.CreatedAt,
+            a.ImageType,
+            a.DisplayOrder,
+            a.ThumbnailWidth,
+            a.ThumbnailHeight)) ?? [];
 
         return new DCRDto(
             dcr.Id, dcr.DCRNumber, dcr.Title, dcr.Description,

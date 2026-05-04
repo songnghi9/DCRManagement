@@ -9,6 +9,7 @@ public class AppDbContext : DbContext
     public DbSet<DCR> DCRs { get; set; }
     public DbSet<ApprovalHistory> ApprovalHistories { get; set; }
     public DbSet<Attachment> Attachments { get; set; }
+    public DbSet<DCRImage> DCRImages { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
