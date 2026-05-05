@@ -17,7 +17,7 @@
 
     <Grid Background="{StaticResource AppBackgroundBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="48" />
+            <RowDefinition Height="36" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -37,7 +37,7 @@
             ButtonsForeground="#EAF0F7"
             Background="#0B1220"
             Foreground="#EAF0F7"
-            MinHeight="48">
+            MinHeight="36">
 
             <!-- Page title + subtitle — vertically centered in the 48px TitleBar -->
             <ui:TitleBar.Header>
