@@ -7,7 +7,7 @@
 
     <UserControl.Resources>
 
-        <!-- ── Row header style: shows row number ── -->
+        <!--  ── Row header style: shows row number ──  -->
         <Style TargetType="{x:Type DataGridRowHeader}">
             <Setter Property="Width" Value="44" />
             <Setter Property="Background" Value="#F8FAFC" />
@@ -16,23 +16,21 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type DataGridRowHeader}">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
                             <TextBlock
                                 x:Name="RowNum"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 FontSize="11"
                                 Foreground="{StaticResource MutedTextBrush}"
-                                Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},
-                                               Path=(ItemsControl.AlternationIndex),
-                                               Converter={x:Static local:RowIndexConverter.Instance}}" />
+                                Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=(ItemsControl.AlternationIndex), Converter={x:Static local:RowIndexConverter.Instance}}" />
                         </Border>
                         <ControlTemplate.Triggers>
-                            <!-- Highlight row number when row is selected -->
-                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}}"
-                                         Value="True">
+                            <!--  Highlight row number when row is selected  -->
+                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True">
                                 <Setter TargetName="RowNum" Property="Foreground" Value="{StaticResource PrimaryBrush}" />
                                 <Setter TargetName="RowNum" Property="FontWeight" Value="SemiBold" />
                             </DataTrigger>
@@ -42,7 +40,7 @@
             </Setter>
         </Style>
 
-        <!-- ── Column header style ── -->
+        <!--  ── Column header style ──  -->
         <Style TargetType="{x:Type DataGridColumnHeader}">
             <Setter Property="Background" Value="#F1F5F9" />
             <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}" />
@@ -54,7 +52,7 @@
             <Setter Property="Cursor" Value="Hand" />
         </Style>
 
-        <!-- ── Row style: hover + selected ── -->
+        <!--  ── Row style: hover + selected ──  -->
         <Style TargetType="{x:Type DataGridRow}">
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="MinHeight" Value="40" />
@@ -68,7 +66,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- ── Cell style ── -->
+        <!--  ── Cell style ──  -->
         <Style TargetType="{x:Type DataGridCell}">
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Padding" Value="0" />
@@ -82,13 +80,15 @@
             </Style.Triggers>
         </Style>
 
-        <!-- ── CheckBox cell style — centered ── -->
-        <Style x:Key="CheckBoxCellStyle" TargetType="{x:Type DataGridCell}"
-               BasedOn="{StaticResource {x:Type DataGridCell}}">
+        <!--  ── CheckBox cell style — centered ──  -->
+        <Style
+            x:Key="CheckBoxCellStyle"
+            BasedOn="{StaticResource {x:Type DataGridCell}}"
+            TargetType="{x:Type DataGridCell}">
             <Setter Property="HorizontalContentAlignment" Value="Center" />
         </Style>
 
-        <!-- ── Priority badge converter ── -->
+        <!--  ── Priority badge converter ──  -->
         <local:PriorityColorConverter x:Key="PriorityColor" />
 
     </UserControl.Resources>
@@ -100,15 +100,16 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- ── Filter / action toolbar ── -->
-        <Border Grid.Row="0"
-                Margin="0,0,0,12"
-                Padding="14,10"
-                Background="{StaticResource SurfaceBrush}"
-                BorderBrush="{StaticResource BorderBrush}"
-                BorderThickness="1"
-                CornerRadius="{StaticResource PanelCornerRadius}"
-                Effect="{StaticResource ShadowXs}">
+        <!--  ── Filter / action toolbar ──  -->
+        <Border
+            Grid.Row="0"
+            Margin="0,0,0,12"
+            Padding="14,10"
+            Background="{StaticResource SurfaceBrush}"
+            BorderBrush="{StaticResource BorderBrush}"
+            BorderThickness="1"
+            CornerRadius="{StaticResource PanelCornerRadius}"
+            Effect="{StaticResource ShadowXs}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="260" />
@@ -118,18 +119,20 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <ui:TextBox x:Name="SearchTextBox"
-                            Grid.Column="0"
-                            Margin="0,0,10,0"
-                            Icon="{ui:SymbolIcon Search24}"
-                            PlaceholderText="Search DCR, title, creator…"
-                            TextChanged="Filter_Changed" />
+                <ui:TextBox
+                    x:Name="SearchTextBox"
+                    Grid.Column="0"
+                    Margin="0,0,10,0"
+                    Icon="{ui:SymbolIcon Search24}"
+                    PlaceholderText="Search DCR, title, creator…"
+                    TextChanged="Filter_Changed" />
 
-                <ComboBox x:Name="StatusComboBox"
-                          Grid.Column="1"
-                          Margin="0,0,10,0"
-                          SelectedIndex="0"
-                          SelectionChanged="Filter_Changed">
+                <ComboBox
+                    x:Name="StatusComboBox"
+                    Grid.Column="1"
+                    Margin="0,0,10,0"
+                    SelectedIndex="0"
+                    SelectionChanged="Filter_Changed">
                     <ComboBoxItem Content="All Status" />
                     <ComboBoxItem Content="Draft" />
                     <ComboBoxItem Content="Pending Review" />
@@ -140,10 +143,11 @@
                     <ComboBoxItem Content="Closed" />
                 </ComboBox>
 
-                <ComboBox x:Name="PriorityComboBox"
-                          Grid.Column="2"
-                          SelectedIndex="0"
-                          SelectionChanged="Filter_Changed">
+                <ComboBox
+                    x:Name="PriorityComboBox"
+                    Grid.Column="2"
+                    SelectedIndex="0"
+                    SelectionChanged="Filter_Changed">
                     <ComboBoxItem Content="All Priority" />
                     <ComboBoxItem Content="Low" />
                     <ComboBoxItem Content="Medium" />
@@ -151,123 +155,150 @@
                     <ComboBoxItem Content="Critical" />
                 </ComboBox>
 
-                <StackPanel Grid.Column="4"
-                            Orientation="Horizontal"
-                            VerticalAlignment="Center">
-                    <ui:Button MinWidth="90" Margin="0,0,8,0"
-                               Click="RefreshButton_Click" Content="Refresh"
-                               CornerRadius="{StaticResource ButtonCornerRadius}"
-                               Icon="{ui:SymbolIcon ArrowSync24}" />
-                    <ui:Button MinWidth="80" Margin="0,0,8,0"
-                               Click="ViewButton_Click" Content="View"
-                               CornerRadius="{StaticResource ButtonCornerRadius}"
-                               Icon="{ui:SymbolIcon Eye24}" />
-                    <ui:Button MinWidth="80" Margin="0,0,8,0"
-                               Click="EditButton_Click" Content="Edit"
-                               CornerRadius="{StaticResource ButtonCornerRadius}"
-                               Icon="{ui:SymbolIcon Edit24}" />
-                    <ui:Button MinWidth="110" Appearance="Primary"
-                               Click="CreateButton_Click" Content="New DCR"
-                               CornerRadius="{StaticResource ButtonCornerRadius}"
-                               Icon="{ui:SymbolIcon Add24}" />
+                <StackPanel
+                    Grid.Column="4"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <ui:Button
+                        MinWidth="90"
+                        Margin="0,0,8,0"
+                        Click="RefreshButton_Click"
+                        Content="Refresh"
+                        CornerRadius="{StaticResource ButtonCornerRadius}"
+                        Icon="{ui:SymbolIcon ArrowSync24}" />
+                    <ui:Button
+                        MinWidth="80"
+                        Margin="0,0,8,0"
+                        Click="ViewButton_Click"
+                        Content="View"
+                        CornerRadius="{StaticResource ButtonCornerRadius}"
+                        Icon="{ui:SymbolIcon Eye24}" />
+                    <ui:Button
+                        MinWidth="80"
+                        Margin="0,0,8,0"
+                        Click="EditButton_Click"
+                        Content="Edit"
+                        CornerRadius="{StaticResource ButtonCornerRadius}"
+                        Icon="{ui:SymbolIcon Edit24}" />
+                    <ui:Button
+                        MinWidth="110"
+                        Appearance="Primary"
+                        Click="CreateButton_Click"
+                        Content="New DCR"
+                        CornerRadius="{StaticResource ButtonCornerRadius}"
+                        Icon="{ui:SymbolIcon Add24}" />
                 </StackPanel>
             </Grid>
         </Border>
 
-        <!-- ── Selection summary bar (shown when rows are checked) ── -->
-        <Border x:Name="SelectionBar"
-                Grid.Row="1"
-                Margin="0,0,0,10"
-                Padding="14,8"
-                Background="#EFF6FF"
-                BorderBrush="#BFDBFE"
-                BorderThickness="1"
-                CornerRadius="{StaticResource PanelCornerRadius}"
-                Visibility="Collapsed">
+        <!--  ── Selection summary bar (shown when rows are checked) ──  -->
+        <Border
+            x:Name="SelectionBar"
+            Grid.Row="1"
+            Margin="0,0,0,10"
+            Padding="14,8"
+            Background="#EFF6FF"
+            BorderBrush="#BFDBFE"
+            BorderThickness="1"
+            CornerRadius="{StaticResource PanelCornerRadius}"
+            Visibility="Collapsed">
             <DockPanel LastChildFill="False">
-                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" VerticalAlignment="Center">
-                    <ui:SymbolIcon Symbol="CheckboxChecked24" Foreground="{StaticResource PrimaryBrush}"
-                                   FontSize="16" Margin="0,0,8,0" />
-                    <TextBlock x:Name="SelectionCountText"
-                               Text="0 items selected"
-                               FontWeight="SemiBold"
-                               Foreground="{StaticResource PrimaryBrush}" />
+                <StackPanel
+                    VerticalAlignment="Center"
+                    DockPanel.Dock="Left"
+                    Orientation="Horizontal">
+                    <ui:SymbolIcon
+                        Margin="0,0,8,0"
+                        FontSize="16"
+                        Foreground="{StaticResource PrimaryBrush}"
+                        Symbol="CheckboxChecked24" />
+                    <TextBlock
+                        x:Name="SelectionCountText"
+                        FontWeight="SemiBold"
+                        Foreground="{StaticResource PrimaryBrush}"
+                        Text="0 items selected" />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
-                    <ui:Button Content="Clear selection"
-                               CornerRadius="{StaticResource ButtonCornerRadius}"
-                               Click="ClearSelectionButton_Click"
-                               Margin="0,0,8,0" />
-                    <ui:Button Content="Select all"
-                               CornerRadius="{StaticResource ButtonCornerRadius}"
-                               Click="SelectAllButton_Click" />
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                    <ui:Button
+                        Margin="0,0,8,0"
+                        Click="ClearSelectionButton_Click"
+                        Content="Clear selection"
+                        CornerRadius="{StaticResource ButtonCornerRadius}" />
+                    <ui:Button
+                        Click="SelectAllButton_Click"
+                        Content="Select all"
+                        CornerRadius="{StaticResource ButtonCornerRadius}" />
                 </StackPanel>
             </DockPanel>
         </Border>
 
-        <!-- ── DCR DataGrid ── -->
-        <Border Grid.Row="2"
-                Background="{StaticResource SurfaceBrush}"
-                BorderBrush="{StaticResource BorderBrush}"
-                BorderThickness="1"
-                ClipToBounds="True"
-                CornerRadius="{StaticResource PanelCornerRadius}"
-                Effect="{StaticResource ShadowXs}">
+        <!--  ── DCR DataGrid ──  -->
+        <Border
+            Grid.Row="2"
+            Background="{StaticResource SurfaceBrush}"
+            BorderBrush="{StaticResource BorderBrush}"
+            BorderThickness="1"
+            ClipToBounds="True"
+            CornerRadius="{StaticResource PanelCornerRadius}"
+            Effect="{StaticResource ShadowXs}">
             <ui:DataGrid
                 x:Name="DcrGrid"
+                AlternatingRowBackground="#FAFBFD"
+                AlternationCount="2"
                 AutoGenerateColumns="False"
                 BorderThickness="0"
                 CanUserAddRows="False"
                 CanUserReorderColumns="True"
                 CanUserResizeColumns="True"
                 CanUserSortColumns="True"
+                GridLinesVisibility="All"
+                HeadersVisibility="All"
+                HorizontalGridLinesBrush="{StaticResource BorderBrush}"
                 IsReadOnly="True"
+                MouseDoubleClick="DcrGrid_MouseDoubleClick"
+                RowBackground="White"
+                RowHeaderWidth="44"
+                SelectionChanged="DcrGrid_SelectionChanged"
                 SelectionMode="Extended"
                 SelectionUnit="FullRow"
-                HeadersVisibility="All"
-                RowHeaderWidth="44"
-                AlternationCount="2"
-                AlternatingRowBackground="#FAFBFD"
-                RowBackground="White"
-                GridLinesVisibility="All"
-                HorizontalGridLinesBrush="{StaticResource BorderBrush}"
-                VerticalGridLinesBrush="{StaticResource BorderBrush}"
-                MouseDoubleClick="DcrGrid_MouseDoubleClick"
-                SelectionChanged="DcrGrid_SelectionChanged">
+                VerticalGridLinesBrush="{StaticResource BorderBrush}">
 
                 <ui:DataGrid.Columns>
 
-                    <!-- ── Col 0: Checkbox ── -->
-                    <DataGridTemplateColumn Width="44"
-                                            CanUserResize="False"
-                                            CanUserReorder="False"
-                                            CanUserSort="False"
-                                            CellStyle="{StaticResource CheckBoxCellStyle}">
+                    <!--  ── Col 0: Checkbox ──  -->
+                    <DataGridTemplateColumn
+                        Width="44"
+                        CanUserReorder="False"
+                        CanUserResize="False"
+                        CanUserSort="False"
+                        CellStyle="{StaticResource CheckBoxCellStyle}">
                         <DataGridTemplateColumn.HeaderTemplate>
                             <DataTemplate>
-                                <!-- Select-all checkbox in header -->
-                                <CheckBox x:Name="SelectAllCheckBox"
-                                          HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"
-                                          Click="SelectAllCheckBox_Click"
-                                          ToolTip="Select / deselect all" />
+                                <!--  Select-all checkbox in header  -->
+                                <CheckBox
+                                    x:Name="SelectAllCheckBox"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Click="SelectAllCheckBox_Click"
+                                    ToolTip="Select / deselect all" />
                             </DataTemplate>
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"
-                                          IsChecked="{Binding IsSelected,
-                                              RelativeSource={RelativeSource AncestorType=DataGridRow},
-                                              Mode=TwoWay}"
-                                          Click="RowCheckBox_Click" />
+                                <CheckBox
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Click="RowCheckBox_Click"
+                                    IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}, Mode=TwoWay}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <!-- ── Col 1: DCR no. ── -->
-                    <DataGridTextColumn Width="130" Header="DCR no."
-                                        Binding="{Binding DCRNumber}">
+                    <!--  ── Col 1: DCR no. ──  -->
+                    <DataGridTextColumn
+                        Width="130"
+                        Binding="{Binding DCRNumber}"
+                        Header="DCR no.">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Padding" Value="12,0" />
@@ -278,9 +309,11 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
 
-                    <!-- ── Col 2: Title ── -->
-                    <DataGridTextColumn Width="*" Header="Title"
-                                        Binding="{Binding Title}">
+                    <!--  ── Col 2: Title ──  -->
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Title}"
+                        Header="Title">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Padding" Value="12,0" />
@@ -290,51 +323,61 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
 
-                    <!-- ── Col 3: Status badge ── -->
-                    <DataGridTemplateColumn Width="160" Header="Status"
-                                            SortMemberPath="StatusDisplay">
+                    <!--  ── Col 3: Status badge ──  -->
+                    <DataGridTemplateColumn
+                        Width="160"
+                        Header="Status"
+                        SortMemberPath="StatusDisplay">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Border Padding="10,0">
-                                    <Border Padding="9,3"
-                                            HorizontalAlignment="Left"
-                                            VerticalAlignment="Center"
-                                            Background="{Binding StatusDisplay,
-                                                Converter={x:Static local:StatusColorConverter.Instance}}"
-                                            CornerRadius="5">
-                                        <TextBlock FontSize="11" FontWeight="SemiBold"
-                                                   Foreground="White"
-                                                   Text="{Binding StatusDisplay}" />
+                                    <Border
+                                        Padding="9,3"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Background="{Binding StatusDisplay, Converter={x:Static local:StatusColorConverter.Instance}}"
+                                        CornerRadius="5">
+                                        <TextBlock
+                                            FontSize="11"
+                                            FontWeight="SemiBold"
+                                            Foreground="White"
+                                            Text="{Binding StatusDisplay}" />
                                     </Border>
                                 </Border>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <!-- ── Col 4: Priority badge ── -->
-                    <DataGridTemplateColumn Width="110" Header="Priority"
-                                            SortMemberPath="Priority">
+                    <!--  ── Col 4: Priority badge ──  -->
+                    <DataGridTemplateColumn
+                        Width="110"
+                        Header="Priority"
+                        SortMemberPath="Priority">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Border Padding="10,0">
-                                    <Border Padding="9,3"
-                                            HorizontalAlignment="Left"
-                                            VerticalAlignment="Center"
-                                            Background="{Binding Priority,
-                                                Converter={StaticResource PriorityColor}}"
-                                            CornerRadius="5">
-                                        <TextBlock FontSize="11" FontWeight="SemiBold"
-                                                   Foreground="White"
-                                                   Text="{Binding Priority}" />
+                                    <Border
+                                        Padding="9,3"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Background="{Binding Priority, Converter={StaticResource PriorityColor}}"
+                                        CornerRadius="5">
+                                        <TextBlock
+                                            FontSize="11"
+                                            FontWeight="SemiBold"
+                                            Foreground="White"
+                                            Text="{Binding Priority}" />
                                     </Border>
                                 </Border>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <!-- ── Col 5: Created by ── -->
-                    <DataGridTextColumn Width="150" Header="Created by"
-                                        Binding="{Binding CreatedBy}">
+                    <!--  ── Col 5: Created by ──  -->
+                    <DataGridTextColumn
+                        Width="150"
+                        Binding="{Binding CreatedBy}"
+                        Header="Created by">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Padding" Value="12,0" />
@@ -343,9 +386,11 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
 
-                    <!-- ── Col 6: Created at ── -->
-                    <DataGridTextColumn Width="150" Header="Created at"
-                                        Binding="{Binding CreatedAt, StringFormat=dd/MM/yyyy HH:mm}">
+                    <!--  ── Col 6: Created at ──  -->
+                    <DataGridTextColumn
+                        Width="150"
+                        Binding="{Binding CreatedAt, StringFormat=dd/MM/yyyy HH:mm}"
+                        Header="Created at">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Padding" Value="12,0" />

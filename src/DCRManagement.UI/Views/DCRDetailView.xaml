@@ -118,7 +118,10 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <!--  Form strip (72px, 6 equal columns)  -->
+                    <!--  Form strip — fixed-width narrow cols, wider cols for Drawing/Machine
+                          Change log no: 130  Category: 130  Drawing no: *  Machine Model: *
+                          Raised by: 160  Raised date: 110
+                    -->
                     <Border
                         Grid.Row="0"
                         Padding="14,10"
@@ -127,15 +130,15 @@
                         BorderThickness="0,0,0,1">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="130" />  <!-- Change log no. -->
+                                <ColumnDefinition Width="130" />  <!-- Category -->
+                                <ColumnDefinition Width="*" />    <!-- Drawing no. -->
+                                <ColumnDefinition Width="*" />    <!-- Machine Model -->
+                                <ColumnDefinition Width="160" />  <!-- Raised by -->
+                                <ColumnDefinition Width="110" />  <!-- Raised date -->
                             </Grid.ColumnDefinitions>
 
-                            <!--  Change log no.  -->
+                            <!--  Change log no. — read-only  -->
                             <StackPanel Grid.Column="0" Margin="0,0,8,0">
                                 <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Change log no." />
                                 <Border Style="{StaticResource ReadOnlyFieldStyle}">
@@ -159,19 +162,21 @@
                                 </ComboBox>
                             </StackPanel>
 
-                            <!--  Drawing no.  -->
+                            <!--  Drawing no. — flexible width  -->
                             <StackPanel Grid.Column="2" Margin="0,0,8,0">
                                 <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Drawing no." />
-                                <ui:TextBox x:Name="DrawingNoTextBox" PlaceholderText="e.g. 12100520" />
+                                <ui:TextBox x:Name="DrawingNoTextBox"
+                                            PlaceholderText="e.g. 12100520" />
                             </StackPanel>
 
-                            <!--  Machine Model  -->
+                            <!--  Machine Model — flexible width  -->
                             <StackPanel Grid.Column="3" Margin="0,0,8,0">
                                 <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Machine Model" />
-                                <ui:TextBox x:Name="MachineTextBox" PlaceholderText="e.g. JSV6-EMU" />
+                                <ui:TextBox x:Name="MachineTextBox"
+                                            PlaceholderText="e.g. JSV6-EMU" />
                             </StackPanel>
 
-                            <!--  Raised by  -->
+                            <!--  Raised by — read-only  -->
                             <StackPanel Grid.Column="4" Margin="0,0,8,0">
                                 <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Raised by" />
                                 <Border Style="{StaticResource ReadOnlyFieldStyle}">
@@ -184,7 +189,7 @@
                                 </Border>
                             </StackPanel>
 
-                            <!--  Raised date — read-only display, set by presenter -->
+                            <!--  Raised date — read-only  -->
                             <StackPanel Grid.Column="5">
                                 <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Raised date" />
                                 <Border Style="{StaticResource ReadOnlyFieldStyle}">
@@ -195,7 +200,6 @@
                                         Foreground="{StaticResource TextBrush}" />
                                 </Border>
                             </StackPanel>
-
 
                         </Grid>
                     </Border>

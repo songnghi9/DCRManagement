@@ -19,61 +19,70 @@ public partial class LoginWindow : FluentWindow
         _authService = authService;
         _services    = services;
 
-        PasswordBox.KeyDown += (s, e) => { if (e.Key == Key.Enter) _ = LoginAsync(); };
         UsernameTextBox.KeyDown += (s, e) => { if (e.Key == Key.Enter) PasswordBox.Focus(); };
+        PasswordBox.KeyDown     += (s, e) => { if (e.Key == Key.Enter) _ = LoginAsync(); };
 
-        // Load saved credentials on startup
-        Loaded += (_, _) => LoadSavedCredentials();
+        Loaded += (_, _) => RefreshSavedAccountsList();
     }
 
-    // ── Saved credentials ─────────────────────────────────────────────────────
+    // ── Saved accounts list ───────────────────────────────────────────────────
 
-    private void LoadSavedCredentials()
+    /// <summary>Reload the saved accounts panel from CredentialStore.</summary>
+    private void RefreshSavedAccountsList()
     {
-        var saved = CredentialStore.Load();
-        if (saved is null)
+        var accounts = CredentialStore.LoadAll();
+
+        if (accounts.Count == 0)
         {
-            SavedAccountsPanel.Visibility = Visibility.Collapsed;
+            SavedAccountsSection.Visibility = Visibility.Collapsed;
             return;
         }
 
-        // Show the saved account banner
-        SavedUsernameText.Text = saved.Value.Username;
-        SavedAccountsPanel.Visibility = Visibility.Visible;
+        // Build view models with avatar initial
+        SavedAccountsList.ItemsSource = accounts
+            .Select(c => new AccountViewModel(c.Username, c.Password))
+            .ToList();
 
-        // Pre-fill fields and check "Remember me"
-        UsernameTextBox.Text = saved.Value.Username;
-        PasswordBox.Password = saved.Value.Password;
-        _rawPassword = saved.Value.Password;
-        RememberMeCheckBox.IsChecked = true;
+        SavedAccountsSection.Visibility = Visibility.Visible;
     }
 
-    /// <summary>"Use" button — fills fields from saved credentials.</summary>
-    private void UseSavedButton_Click(object sender, RoutedEventArgs e)
+    /// <summary>"Use" button on an account row — fills fields.</summary>
+    private void UseAccountButton_Click(object sender, RoutedEventArgs e)
     {
-        var saved = CredentialStore.Load();
-        if (saved is null) return;
+        if (sender is not FrameworkElement fe || fe.Tag is not AccountViewModel vm) return;
 
-        UsernameTextBox.Text = saved.Value.Username;
-        PasswordBox.Password = saved.Value.Password;
-        _rawPassword = saved.Value.Password;
+        UsernameTextBox.Text = vm.Username;
+        PasswordBox.Password = vm.Password;
+        _rawPassword         = vm.Password;
         RememberMeCheckBox.IsChecked = true;
 
-        // Move focus to Sign in button for quick keyboard confirm
         LoginButton.Focus();
     }
 
-    /// <summary>"Forget" (delete) button — removes saved credentials.</summary>
-    private void ForgetButton_Click(object sender, RoutedEventArgs e)
+    /// <summary>Remove (×) button on an account row.</summary>
+    private void RemoveAccountButton_Click(object sender, RoutedEventArgs e)
     {
-        CredentialStore.Clear();
-        SavedAccountsPanel.Visibility = Visibility.Collapsed;
-        RememberMeCheckBox.IsChecked = false;
+        if (sender is not FrameworkElement fe || fe.Tag is not AccountViewModel vm) return;
 
-        // Clear fields only if they matched the saved account
-        UsernameTextBox.Text = string.Empty;
-        PasswordBox.Password = string.Empty;
-        _rawPassword = string.Empty;
+        CredentialStore.Remove(vm.Username);
+        RefreshSavedAccountsList();
+
+        // Clear fields if they matched the removed account
+        if (UsernameTextBox.Text.Equals(vm.Username, StringComparison.OrdinalIgnoreCase))
+        {
+            UsernameTextBox.Text = string.Empty;
+            PasswordBox.Password = string.Empty;
+            _rawPassword         = string.Empty;
+            RememberMeCheckBox.IsChecked = false;
+        }
+    }
+
+    /// <summary>"Clear all" button — removes every saved account.</summary>
+    private void ClearAllAccountsButton_Click(object sender, RoutedEventArgs e)
+    {
+        CredentialStore.ClearAll();
+        RefreshSavedAccountsList();
+        RememberMeCheckBox.IsChecked = false;
     }
 
     // ── Password box ──────────────────────────────────────────────────────────
@@ -86,7 +95,7 @@ public partial class LoginWindow : FluentWindow
 
     private void ShowPasswordCheckBox_Changed(object sender, RoutedEventArgs e)
     {
-        // WPF-UI PasswordBox has a built-in reveal eye button — no extra code needed
+        // WPF-UI PasswordBox has a built-in reveal eye button
     }
 
     // ── Login ─────────────────────────────────────────────────────────────────
@@ -121,16 +130,11 @@ public partial class LoginWindow : FluentWindow
                 return;
             }
 
-            // ── Save or clear credentials based on "Remember me" ──────────────
+            // Save or remove based on "Remember me"
             if (RememberMeCheckBox.IsChecked == true)
-            {
                 CredentialStore.Save(username, password);
-            }
             else
-            {
-                // User unchecked "Remember me" — remove any previously saved creds
-                CredentialStore.Clear();
-            }
+                CredentialStore.Remove(username);
 
             _services.GetRequiredService<MainWindow>().Show();
             Close();
@@ -146,4 +150,18 @@ public partial class LoginWindow : FluentWindow
             LoginButton.Content   = "Sign in";
         }
     }
+}
+
+// ── View model for saved account row ─────────────────────────────────────────
+
+/// <summary>Wraps a SavedCredential for display in the accounts list.</summary>
+internal sealed class AccountViewModel(string username, string password)
+{
+    public string Username { get; } = username;
+    public string Password { get; } = password;
+
+    /// <summary>First letter of username, uppercased — shown in avatar circle.</summary>
+    public string Initial => string.IsNullOrEmpty(Username)
+        ? "?"
+        : Username[0].ToString().ToUpperInvariant();
 }

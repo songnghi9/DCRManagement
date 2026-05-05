@@ -34,43 +34,87 @@
             ShowMaximize="True"
             ShowMinimize="True" />
 
-        <!-- Left — brand panel -->
+        <!--  Left — brand panel  -->
         <Border Grid.Row="1" Background="{StaticResource SidebarBrush}">
             <Grid Margin="56">
                 <StackPanel VerticalAlignment="Center">
-                    <Border Width="56" Height="56"
-                            Margin="0,0,0,28" HorizontalAlignment="Left"
-                            Background="#2563EB"
-                            CornerRadius="{StaticResource DialogCornerRadius}">
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
-                                   FontSize="28" FontWeight="Bold" Foreground="White" Text="D" />
+                    <Border
+                        Width="56"
+                        Height="56"
+                        Margin="0,0,0,28"
+                        HorizontalAlignment="Left"
+                        Background="#2563EB"
+                        CornerRadius="{StaticResource DialogCornerRadius}">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="28"
+                            FontWeight="Bold"
+                            Foreground="White"
+                            Text="D" />
                     </Border>
-                    <TextBlock FontSize="32" FontWeight="Bold" Foreground="White"
-                               LineHeight="38" Text="DCR Management" />
-                    <TextBlock Margin="0,14,0,0" FontSize="15" Foreground="#94A3B8"
-                               LineHeight="24"
-                               Text="Document change requests, image review,&#x0a;and approval workflow."
-                               TextWrapping="Wrap" />
+                    <TextBlock
+                        FontSize="32"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        LineHeight="38"
+                        Text="DCR Management" />
+                    <TextBlock
+                        Margin="0,14,0,0"
+                        FontSize="15"
+                        Foreground="#94A3B8"
+                        LineHeight="24"
+                        Text="Document change requests, image review,&#x0a;and approval workflow."
+                        TextWrapping="Wrap" />
                     <StackPanel Margin="0,36,0,0" Orientation="Horizontal">
-                        <Border Margin="0,0,8,0" Padding="12,6"
-                                Background="#1A2E4A" CornerRadius="{StaticResource BadgeCornerRadius}">
+                        <Border
+                            Margin="0,0,8,0"
+                            Padding="12,6"
+                            Background="#1A2E4A"
+                            CornerRadius="{StaticResource BadgeCornerRadius}">
                             <StackPanel Orientation="Horizontal">
-                                <ui:SymbolIcon Margin="0,0,6,0" FontSize="13" Foreground="#34D399" Symbol="Checkmark16" />
-                                <TextBlock FontSize="12" Foreground="#CBD5E1" Text="Before / After" />
+                                <ui:SymbolIcon
+                                    Margin="0,0,6,0"
+                                    FontSize="13"
+                                    Foreground="#34D399"
+                                    Symbol="Checkmark16" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="#CBD5E1"
+                                    Text="Before / After" />
                             </StackPanel>
                         </Border>
-                        <Border Margin="0,0,8,0" Padding="12,6"
-                                Background="#1A2E4A" CornerRadius="{StaticResource BadgeCornerRadius}">
+                        <Border
+                            Margin="0,0,8,0"
+                            Padding="12,6"
+                            Background="#1A2E4A"
+                            CornerRadius="{StaticResource BadgeCornerRadius}">
                             <StackPanel Orientation="Horizontal">
-                                <ui:SymbolIcon Margin="0,0,6,0" FontSize="13" Foreground="#34D399" Symbol="Checkmark16" />
-                                <TextBlock FontSize="12" Foreground="#CBD5E1" Text="Approval flow" />
+                                <ui:SymbolIcon
+                                    Margin="0,0,6,0"
+                                    FontSize="13"
+                                    Foreground="#34D399"
+                                    Symbol="Checkmark16" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="#CBD5E1"
+                                    Text="Approval flow" />
                             </StackPanel>
                         </Border>
-                        <Border Padding="12,6"
-                                Background="#1A2E4A" CornerRadius="{StaticResource BadgeCornerRadius}">
+                        <Border
+                            Padding="12,6"
+                            Background="#1A2E4A"
+                            CornerRadius="{StaticResource BadgeCornerRadius}">
                             <StackPanel Orientation="Horizontal">
-                                <ui:SymbolIcon Margin="0,0,6,0" FontSize="13" Foreground="#34D399" Symbol="Checkmark16" />
-                                <TextBlock FontSize="12" Foreground="#CBD5E1" Text="Risk assessment" />
+                                <ui:SymbolIcon
+                                    Margin="0,0,6,0"
+                                    FontSize="13"
+                                    Foreground="#34D399"
+                                    Symbol="Checkmark16" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="#CBD5E1"
+                                    Text="Risk assessment" />
                             </StackPanel>
                         </Border>
                     </StackPanel>
@@ -78,199 +122,234 @@
             </Grid>
         </Border>
 
-        <!-- Right — login form -->
-        <Border Grid.Row="1" Grid.Column="1"
-                Background="{StaticResource AppBackgroundBrush}">
-            <Border Margin="40" Padding="40,32"
-                    VerticalAlignment="Center"
-                    Background="{StaticResource SurfaceBrush}"
-                    BorderBrush="{StaticResource BorderBrush}"
-                    BorderThickness="1"
-                    CornerRadius="{StaticResource DialogCornerRadius}"
-                    Effect="{StaticResource SoftShadow}">
+        <!--  Right — login form  -->
+        <Border
+            Grid.Row="1"
+            Grid.Column="1"
+            Background="{StaticResource AppBackgroundBrush}">
+            <Border
+                Margin="40"
+                Padding="40,32"
+                VerticalAlignment="Center"
+                Background="{StaticResource SurfaceBrush}"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="{StaticResource DialogCornerRadius}"
+                Effect="{StaticResource SoftShadow}">
                 <StackPanel>
 
-                    <TextBlock FontSize="26" FontWeight="Bold"
-                               Foreground="{StaticResource TextBrush}"
-                               Text="Welcome back" />
-                    <TextBlock Margin="0,6,0,24" FontSize="14"
-                               Foreground="{StaticResource MutedTextBrush}"
-                               Text="Sign in to your DCR account" />
+                    <TextBlock
+                        FontSize="26"
+                        FontWeight="Bold"
+                        Foreground="{StaticResource TextBrush}"
+                        Text="Welcome back" />
+                    <TextBlock
+                        Margin="0,6,0,24"
+                        FontSize="14"
+                        Foreground="{StaticResource MutedTextBrush}"
+                        Text="Sign in to your DCR account" />
 
-                    <!-- ── Saved accounts section ── -->
-                    <Border x:Name="SavedAccountsSection"
-                            Margin="0,0,0,18"
-                            Padding="0"
-                            Background="{StaticResource SurfaceMutedBrush}"
-                            BorderBrush="{StaticResource BorderBrush}"
-                            BorderThickness="1"
-                            CornerRadius="{StaticResource InputCornerRadius}"
-                            Visibility="Collapsed">
+                    <!--  ── Saved accounts section ──  -->
+                    <Border
+                        x:Name="SavedAccountsSection"
+                        Margin="0,0,0,18"
+                        Padding="0"
+                        Background="{StaticResource SurfaceMutedBrush}"
+                        BorderBrush="{StaticResource BorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="{StaticResource InputCornerRadius}"
+                        Visibility="Collapsed">
                         <StackPanel>
 
-                            <!-- Header row -->
+                            <!--  Header row  -->
                             <DockPanel Margin="12,10,12,8" LastChildFill="False">
-                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
-                                    <ui:SymbolIcon Symbol="People24"
-                                                   Foreground="{StaticResource PrimaryBrush}"
-                                                   FontSize="14" Margin="0,0,7,0"
-                                                   VerticalAlignment="Center" />
-                                    <TextBlock Text="Saved accounts"
-                                               FontSize="12" FontWeight="SemiBold"
-                                               Foreground="{StaticResource PrimaryBrush}"
-                                               VerticalAlignment="Center" />
+                                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                                    <ui:SymbolIcon
+                                        Margin="0,0,7,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="14"
+                                        Foreground="{StaticResource PrimaryBrush}"
+                                        Symbol="People24" />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontSize="12"
+                                        FontWeight="SemiBold"
+                                        Foreground="{StaticResource PrimaryBrush}"
+                                        Text="Saved accounts" />
                                 </StackPanel>
-                                <ui:Button DockPanel.Dock="Right"
-                                           x:Name="ClearAllAccountsButton"
-                                           Padding="8,3" MinHeight="26"
-                                           CornerRadius="{StaticResource ButtonCornerRadius}"
-                                           Click="ClearAllAccountsButton_Click"
-                                           ToolTip="Remove all saved accounts">
+                                <ui:Button
+                                    x:Name="ClearAllAccountsButton"
+                                    MinHeight="26"
+                                    Padding="8,3"
+                                    Click="ClearAllAccountsButton_Click"
+                                    CornerRadius="{StaticResource ButtonCornerRadius}"
+                                    DockPanel.Dock="Right"
+                                    ToolTip="Remove all saved accounts">
                                     <StackPanel Orientation="Horizontal">
-                                        <ui:SymbolIcon Symbol="Delete24" FontSize="12" Margin="0,0,4,0" />
-                                        <TextBlock Text="Clear all" FontSize="11" />
+                                        <ui:SymbolIcon
+                                            Margin="0,0,4,0"
+                                            FontSize="12"
+                                            Symbol="Delete24" />
+                                        <TextBlock FontSize="11" Text="Clear all" />
                                     </StackPanel>
                                 </ui:Button>
                             </DockPanel>
 
-                            <!-- Account list — max 3 rows visible, scrollable -->
-                            <ScrollViewer MaxHeight="160"
-                                          VerticalScrollBarVisibility="Auto"
-                                          HorizontalScrollBarVisibility="Disabled"
-                                          Margin="0,0,0,4">
+                            <!--  Account list — max 3 rows visible, scrollable  -->
+                            <ScrollViewer
+                                MaxHeight="100"
+                                Margin="0,0,0,4"
+                                HorizontalScrollBarVisibility="Disabled"
+                                VerticalScrollBarVisibility="Auto">
                                 <ItemsControl x:Name="SavedAccountsList">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                        <!-- Each saved account row -->
-                                        <Border x:Name="AccountRow"
+                                            <!--  Each saved account row  -->
+                                            <Border
+                                                x:Name="AccountRow"
                                                 Margin="6,2"
                                                 Padding="10,8"
-                                                CornerRadius="{StaticResource InputCornerRadius}"
                                                 Background="White"
                                                 BorderBrush="{StaticResource BorderBrush}"
                                                 BorderThickness="1"
+                                                CornerRadius="{StaticResource InputCornerRadius}"
                                                 Cursor="Hand">
-                                            <Border.InputBindings>
-                                                <MouseBinding MouseAction="LeftClick"
-                                                              Command="{x:Null}" />
-                                            </Border.InputBindings>
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto" />
-                                                    <ColumnDefinition Width="*" />
-                                                    <ColumnDefinition Width="Auto" />
-                                                    <ColumnDefinition Width="Auto" />
-                                                </Grid.ColumnDefinitions>
+                                                <Border.InputBindings>
+                                                    <MouseBinding Command="{x:Null}" MouseAction="LeftClick" />
+                                                </Border.InputBindings>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
 
-                                                <!-- Avatar circle -->
-                                                <Border Grid.Column="0"
-                                                        Width="30" Height="30"
-                                                        CornerRadius="15"
+                                                    <!--  Avatar circle  -->
+                                                    <Border
+                                                        Grid.Column="0"
+                                                        Width="30"
+                                                        Height="30"
+                                                        Margin="0,0,10,0"
                                                         Background="{StaticResource PrimaryBrush}"
-                                                        Margin="0,0,10,0">
-                                                    <TextBlock Text="{Binding Initial}"
-                                                               Foreground="White"
-                                                               FontSize="12" FontWeight="Bold"
-                                                               HorizontalAlignment="Center"
-                                                               VerticalAlignment="Center" />
-                                                </Border>
+                                                        CornerRadius="15">
+                                                        <TextBlock
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            FontSize="12"
+                                                            FontWeight="Bold"
+                                                            Foreground="White"
+                                                            Text="{Binding Initial}" />
+                                                    </Border>
 
-                                                <!-- Username -->
-                                                <TextBlock Grid.Column="1"
-                                                           Text="{Binding Username}"
-                                                           FontWeight="SemiBold"
-                                                           VerticalAlignment="Center"
-                                                           TextTrimming="CharacterEllipsis" />
+                                                    <!--  Username  -->
+                                                    <TextBlock
+                                                        Grid.Column="1"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="SemiBold"
+                                                        Text="{Binding Username}"
+                                                        TextTrimming="CharacterEllipsis" />
 
-                                                <!-- Use button -->
-                                                <ui:Button Grid.Column="2"
-                                                           Content="Use"
-                                                           Appearance="Primary"
-                                                           Padding="10,4" MinHeight="28"
-                                                           CornerRadius="{StaticResource ButtonCornerRadius}"
-                                                           Margin="8,0,6,0"
-                                                           Tag="{Binding}"
-                                                           Click="UseAccountButton_Click" />
+                                                    <!--  Use button  -->
+                                                    <ui:Button
+                                                        Grid.Column="2"
+                                                        MinHeight="28"
+                                                        Margin="8,0,6,0"
+                                                        Padding="10,4"
+                                                        Appearance="Primary"
+                                                        Click="UseAccountButton_Click"
+                                                        Content="Use"
+                                                        CornerRadius="{StaticResource ButtonCornerRadius}"
+                                                        Tag="{Binding}" />
 
-                                                <!-- Remove button -->
-                                                <ui:Button Grid.Column="3"
-                                                           Padding="6,4" MinHeight="28"
-                                                           CornerRadius="{StaticResource ButtonCornerRadius}"
-                                                           Tag="{Binding}"
-                                                           Click="RemoveAccountButton_Click"
-                                                           ToolTip="Remove this account">
-                                                    <ui:SymbolIcon Symbol="Dismiss24" FontSize="12" />
-                                                </ui:Button>
-                                            </Grid>
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
+                                                    <!--  Remove button  -->
+                                                    <ui:Button
+                                                        Grid.Column="3"
+                                                        MinHeight="28"
+                                                        Padding="6,4"
+                                                        Click="RemoveAccountButton_Click"
+                                                        CornerRadius="{StaticResource ButtonCornerRadius}"
+                                                        Tag="{Binding}"
+                                                        ToolTip="Remove this account">
+                                                        <ui:SymbolIcon FontSize="12" Symbol="Dismiss24" />
+                                                    </ui:Button>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
                                 </ItemsControl>
                             </ScrollViewer>
 
                         </StackPanel>
                     </Border>
 
-                    <!-- Username -->
+                    <!--  Username  -->
                     <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Username" />
-                    <ui:TextBox x:Name="UsernameTextBox"
-                                Margin="0,0,0,14"
-                                Icon="{ui:SymbolIcon Person24}"
-                                PlaceholderText="Enter your username" />
+                    <ui:TextBox
+                        x:Name="UsernameTextBox"
+                        Margin="0,0,0,14"
+                        Icon="{ui:SymbolIcon Person24}"
+                        PlaceholderText="Enter your username" />
 
-                    <!-- Password -->
+                    <!--  Password  -->
                     <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Password" />
-                    <ui:PasswordBox x:Name="PasswordBox"
-                                    Margin="0,0,0,12"
-                                    PasswordChanged="PasswordBox_PasswordChanged"
-                                    PlaceholderText="Enter your password" />
+                    <ui:PasswordBox
+                        x:Name="PasswordBox"
+                        Margin="0,0,0,12"
+                        PasswordChanged="PasswordBox_PasswordChanged"
+                        PlaceholderText="Enter your password" />
 
-                    <!-- Options row -->
+                    <!--  Options row  -->
                     <Grid Margin="0,0,0,20">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <CheckBox x:Name="ShowPasswordCheckBox"
-                                  Grid.Column="0"
-                                  Content="Show password"
-                                  Checked="ShowPasswordCheckBox_Changed"
-                                  Unchecked="ShowPasswordCheckBox_Changed"
-                                  VerticalAlignment="Center" />
-                        <CheckBox x:Name="RememberMeCheckBox"
-                                  Grid.Column="1"
-                                  Content="Remember me"
-                                  HorizontalAlignment="Right"
-                                  VerticalAlignment="Center"
-                                  ToolTip="Save credentials securely on this device" />
+                        <CheckBox
+                            x:Name="ShowPasswordCheckBox"
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            Checked="ShowPasswordCheckBox_Changed"
+                            Content="Show password"
+                            Unchecked="ShowPasswordCheckBox_Changed" />
+                        <CheckBox
+                            x:Name="RememberMeCheckBox"
+                            Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Content="Remember me"
+                            ToolTip="Save credentials securely on this device" />
                     </Grid>
 
-                    <!-- Error -->
-                    <ui:InfoBar x:Name="ErrorInfoBar"
-                                Margin="0,0,0,14"
-                                IsClosable="False"
-                                IsOpen="False"
-                                Severity="Error" />
+                    <!--  Error  -->
+                    <ui:InfoBar
+                        x:Name="ErrorInfoBar"
+                        Margin="0,0,0,14"
+                        IsClosable="False"
+                        IsOpen="False"
+                        Severity="Error" />
 
-                    <!-- Sign in -->
-                    <ui:Button x:Name="LoginButton"
-                               MinHeight="44"
-                               HorizontalAlignment="Stretch"
-                               HorizontalContentAlignment="Center"
-                               Appearance="Primary"
-                               Click="LoginButton_Click"
-                               Content="Sign in"
-                               CornerRadius="{StaticResource ButtonCornerRadius}"
-                               FontSize="14"
-                               FontWeight="SemiBold" />
+                    <!--  Sign in  -->
+                    <ui:Button
+                        x:Name="LoginButton"
+                        MinHeight="44"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Appearance="Primary"
+                        Click="LoginButton_Click"
+                        Content="Sign in"
+                        CornerRadius="{StaticResource ButtonCornerRadius}"
+                        FontSize="14"
+                        FontWeight="SemiBold" />
 
-                    <!-- Security note -->
-                    <TextBlock Margin="0,12,0,0"
-                               FontSize="11"
-                               Foreground="{StaticResource MutedTextBrush}"
-                               HorizontalAlignment="Center"
-                               TextAlignment="Center">
-                        <ui:SymbolIcon Symbol="ShieldCheckmark20" FontSize="11" />
+                    <!--  Security note  -->
+                    <TextBlock
+                        Margin="0,12,0,0"
+                        HorizontalAlignment="Center"
+                        FontSize="11"
+                        Foreground="{StaticResource MutedTextBrush}"
+                        TextAlignment="Center">
+                        <ui:SymbolIcon FontSize="11" Symbol="ShieldCheckmark20" />
                         <Run Text=" Encrypted with Windows DPAPI" />
                     </TextBlock>
 
