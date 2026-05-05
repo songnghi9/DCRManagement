@@ -166,7 +166,7 @@
                             <StackPanel Grid.Column="2" Margin="0,0,8,0">
                                 <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Drawing no." />
                                 <ui:TextBox x:Name="DrawingNoTextBox"
-                                            PlaceholderText="e.g. 12100520" />
+                                            PlaceholderText="e.g. 12100520"/>
                             </StackPanel>
 
                             <!--  Machine Model — flexible width  -->
@@ -174,6 +174,7 @@
                                 <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Machine Model" />
                                 <ui:TextBox x:Name="MachineTextBox"
                                             PlaceholderText="e.g. JSV6-EMU" />
+                                            
                             </StackPanel>
 
                             <!--  Raised by — read-only  -->
@@ -253,7 +254,7 @@
                         <Border
                             Grid.Column="0"
                             Margin="0,0,1,0"
-                            Style="{StaticResource ImageCanvasStyle}">
+                            Style="{StaticResource ImageCanvasStyle}" CornerRadius="2,2,2,2">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="42" />
@@ -428,7 +429,7 @@
                                                     x:Name="SavingTextBox"
                                                     Grid.Column="0"
                                                     Margin="0,0,4,0"
-                                                    PlaceholderText="0" />
+                                                    PlaceholderText="0"/>
                                                 <ComboBox
                                                     x:Name="SavingCurrencyComboBox"
                                                     Grid.Column="1"

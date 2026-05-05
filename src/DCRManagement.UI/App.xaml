@@ -525,6 +525,8 @@
                 <Setter Property="CornerRadius" Value="{StaticResource InputCornerRadius}" />
             </Style>
 
+            <!-- ui:TextBox MinHeight synced with other inputs via per-instance CornerRadius in each View -->
+
             <Style x:Key="ImageCanvasStyle" TargetType="{x:Type Border}">
                 <Setter Property="Background" Value="#FFF4F7FB" />
                 <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
