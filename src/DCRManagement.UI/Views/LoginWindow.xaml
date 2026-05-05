@@ -5,9 +5,9 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="Sign in — DCR Management"
     Width="1000"
-    Height="640"
+    Height="660"
     MinWidth="820"
-    MinHeight="540"
+    MinHeight="560"
     ExtendsContentIntoTitleBar="True"
     WindowStartupLocation="CenterScreen">
 
@@ -34,91 +34,50 @@
             ShowMaximize="True"
             ShowMinimize="True" />
 
-        <!--  Left — brand panel  -->
+        <!-- Left — brand panel -->
         <Border Grid.Row="1" Background="{StaticResource SidebarBrush}">
             <Grid Margin="56">
                 <StackPanel VerticalAlignment="Center">
-                    <!--  Logo mark  -->
-                    <Border
-                        Width="56"
-                        Height="56"
-                        Margin="0,0,0,28"
-                        HorizontalAlignment="Left"
-                        Background="#2563EB"
-                        CornerRadius="{StaticResource DialogCornerRadius}">
-                        <TextBlock
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontSize="28"
-                            FontWeight="Bold"
-                            Foreground="White"
-                            Text="D" />
+                    <!-- Logo mark -->
+                    <Border Width="56" Height="56"
+                            Margin="0,0,0,28" HorizontalAlignment="Left"
+                            Background="#2563EB"
+                            CornerRadius="{StaticResource DialogCornerRadius}">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   FontSize="28" FontWeight="Bold" Foreground="White" Text="D" />
                     </Border>
 
-                    <TextBlock
-                        FontSize="32"
-                        FontWeight="Bold"
-                        Foreground="White"
-                        LineHeight="38"
-                        Text="DCR Management" />
-                    <TextBlock
-                        Margin="0,14,0,0"
-                        FontSize="15"
-                        Foreground="#94A3B8"
-                        LineHeight="24"
-                        Text="Document change requests, image review,&#x0a;and approval workflow."
-                        TextWrapping="Wrap" />
+                    <TextBlock FontSize="32" FontWeight="Bold" Foreground="White"
+                               LineHeight="38" Text="DCR Management" />
+                    <TextBlock Margin="0,14,0,0" FontSize="15" Foreground="#94A3B8"
+                               LineHeight="24"
+                               Text="Document change requests, image review,&#x0a;and approval workflow."
+                               TextWrapping="Wrap" />
 
-                    <!--  Feature pills  -->
+                    <!-- Feature pills -->
                     <StackPanel Margin="0,36,0,0" Orientation="Horizontal">
-                        <Border
-                            Margin="0,0,8,0"
-                            Padding="12,6"
-                            Background="#1A2E4A"
-                            CornerRadius="{StaticResource BadgeCornerRadius}">
+                        <Border Margin="0,0,8,0" Padding="12,6"
+                                Background="#1A2E4A" CornerRadius="{StaticResource BadgeCornerRadius}">
                             <StackPanel Orientation="Horizontal">
-                                <ui:SymbolIcon
-                                    Margin="0,0,6,0"
-                                    FontSize="13"
-                                    Foreground="#34D399"
-                                    Symbol="Checkmark16" />
-                                <TextBlock
-                                    FontSize="12"
-                                    Foreground="#CBD5E1"
-                                    Text="Before / After" />
+                                <ui:SymbolIcon Margin="0,0,6,0" FontSize="13"
+                                               Foreground="#34D399" Symbol="Checkmark16" />
+                                <TextBlock FontSize="12" Foreground="#CBD5E1" Text="Before / After" />
                             </StackPanel>
                         </Border>
-                        <Border
-                            Margin="0,0,8,0"
-                            Padding="12,6"
-                            Background="#1A2E4A"
-                            CornerRadius="{StaticResource BadgeCornerRadius}">
+                        <Border Margin="0,0,8,0" Padding="12,6"
+                                Background="#1A2E4A" CornerRadius="{StaticResource BadgeCornerRadius}">
                             <StackPanel Orientation="Horizontal">
-                                <ui:SymbolIcon
-                                    Margin="0,0,6,0"
-                                    FontSize="13"
-                                    Foreground="#34D399"
-                                    Symbol="Checkmark16" />
-                                <TextBlock
-                                    FontSize="12"
-                                    Foreground="#CBD5E1"
-                                    Text="Approval flow" />
+                                <ui:SymbolIcon Margin="0,0,6,0" FontSize="13"
+                                               Foreground="#34D399" Symbol="Checkmark16" />
+                                <TextBlock FontSize="12" Foreground="#CBD5E1" Text="Approval flow" />
                             </StackPanel>
                         </Border>
-                        <Border
-                            Padding="12,6"
-                            Background="#1A2E4A"
-                            CornerRadius="{StaticResource BadgeCornerRadius}">
+                        <Border Padding="12,6"
+                                Background="#1A2E4A" CornerRadius="{StaticResource BadgeCornerRadius}">
                             <StackPanel Orientation="Horizontal">
-                                <ui:SymbolIcon
-                                    Margin="0,0,6,0"
-                                    FontSize="13"
-                                    Foreground="#34D399"
-                                    Symbol="Checkmark16" />
-                                <TextBlock
-                                    FontSize="12"
-                                    Foreground="#CBD5E1"
-                                    Text="Risk assessment" />
+                                <ui:SymbolIcon Margin="0,0,6,0" FontSize="13"
+                                               Foreground="#34D399" Symbol="Checkmark16" />
+                                <TextBlock FontSize="12" Foreground="#CBD5E1" Text="Risk assessment" />
                             </StackPanel>
                         </Border>
                     </StackPanel>
@@ -126,85 +85,145 @@
             </Grid>
         </Border>
 
-        <!--  Right — login form  -->
-        <Border
-            Grid.Row="1"
-            Grid.Column="1"
-            Background="{StaticResource AppBackgroundBrush}">
-            <Border
-                Margin="40"
-                Padding="40,36"
-                VerticalAlignment="Center"
-                Background="{StaticResource SurfaceBrush}"
-                BorderBrush="{StaticResource BorderBrush}"
-                BorderThickness="1"
-                CornerRadius="{StaticResource DialogCornerRadius}"
-                Effect="{StaticResource SoftShadow}">
+        <!-- Right — login form -->
+        <Border Grid.Row="1" Grid.Column="1"
+                Background="{StaticResource AppBackgroundBrush}">
+            <Border Margin="40" Padding="40,36"
+                    VerticalAlignment="Center"
+                    Background="{StaticResource SurfaceBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="{StaticResource DialogCornerRadius}"
+                    Effect="{StaticResource SoftShadow}">
                 <StackPanel>
-                    <TextBlock
-                        FontSize="26"
-                        FontWeight="Bold"
-                        Foreground="{StaticResource TextBrush}"
-                        Text="Welcome back" />
-                    <TextBlock
-                        Margin="0,6,0,32"
-                        FontSize="14"
-                        Foreground="{StaticResource MutedTextBrush}"
-                        Text="Sign in to your DCR account" />
 
-                    <!--  Username  -->
+                    <TextBlock FontSize="26" FontWeight="Bold"
+                               Foreground="{StaticResource TextBrush}"
+                               Text="Welcome back" />
+                    <TextBlock Margin="0,6,0,28" FontSize="14"
+                               Foreground="{StaticResource MutedTextBrush}"
+                               Text="Sign in to your DCR account" />
+
+                    <!-- ── Saved accounts dropdown (visible only when saved creds exist) ── -->
+                    <Border x:Name="SavedAccountsPanel"
+                            Margin="0,0,0,20"
+                            Padding="12,10"
+                            Background="#F0F7FF"
+                            BorderBrush="#BFDBFE"
+                            BorderThickness="1"
+                            CornerRadius="{StaticResource InputCornerRadius}"
+                            Visibility="Collapsed">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <ui:SymbolIcon Grid.Column="0"
+                                           Symbol="Person24"
+                                           Foreground="{StaticResource PrimaryBrush}"
+                                           FontSize="16"
+                                           Margin="0,0,10,0"
+                                           VerticalAlignment="Center" />
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Saved account"
+                                           FontSize="11" FontWeight="SemiBold"
+                                           Foreground="{StaticResource PrimaryBrush}" />
+                                <TextBlock x:Name="SavedUsernameText"
+                                           FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextBrush}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                <ui:Button x:Name="UseSavedButton"
+                                           Content="Use"
+                                           Appearance="Primary"
+                                           CornerRadius="{StaticResource ButtonCornerRadius}"
+                                           Padding="12,5"
+                                           MinHeight="30"
+                                           Margin="0,0,6,0"
+                                           Click="UseSavedButton_Click"
+                                           ToolTip="Fill in saved credentials" />
+                                <ui:Button x:Name="ForgetButton"
+                                           CornerRadius="{StaticResource ButtonCornerRadius}"
+                                           Padding="8,5"
+                                           MinHeight="30"
+                                           Click="ForgetButton_Click"
+                                           ToolTip="Remove saved credentials">
+                                    <ui:SymbolIcon Symbol="Delete24" FontSize="14" />
+                                </ui:Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Username -->
                     <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Username" />
-                    <ui:TextBox
-                        x:Name="UsernameTextBox"
-                        Margin="0,0,0,16"
-                        Icon="{ui:SymbolIcon Person24}"
-                        PlaceholderText="Enter your username" />
+                    <ui:TextBox x:Name="UsernameTextBox"
+                                Margin="0,0,0,14"
+                                Icon="{ui:SymbolIcon Person24}"
+                                PlaceholderText="Enter your username" />
 
-                    <!--  Password  -->
+                    <!-- Password -->
                     <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Password" />
-                    <ui:PasswordBox
-                        x:Name="PasswordBox"
-                        Margin="0,0,0,8"
-                        PasswordChanged="PasswordBox_PasswordChanged"
-                        PlaceholderText="Enter your password" />
+                    <ui:PasswordBox x:Name="PasswordBox"
+                                    Margin="0,0,0,12"
+                                    PasswordChanged="PasswordBox_PasswordChanged"
+                                    PlaceholderText="Enter your password" />
 
-                    <CheckBox
-                        x:Name="ShowPasswordCheckBox"
-                        Margin="0,0,0,24"
-                        Checked="ShowPasswordCheckBox_Changed"
-                        Content="Show password"
-                        Unchecked="ShowPasswordCheckBox_Changed" />
+                    <!-- Options row: Show password + Remember me -->
+                    <Grid Margin="0,0,0,22">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-                    <!--  Error message  -->
-                    <ui:InfoBar
-                        x:Name="ErrorInfoBar"
-                        Margin="0,0,0,16"
-                        IsClosable="False"
-                        IsOpen="False"
-                        Severity="Error" />
+                        <CheckBox x:Name="ShowPasswordCheckBox"
+                                  Grid.Column="0"
+                                  Content="Show password"
+                                  Checked="ShowPasswordCheckBox_Changed"
+                                  Unchecked="ShowPasswordCheckBox_Changed"
+                                  VerticalAlignment="Center" />
 
-                    <!--  Sign in button with rounded corners  -->
+                        <!-- Remember me -->
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center">
+                            <CheckBox x:Name="RememberMeCheckBox"
+                                      Content="Remember me"
+                                      ToolTip="Save username and password securely on this device"
+                                      VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Grid>
 
-                    <ui:Button
-                        x:Name="LoginButton"
-                        MinHeight="44"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Center"
-                        Appearance="Primary"
-                        Click="LoginButton_Click"
-                        Content="Sign in"
-                        CornerRadius="{StaticResource ButtonCornerRadius}"
-                        FontSize="14"
-                        FontWeight="SemiBold" />
-                    <!--<Button x:Name="LoginButton"
-                        Content="Sign in"
-                        Style="{StaticResource PrimaryButtonStyle}"
-                        HorizontalAlignment="Stretch"
-                        FontSize="14"
-                        FontWeight="SemiBold"
-                        MinHeight="44"
-                        Click="LoginButton_Click" />-->
+                    <!-- Error message -->
+                    <ui:InfoBar x:Name="ErrorInfoBar"
+                                Margin="0,0,0,14"
+                                IsClosable="False"
+                                IsOpen="False"
+                                Severity="Error" />
 
+                    <!-- Sign in button -->
+                    <ui:Button x:Name="LoginButton"
+                               MinHeight="44"
+                               HorizontalAlignment="Stretch"
+                               HorizontalContentAlignment="Center"
+                               Appearance="Primary"
+                               Click="LoginButton_Click"
+                               Content="Sign in"
+                               CornerRadius="{StaticResource ButtonCornerRadius}"
+                               FontSize="14"
+                               FontWeight="SemiBold" />
+
+                    <!-- Security note -->
+                    <TextBlock Margin="0,14,0,0"
+                               FontSize="11"
+                               Foreground="{StaticResource MutedTextBrush}"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap">
+                        <ui:SymbolIcon Symbol="ShieldCheckmark20" FontSize="11" />
+                        <Run Text=" Credentials are encrypted with Windows DPAPI" />
+                    </TextBlock>
 
                 </StackPanel>
             </Border>
