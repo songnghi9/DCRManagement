@@ -539,20 +539,24 @@
                                         <StackPanel Grid.Column="1">
                                             <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Date" />
                                             <!-- Grid overlay: CalendarDatePicker + placeholder TextBlock -->
-                                            <Grid>
+                                            <Grid MinHeight="36">
+                                                <!-- CalendarDatePicker fills the cell — icon pinned to right -->
                                                 <ui:CalendarDatePicker
                                                     x:Name="DecisionDatePicker"
                                                     HorizontalAlignment="Stretch"
+                                                    HorizontalContentAlignment="Right"
+                                                    Padding="0,0,8,0"
                                                     MinHeight="36"
                                                     IsTodayHighlighted="True" />
-                                                <!-- Placeholder — hidden by code-behind once a date is picked -->
+                                                <!-- Placeholder text — left-aligned, does not block clicks -->
                                                 <TextBlock
                                                     x:Name="DecisionDatePlaceholder"
                                                     Text="Select date…"
                                                     FontSize="13"
                                                     Foreground="{StaticResource MutedTextBrush}"
-                                                    Margin="12,0,0,0"
+                                                    Margin="12,0,32,0"
                                                     VerticalAlignment="Center"
+                                                    HorizontalAlignment="Left"
                                                     IsHitTestVisible="False"
                                                     Visibility="Visible" />
                                             </Grid>
