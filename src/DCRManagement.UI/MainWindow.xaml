@@ -36,7 +36,47 @@
             ButtonsBackground="#0B1220"
             ButtonsForeground="#EAF0F7"
             Background="#0B1220"
-            Foreground="#EAF0F7" />
+            Foreground="#EAF0F7">
+
+            <!-- Page title + subtitle in the left area of TitleBar -->
+            <ui:TitleBar.Header>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8,0,0,0">
+                    <TextBlock x:Name="PageTitleText"
+                               Text="DCR Requests"
+                               FontSize="13" FontWeight="SemiBold"
+                               Foreground="#EAF0F7"
+                               VerticalAlignment="Center" />
+                    <TextBlock Text=" — "
+                               FontSize="12"
+                               Foreground="#8FA3BF"
+                               VerticalAlignment="Center" />
+                    <TextBlock x:Name="PageSubtitleText"
+                               Text="Search, review, create, and approve document change requests"
+                               FontSize="12"
+                               Foreground="#8FA3BF"
+                               VerticalAlignment="Center"
+                               TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+            </ui:TitleBar.Header>
+
+            <!-- Date pill in the right area (before min/max/close buttons) -->
+            <ui:TitleBar.TrailingContent>
+                <Border Background="#1A2E4A"
+                        BorderBrush="#2B3C54"
+                        BorderThickness="1"
+                        CornerRadius="5"
+                        Padding="9,3"
+                        Margin="0,0,8,0"
+                        VerticalAlignment="Center"
+                        WindowChrome.IsHitTestVisibleInChrome="True">
+                    <TextBlock Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat={}{0:dd/MM/yyyy}}"
+                               xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                               Foreground="#8FA3BF"
+                               FontSize="11" FontWeight="SemiBold" />
+                </Border>
+            </ui:TitleBar.TrailingContent>
+
+        </ui:TitleBar>
 
         <!-- ── SIDEBAR ─────────────────────────────────────────────────── -->
         <Border Grid.Row="1" Grid.Column="0" Background="{StaticResource SidebarBrush}">
@@ -190,58 +230,8 @@
         </Border>
 
         <!-- ── MAIN CONTENT ─────────────────────────────────────────────── -->
-        <Grid Grid.Row="1" Grid.Column="1" Margin="20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <!-- Page header — compact single row, minimal height -->
-            <Border Grid.Row="0"
-                    Background="{StaticResource SurfaceBrush}"
-                    BorderBrush="{StaticResource BorderBrush}"
-                    BorderThickness="0,0,0,1"
-                    Padding="16,0"
-                    Margin="0,0,0,10">
-                <DockPanel LastChildFill="False" Height="44">
-
-                    <!-- Date pill — right -->
-                    <Border DockPanel.Dock="Right"
-                            Background="{StaticResource SurfaceMutedBrush}"
-                            BorderBrush="{StaticResource BorderBrush}"
-                            BorderThickness="1"
-                            CornerRadius="6"
-                            Padding="10,4"
-                            VerticalAlignment="Center">
-                        <TextBlock Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat={}{0:dd/MM/yyyy}}"
-                                   xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                                   Foreground="{StaticResource MutedTextBrush}"
-                                   FontSize="12" FontWeight="SemiBold" />
-                    </Border>
-
-                    <!-- Title + subtitle inline -->
-                    <StackPanel DockPanel.Dock="Left"
-                                Orientation="Horizontal"
-                                VerticalAlignment="Center">
-                        <TextBlock x:Name="PageTitleText"
-                                   Text="DCR Requests"
-                                   FontSize="16" FontWeight="Bold"
-                                   Foreground="{StaticResource PrimaryDarkBrush}"
-                                   VerticalAlignment="Center" />
-                        <TextBlock Text=" — " FontSize="13"
-                                   Foreground="{StaticResource MutedTextBrush}"
-                                   VerticalAlignment="Center" />
-                        <TextBlock x:Name="PageSubtitleText"
-                                   Text="Search, review, create, and approve document change requests"
-                                   Foreground="{StaticResource MutedTextBrush}"
-                                   FontSize="12"
-                                   VerticalAlignment="Center"
-                                   TextTrimming="CharacterEllipsis" />
-                    </StackPanel>
-                </DockPanel>
-            </Border>
-
-            <ContentControl x:Name="ContentHost" Grid.Row="1" />
+        <Grid Grid.Row="1" Grid.Column="1" Margin="16,12,16,16">
+            <ContentControl x:Name="ContentHost" />
         </Grid>
     </Grid>
 </ui:FluentWindow>
