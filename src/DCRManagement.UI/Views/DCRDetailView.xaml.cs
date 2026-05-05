@@ -28,20 +28,32 @@ public partial class DCRDetailView : UserControl
         _workflowService = workflowService;
         _userService = userService;
 
-        // Toggle placeholder visibility when CalendarDatePicker date changes
-        // CalendarDatePicker inherits Button — use DependencyPropertyDescriptor to watch Date
-        DecisionDatePicker.Click += (_, _) =>
-            Dispatcher.InvokeAsync(UpdateDatePlaceholder,
-                System.Windows.Threading.DispatcherPriority.Background);
-        Loaded += (_, _) => UpdateDatePlaceholder();
-    }
+        // Watch CalendarDatePicker.Date via DependencyPropertyDescriptor
+        // so the selected date is shown in the placeholder TextBlock
+        var dpd = System.ComponentModel.DependencyPropertyDescriptor.FromProperty(
+            Wpf.Ui.Controls.CalendarDatePicker.DateProperty,
+            typeof(Wpf.Ui.Controls.CalendarDatePicker));
+        dpd?.AddValueChanged(DecisionDatePicker, (_, _) => UpdateDateDisplay());
 
-    private void UpdateDatePlaceholder()
+        Loaded += (_, _) => UpdateDateDisplay();    }
+
+    private void UpdateDateDisplay()
     {
-        DecisionDatePlaceholder.Visibility =
-            DecisionDatePicker.Date is null
-                ? Visibility.Visible
-                : Visibility.Collapsed;
+        if (DecisionDatePicker.Date is DateTime date)
+        {
+            // Show the selected date — hide placeholder hint, show formatted date
+            DecisionDatePlaceholder.Text       = date.ToString("dd/MM/yyyy");
+            DecisionDatePlaceholder.Foreground = (System.Windows.Media.Brush)FindResource("TextBrush");
+            DecisionDatePlaceholder.FontWeight = FontWeights.Normal;
+            DecisionDatePlaceholder.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            // No date selected — show muted hint text
+            DecisionDatePlaceholder.Text       = "Select date…";
+            DecisionDatePlaceholder.Foreground = (System.Windows.Media.Brush)FindResource("MutedTextBrush");
+            DecisionDatePlaceholder.Visibility = Visibility.Visible;
+        }
     }
 
     // ─── Public API ───────────────────────────────────────────────────────────
