@@ -125,7 +125,7 @@
                                HorizontalAlignment="Stretch"
                                HorizontalContentAlignment="Center"
                                FontSize="14" FontWeight="SemiBold"
-                               MinHeight="42"
+                               MinHeight="44"
                                Click="LoginButton_Click"
                                CornerRadius="{StaticResource ButtonCornerRadius}" />
                 </StackPanel>

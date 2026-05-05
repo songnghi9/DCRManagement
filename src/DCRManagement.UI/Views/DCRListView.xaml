@@ -75,24 +75,28 @@
                     Orientation="Horizontal">
                     <ui:Button
                         Margin="0,0,8,0"
+                        MinWidth="90"
                         Click="RefreshButton_Click"
                         Content="Refresh"
                         CornerRadius="{StaticResource ButtonCornerRadius}"
                         Icon="{ui:SymbolIcon ArrowSync24}" />
                     <ui:Button
                         Margin="0,0,8,0"
+                        MinWidth="80"
                         Click="ViewButton_Click"
                         Content="View"
                         CornerRadius="{StaticResource ButtonCornerRadius}"
                         Icon="{ui:SymbolIcon Eye24}" />
                     <ui:Button
                         Margin="0,0,8,0"
+                        MinWidth="80"
                         Click="EditButton_Click"
                         Content="Edit"
                         CornerRadius="{StaticResource ButtonCornerRadius}"
                         Icon="{ui:SymbolIcon Edit24}" />
                     <ui:Button
                         Appearance="Primary"
+                        MinWidth="110"
                         Click="CreateButton_Click"
                         Content="New DCR"
                         CornerRadius="{StaticResource ButtonCornerRadius}"

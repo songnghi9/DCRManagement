@@ -41,13 +41,13 @@
             <SolidColorBrush x:Key="SidebarPanelBrush" Color="{StaticResource SidebarPanelColor}" />
             <SolidColorBrush x:Key="SidebarMutedBrush" Color="{StaticResource SidebarMutedColor}" />
 
-            <CornerRadius x:Key="InputCornerRadius">7</CornerRadius>
-            <CornerRadius x:Key="ButtonCornerRadius">7</CornerRadius>
-            <CornerRadius x:Key="IconButtonCornerRadius">7</CornerRadius>
-            <CornerRadius x:Key="NavButtonCornerRadius">7</CornerRadius>
-            <CornerRadius x:Key="PanelCornerRadius">7</CornerRadius>
-            <CornerRadius x:Key="CardCornerRadius">7</CornerRadius>
-            <CornerRadius x:Key="DialogCornerRadius">10</CornerRadius>
+            <CornerRadius x:Key="InputCornerRadius">8</CornerRadius>
+            <CornerRadius x:Key="ButtonCornerRadius">8</CornerRadius>
+            <CornerRadius x:Key="IconButtonCornerRadius">10</CornerRadius>
+            <CornerRadius x:Key="NavButtonCornerRadius">8</CornerRadius>
+            <CornerRadius x:Key="PanelCornerRadius">10</CornerRadius>
+            <CornerRadius x:Key="CardCornerRadius">12</CornerRadius>
+            <CornerRadius x:Key="DialogCornerRadius">12</CornerRadius>
             <CornerRadius x:Key="BadgeCornerRadius">999</CornerRadius>
 
             <DropShadowEffect
@@ -279,12 +279,17 @@
             </Style>
 
             <Style TargetType="{x:Type Button}">
-                <Setter Property="MinHeight" Value="34" />
-                <Setter Property="Padding" Value="13,6" />
+                <Setter Property="MinHeight" Value="36" />
+                <Setter Property="Padding" Value="16,8" />
                 <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
                 <Setter Property="BorderBrush" Value="{StaticResource BorderStrongBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+                <Setter Property="FontSize" Value="13" />
+                <Setter Property="FontWeight" Value="Medium" />
                 <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Button}">
@@ -295,21 +300,33 @@
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="{StaticResource ButtonCornerRadius}"
                                 SnapsToDevicePixels="True">
-                                <ContentPresenter
-                                    Margin="{TemplateBinding Padding}"
-                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                    RecognizesAccessKey="True" />
+                                <!-- Hover overlay -->
+                                <Border x:Name="HoverOverlay"
+                                        CornerRadius="{StaticResource ButtonCornerRadius}"
+                                        Background="Transparent"
+                                        Opacity="0">
+                                    <ContentPresenter
+                                        Margin="{TemplateBinding Padding}"
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        RecognizesAccessKey="True" />
+                                </Border>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter TargetName="Chrome" Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
+                                    <Setter TargetName="Chrome" Property="Background" Value="#F0F6FF" />
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="Chrome" Property="Opacity" Value="0.86" />
+                                    <Setter TargetName="Chrome" Property="Background" Value="#E0EDFF" />
+                                    <Setter TargetName="Chrome" Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
+                                    <Setter TargetName="Chrome" Property="Opacity" Value="0.92" />
+                                </Trigger>
+                                <Trigger Property="IsFocused" Value="True">
+                                    <Setter TargetName="Chrome" Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
                                 </Trigger>
                                 <Trigger Property="IsEnabled" Value="False">
-                                    <Setter TargetName="Chrome" Property="Opacity" Value="0.48" />
+                                    <Setter TargetName="Chrome" Property="Opacity" Value="0.45" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -317,9 +334,13 @@
                 </Setter>
             </Style>
 
+            <!-- ui:Button global style — ensures CornerRadius is always applied -->
             <Style TargetType="{x:Type ui:Button}">
                 <Setter Property="CornerRadius" Value="{StaticResource ButtonCornerRadius}" />
-                <Setter Property="MinHeight" Value="34" />
+                <Setter Property="MinHeight" Value="36" />
+                <Setter Property="Padding" Value="16,8" />
+                <Setter Property="FontSize" Value="13" />
+                <Setter Property="Cursor" Value="Hand" />
             </Style>
 
             <Style TargetType="{x:Type CheckBox}">
@@ -385,6 +406,38 @@
                 <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
                 <Setter Property="Foreground" Value="White" />
                 <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="Chrome"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="{StaticResource ButtonCornerRadius}"
+                                    SnapsToDevicePixels="True">
+                                <ContentPresenter
+                                    Margin="{TemplateBinding Padding}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    RecognizesAccessKey="True" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Chrome" Property="Background" Value="#1D4ED8" />
+                                    <Setter TargetName="Chrome" Property="BorderBrush" Value="#1D4ED8" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="Chrome" Property="Background" Value="#1E40AF" />
+                                    <Setter TargetName="Chrome" Property="BorderBrush" Value="#1E40AF" />
+                                    <Setter TargetName="Chrome" Property="Opacity" Value="0.92" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="Chrome" Property="Opacity" Value="0.45" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
 
             <Style
@@ -395,6 +448,36 @@
                 <Setter Property="BorderBrush" Value="{StaticResource DangerBrush}" />
                 <Setter Property="Foreground" Value="White" />
                 <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="Chrome"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="{StaticResource ButtonCornerRadius}"
+                                    SnapsToDevicePixels="True">
+                                <ContentPresenter
+                                    Margin="{TemplateBinding Padding}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    RecognizesAccessKey="True" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Chrome" Property="Background" Value="#B91C1C" />
+                                    <Setter TargetName="Chrome" Property="BorderBrush" Value="#B91C1C" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="Chrome" Property="Opacity" Value="0.90" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="Chrome" Property="Opacity" Value="0.45" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
 
             <Style
