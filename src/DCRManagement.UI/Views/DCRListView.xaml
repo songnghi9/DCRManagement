@@ -50,7 +50,7 @@
             <Setter Property="FontWeight" Value="SemiBold" />
             <Setter Property="Padding" Value="12,10" />
             <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
-            <Setter Property="BorderThickness" Value="0,0,0,1" />
+            <Setter Property="BorderThickness" Value="0,0,1,1" />
             <Setter Property="Cursor" Value="Hand" />
         </Style>
 
@@ -229,9 +229,9 @@
                 AlternationCount="2"
                 AlternatingRowBackground="#FAFBFD"
                 RowBackground="White"
-                GridLinesVisibility="Horizontal"
+                GridLinesVisibility="All"
                 HorizontalGridLinesBrush="{StaticResource BorderBrush}"
-                VerticalGridLinesBrush="Transparent"
+                VerticalGridLinesBrush="{StaticResource BorderBrush}"
                 MouseDoubleClick="DcrGrid_MouseDoubleClick"
                 SelectionChanged="DcrGrid_SelectionChanged">
 
@@ -301,7 +301,7 @@
                                             VerticalAlignment="Center"
                                             Background="{Binding StatusDisplay,
                                                 Converter={x:Static local:StatusColorConverter.Instance}}"
-                                            CornerRadius="{StaticResource BadgeCornerRadius}">
+                                            CornerRadius="5">
                                         <TextBlock FontSize="11" FontWeight="SemiBold"
                                                    Foreground="White"
                                                    Text="{Binding StatusDisplay}" />
@@ -322,7 +322,7 @@
                                             VerticalAlignment="Center"
                                             Background="{Binding Priority,
                                                 Converter={StaticResource PriorityColor}}"
-                                            CornerRadius="{StaticResource BadgeCornerRadius}">
+                                            CornerRadius="5">
                                         <TextBlock FontSize="11" FontWeight="SemiBold"
                                                    Foreground="White"
                                                    Text="{Binding Priority}" />
