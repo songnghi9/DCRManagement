@@ -162,13 +162,15 @@
                             <!--  Drawing no.  -->
                             <StackPanel Grid.Column="2" Margin="0,0,8,0">
                                 <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Drawing no." />
-                                <TextBox x:Name="DrawingNoTextBox" />
+                                <ui:TextBox x:Name="DrawingNoTextBox"
+                                            PlaceholderText="e.g. 12100520" />
                             </StackPanel>
 
                             <!--  Machine Model  -->
                             <StackPanel Grid.Column="3" Margin="0,0,8,0">
                                 <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Machine Model" />
-                                <TextBox x:Name="MachineTextBox" />
+                                <ui:TextBox x:Name="MachineTextBox"
+                                            PlaceholderText="e.g. JSV6-EMU" />
                             </StackPanel>
 
                             <!--  Raised by  -->
@@ -418,10 +420,11 @@
                                                     <ColumnDefinition Width="*" />
                                                     <ColumnDefinition Width="92" />
                                                 </Grid.ColumnDefinitions>
-                                                <TextBox
+                                                <ui:TextBox
                                                     x:Name="SavingTextBox"
                                                     Grid.Column="0"
-                                                    Margin="0,0,4,0" />
+                                                    Margin="0,0,4,0"
+                                                    PlaceholderText="0" />
                                                 <ComboBox
                                                     x:Name="SavingCurrencyComboBox"
                                                     Grid.Column="1"
@@ -442,10 +445,11 @@
                                                     <ColumnDefinition Width="*" />
                                                     <ColumnDefinition Width="92" />
                                                 </Grid.ColumnDefinitions>
-                                                <TextBox
+                                                <ui:TextBox
                                                     x:Name="CostTextBox"
                                                     Grid.Column="0"
-                                                    Margin="0,0,4,0" />
+                                                    Margin="0,0,4,0"
+                                                    PlaceholderText="0" />
                                                 <ComboBox
                                                     x:Name="CostCurrencyComboBox"
                                                     Grid.Column="1"
@@ -502,7 +506,8 @@
                                         </StackPanel>
                                         <StackPanel Grid.Column="1">
                                             <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Date" />
-                                            <DatePicker x:Name="DecisionDatePicker" />
+                                            <ui:CalendarDatePicker x:Name="DecisionDatePicker"
+                                                                   IsTodayHighlighted="True" />
                                         </StackPanel>
                                     </Grid>
 
