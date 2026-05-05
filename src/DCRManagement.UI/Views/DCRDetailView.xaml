@@ -162,15 +162,13 @@
                             <!--  Drawing no.  -->
                             <StackPanel Grid.Column="2" Margin="0,0,8,0">
                                 <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Drawing no." />
-                                <ui:TextBox x:Name="DrawingNoTextBox"
-                                            PlaceholderText="e.g. 12100520" />
+                                <ui:TextBox x:Name="DrawingNoTextBox" PlaceholderText="e.g. 12100520" />
                             </StackPanel>
 
                             <!--  Machine Model  -->
                             <StackPanel Grid.Column="3" Margin="0,0,8,0">
                                 <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Machine Model" />
-                                <ui:TextBox x:Name="MachineTextBox"
-                                            PlaceholderText="e.g. JSV6-EMU" />
+                                <ui:TextBox x:Name="MachineTextBox" PlaceholderText="e.g. JSV6-EMU" />
                             </StackPanel>
 
                             <!--  Raised by  -->
@@ -187,6 +185,7 @@
                             </StackPanel>
 
                             <!--  Raised date  -->
+                            <!--
                             <StackPanel Grid.Column="5">
                                 <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Raised date" />
                                 <Border Style="{StaticResource ReadOnlyFieldStyle}">
@@ -197,6 +196,35 @@
                                         Foreground="{StaticResource TextBrush}" />
                                 </Border>
                             </StackPanel>
+                            -->
+                            <StackPanel Grid.Column="5">
+                                <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Raised date" />
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="40" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!--  TEXTBOX  -->
+                                    <TextBox
+                                        x:Name="RaisedDateText"
+                                        Padding="8,4"
+                                        VerticalContentAlignment="Center"
+                                        Text="{Binding RaisedDate, StringFormat=dd/MM/yyyy, Mode=TwoWay}" />
+
+                                    <!--  CALENDAR PICKER  -->
+                                    <ui:CalendarDatePicker
+                                        x:Name="RaisedDatePicker"
+                                        Grid.Column="1"
+                                        Width="40"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Date="{Binding RaisedDate, Mode=TwoWay}" />
+                                </Grid>
+                            </StackPanel>
+
+
                         </Grid>
                     </Border>
 
@@ -495,6 +523,8 @@
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
+
+                                        <!-- Col 0: Decision ComboBox -->
                                         <StackPanel Grid.Column="0" Margin="0,0,6,0">
                                             <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Decision" />
                                             <ComboBox x:Name="ConsultantDecisionComboBox">
@@ -504,20 +534,23 @@
                                                 <ComboBoxItem Content="Pending" />
                                             </ComboBox>
                                         </StackPanel>
+
+                                        <!-- Col 1: Date — CalendarDatePicker same height as ComboBox -->
                                         <StackPanel Grid.Column="1">
                                             <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Date" />
-                                            <!-- CalendarDatePicker has no PlaceholderText.
-                                                 Overlay a hint TextBlock; code-behind toggles its Visibility. -->
+                                            <!-- Grid overlay: CalendarDatePicker + placeholder TextBlock -->
                                             <Grid>
                                                 <ui:CalendarDatePicker
                                                     x:Name="DecisionDatePicker"
-                                                    IsTodayHighlighted="True"
-                                                    HorizontalAlignment="Stretch" />
+                                                    HorizontalAlignment="Stretch"
+                                                    MinHeight="36"
+                                                    IsTodayHighlighted="True" />
+                                                <!-- Placeholder — hidden by code-behind once a date is picked -->
                                                 <TextBlock
                                                     x:Name="DecisionDatePlaceholder"
                                                     Text="Select date…"
-                                                    Foreground="{StaticResource MutedTextBrush}"
                                                     FontSize="13"
+                                                    Foreground="{StaticResource MutedTextBrush}"
                                                     Margin="12,0,0,0"
                                                     VerticalAlignment="Center"
                                                     IsHitTestVisible="False"
