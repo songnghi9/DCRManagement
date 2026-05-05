@@ -32,7 +32,7 @@
                         <Border x:Name="StatusBadge"
                                 Margin="10,0,0,0"
                                 Padding="10,3"
-                                CornerRadius="999"
+                                CornerRadius="{StaticResource BadgeCornerRadius}"
                                 VerticalAlignment="Center"
                                 Background="{StaticResource MutedTextBrush}">
                             <TextBlock x:Name="StatusBadgeText"
@@ -298,9 +298,9 @@
                                                        DockPanel.Dock="Left"
                                                        VerticalAlignment="Center"
                                                        Margin="0"/>
-                                            <ComboBox x:Name="LeadTimeComboBox"
-                                                      DockPanel.Dock="Right"
-                                                      Width="90">
+                                             <ComboBox x:Name="LeadTimeComboBox"
+                                                       DockPanel.Dock="Right"
+                                                       Width="128">
                                                 <ComboBoxItem Content=""/>
                                                 <ComboBoxItem Content="Yes"/>
                                                 <ComboBoxItem Content="No"/>
@@ -323,9 +323,9 @@
                                                        DockPanel.Dock="Left"
                                                        VerticalAlignment="Center"
                                                        Margin="0"/>
-                                            <ComboBox x:Name="SafetyComboBox"
-                                                      DockPanel.Dock="Right"
-                                                      Width="90">
+                                             <ComboBox x:Name="SafetyComboBox"
+                                                       DockPanel.Dock="Right"
+                                                       Width="128">
                                                 <ComboBoxItem Content=""/>
                                                 <ComboBoxItem Content="Yes"/>
                                                 <ComboBoxItem Content="No"/>
@@ -348,9 +348,9 @@
                                                        DockPanel.Dock="Left"
                                                        VerticalAlignment="Center"
                                                        Margin="0"/>
-                                            <ComboBox x:Name="ComplianceComboBox"
-                                                      DockPanel.Dock="Right"
-                                                      Width="90">
+                                             <ComboBox x:Name="ComplianceComboBox"
+                                                       DockPanel.Dock="Right"
+                                                       Width="128">
                                                 <ComboBoxItem Content=""/>
                                                 <ComboBoxItem Content="Yes"/>
                                                 <ComboBoxItem Content="No"/>
@@ -378,13 +378,14 @@
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="76"/>
+                                                    <ColumnDefinition Width="92"/>
                                                 </Grid.ColumnDefinitions>
                                                 <TextBox x:Name="SavingTextBox"
                                                          Grid.Column="0"
                                                          Margin="0,0,4,0"/>
                                                 <ComboBox x:Name="SavingCurrencyComboBox"
-                                                          Grid.Column="1">
+                                                          Grid.Column="1"
+                                                          MinWidth="92">
                                                     <ComboBoxItem Content="Mvnd"/>
                                                     <ComboBoxItem Content="USD"/>
                                                     <ComboBoxItem Content="VND"/>
@@ -399,13 +400,14 @@
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="76"/>
+                                                    <ColumnDefinition Width="92"/>
                                                 </Grid.ColumnDefinitions>
                                                 <TextBox x:Name="CostTextBox"
                                                          Grid.Column="0"
                                                          Margin="0,0,4,0"/>
                                                 <ComboBox x:Name="CostCurrencyComboBox"
-                                                          Grid.Column="1">
+                                                          Grid.Column="1"
+                                                          MinWidth="92">
                                                     <ComboBoxItem Content="Mvnd"/>
                                                     <ComboBoxItem Content="USD"/>
                                                     <ComboBoxItem Content="VND"/>

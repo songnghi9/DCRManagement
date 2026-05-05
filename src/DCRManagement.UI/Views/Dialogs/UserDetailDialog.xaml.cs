@@ -18,7 +18,7 @@ public partial class UserDetailDialog : FluentWindow
         FullNameTextBox.Text   = user.FullName;
         EmailTextBox.Text      = user.Email;
         DepartmentTextBox.Text = user.Department ?? string.Empty;
-        IsActiveToggle.IsChecked = user.IsActive;
+        IsActiveCheckBox.IsChecked = user.IsActive;
 
         foreach (var item in RoleComboBox.Items.OfType<ComboBoxItem>())
         {
@@ -39,7 +39,7 @@ public partial class UserDetailDialog : FluentWindow
             EmailTextBox.Text.Trim(),
             Enum.Parse<UserRole>(roleText),
             string.IsNullOrWhiteSpace(DepartmentTextBox.Text) ? null : DepartmentTextBox.Text.Trim(),
-            IsActiveToggle.IsChecked == true);
+            IsActiveCheckBox.IsChecked == true);
     }
 
     private void OkButton_Click(object sender, RoutedEventArgs e) => DialogResult = true;

@@ -4,37 +4,81 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="Submit DCR for Review"
-    Width="480"
+    Width="520"
     Height="320"
-    MinWidth="400"
+    MinWidth="420"
+    ResizeMode="NoResize"
     WindowStartupLocation="CenterOwner"
     ExtendsContentIntoTitleBar="True">
 
-    <Border Margin="24" Background="{StaticResource SurfaceBrush}">
-        <StackPanel>
-            <TextBlock Text="Assign reviewer and approver"
-                       FontSize="16" FontWeight="SemiBold"
-                       Margin="0,0,0,20" />
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="36" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-            <TextBlock Text="Reviewer" Style="{StaticResource FieldLabelStyle}" />
-            <ComboBox x:Name="ReviewerComboBox"
-                      DisplayMemberPath="FullName"
-                      SelectedValuePath="Id"
-                      Margin="0,0,0,16" />
+        <!-- Title bar with Close only (no resize for dialogs) -->
+        <ui:TitleBar Grid.Row="0"
+                     Title="Submit DCR for Review"
+                     ShowMinimize="False"
+                     ShowMaximize="False"
+                     ShowClose="True"
+                     CanMaximize="False"
+                     Background="{StaticResource SurfaceBrush}"
+                     Foreground="{StaticResource TextBrush}"
+                     ButtonsBackground="{StaticResource SurfaceBrush}"
+                     ButtonsForeground="{StaticResource MutedTextBrush}" />
 
-            <TextBlock Text="Approver" Style="{StaticResource FieldLabelStyle}" />
-            <ComboBox x:Name="ApproverComboBox"
-                      DisplayMemberPath="FullName"
-                      SelectedValuePath="Id"
-                      Margin="0,0,0,24" />
+        <!-- Content -->
+        <Border Grid.Row="1"
+                Background="{StaticResource SurfaceBrush}"
+                Padding="24,16,24,24">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <ui:Button Content="Cancel" Click="CancelButton_Click"
-                           Margin="0,0,10,0" CornerRadius="8" />
-                <ui:Button Content="Submit to Review" Click="SubmitButton_Click"
-                           Appearance="Primary" CornerRadius="8"
-                           Icon="{ui:SymbolIcon Send24}" />
-            </StackPanel>
-        </StackPanel>
-    </Border>
+                <!-- Section title -->
+                <TextBlock Grid.Row="0"
+                           Text="Assign reviewer and approver"
+                           FontSize="15" FontWeight="SemiBold"
+                           Margin="0,0,0,18" />
+
+                <!-- Reviewer -->
+                <TextBlock Grid.Row="1" Style="{StaticResource FieldLabelStyle}" Text="Reviewer" />
+                <ComboBox x:Name="ReviewerComboBox"
+                          Grid.Row="2"
+                          DisplayMemberPath="FullName"
+                          SelectedValuePath="Id"
+                          Margin="0,0,0,14" />
+
+                <!-- Approver -->
+                <TextBlock Grid.Row="3" Style="{StaticResource FieldLabelStyle}" Text="Approver" />
+                <ComboBox x:Name="ApproverComboBox"
+                          Grid.Row="4"
+                          DisplayMemberPath="FullName"
+                          SelectedValuePath="Id" />
+
+                <!-- Actions -->
+                <StackPanel Grid.Row="5"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Margin="0,20,0,0">
+                    <Button Content="Cancel"
+                            Click="CancelButton_Click"
+                            Margin="0,0,10,0"
+                            MinWidth="90" />
+                    <Button Content="Submit to Review"
+                            Click="SubmitButton_Click"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            MinWidth="130" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
 </ui:FluentWindow>

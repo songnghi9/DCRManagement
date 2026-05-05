@@ -12,17 +12,34 @@
     ExtendsContentIntoTitleBar="True">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="36" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1.1*" />
             <ColumnDefinition Width="0.9*" />
         </Grid.ColumnDefinitions>
 
+        <ui:TitleBar
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            Title="DCR Management"
+            ShowMinimize="True"
+            ShowMaximize="True"
+            ShowClose="True"
+            CanMaximize="True"
+            ButtonsBackground="#0B1220"
+            ButtonsForeground="#EAF0F7"
+            Background="#0B1220"
+            Foreground="#EAF0F7" />
+
         <!-- Left — brand panel -->
-        <Border Background="{StaticResource SidebarBrush}">
+        <Border Grid.Row="1" Background="{StaticResource SidebarBrush}">
             <Grid Margin="56">
                 <StackPanel VerticalAlignment="Center">
                     <!-- Logo mark -->
-                    <Border Width="56" Height="56" CornerRadius="14" Background="#2563EB"
+                    <Border Width="56" Height="56" CornerRadius="{StaticResource DialogCornerRadius}" Background="#2563EB"
                             Margin="0,0,0,28" HorizontalAlignment="Left">
                         <TextBlock Text="D" Foreground="White" FontSize="28" FontWeight="Bold"
                                    HorizontalAlignment="Center" VerticalAlignment="Center" />
@@ -36,19 +53,19 @@
 
                     <!-- Feature pills -->
                     <StackPanel Orientation="Horizontal" Margin="0,36,0,0">
-                        <Border Background="#1A2E4A" CornerRadius="20" Padding="12,6" Margin="0,0,8,0">
+                        <Border Background="#1A2E4A" CornerRadius="{StaticResource BadgeCornerRadius}" Padding="12,6" Margin="0,0,8,0">
                             <StackPanel Orientation="Horizontal">
                                 <ui:SymbolIcon Symbol="Checkmark16" Foreground="#34D399" FontSize="13" Margin="0,0,6,0" />
                                 <TextBlock Text="Before / After" Foreground="#CBD5E1" FontSize="12" />
                             </StackPanel>
                         </Border>
-                        <Border Background="#1A2E4A" CornerRadius="20" Padding="12,6" Margin="0,0,8,0">
+                        <Border Background="#1A2E4A" CornerRadius="{StaticResource BadgeCornerRadius}" Padding="12,6" Margin="0,0,8,0">
                             <StackPanel Orientation="Horizontal">
                                 <ui:SymbolIcon Symbol="Checkmark16" Foreground="#34D399" FontSize="13" Margin="0,0,6,0" />
                                 <TextBlock Text="Approval flow" Foreground="#CBD5E1" FontSize="12" />
                             </StackPanel>
                         </Border>
-                        <Border Background="#1A2E4A" CornerRadius="20" Padding="12,6">
+                        <Border Background="#1A2E4A" CornerRadius="{StaticResource BadgeCornerRadius}" Padding="12,6">
                             <StackPanel Orientation="Horizontal">
                                 <ui:SymbolIcon Symbol="Checkmark16" Foreground="#34D399" FontSize="13" Margin="0,0,6,0" />
                                 <TextBlock Text="Risk assessment" Foreground="#CBD5E1" FontSize="12" />
@@ -60,11 +77,11 @@
         </Border>
 
         <!-- Right — login form -->
-        <Border Grid.Column="1" Background="{StaticResource AppBackgroundBrush}">
+        <Border Grid.Row="1" Grid.Column="1" Background="{StaticResource AppBackgroundBrush}">
             <Border Margin="40" Padding="40,36"
                     Background="{StaticResource SurfaceBrush}"
                     BorderBrush="{StaticResource BorderBrush}"
-                    BorderThickness="1" CornerRadius="16"
+                    BorderThickness="1" CornerRadius="{StaticResource DialogCornerRadius}"
                     Effect="{StaticResource SoftShadow}"
                     VerticalAlignment="Center">
                 <StackPanel>
@@ -110,7 +127,7 @@
                                FontSize="14" FontWeight="SemiBold"
                                MinHeight="42"
                                Click="LoginButton_Click"
-                               CornerRadius="8" />
+                               CornerRadius="{StaticResource ButtonCornerRadius}" />
                 </StackPanel>
             </Border>
         </Border>

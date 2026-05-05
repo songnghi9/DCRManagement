@@ -10,12 +10,15 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- Toolbar -->
-        <Border Margin="0,0,0,14" Padding="16,12"
-                Background="{StaticResource SurfaceBrush}"
-                BorderBrush="{StaticResource BorderBrush}"
-                BorderThickness="1" CornerRadius="10"
-                Effect="{StaticResource ShadowXs}">
+        <!--  Toolbar  -->
+        <Border
+            Margin="0,0,0,14"
+            Padding="16,12"
+            Background="{StaticResource SurfaceBrush}"
+            BorderBrush="{StaticResource BorderBrush}"
+            BorderThickness="1"
+            CornerRadius="{StaticResource PanelCornerRadius}"
+            Effect="{StaticResource ShadowXs}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="260" />
@@ -24,17 +27,19 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <ui:TextBox x:Name="SearchTextBox"
-                            Grid.Column="0"
-                            PlaceholderText="Search name, username, email…"
-                            Icon="{ui:SymbolIcon Search24}"
-                            TextChanged="Filter_Changed"
-                            Margin="0,0,10,0" />
+                <ui:TextBox
+                    x:Name="SearchTextBox"
+                    Grid.Column="0"
+                    Margin="0,0,10,0"
+                    Icon="{ui:SymbolIcon Search24}"
+                    PlaceholderText="Search name, username, email…"
+                    TextChanged="Filter_Changed" />
 
-                <ComboBox x:Name="RoleComboBox"
-                          Grid.Column="1"
-                          SelectionChanged="Filter_Changed"
-                          SelectedIndex="0">
+                <ComboBox
+                    x:Name="RoleComboBox"
+                    Grid.Column="1"
+                    SelectedIndex="0"
+                    SelectionChanged="Filter_Changed">
                     <ComboBoxItem Content="All Roles" />
                     <ComboBoxItem Content="Admin" />
                     <ComboBoxItem Content="Engineer" />
@@ -43,31 +48,52 @@
                     <ComboBoxItem Content="ReadOnly" />
                 </ComboBox>
 
-                <ui:Button Grid.Column="3" Content="Refresh"
-                           Click="RefreshButton_Click"
-                           Appearance="Primary" CornerRadius="8"
-                           Icon="{ui:SymbolIcon ArrowSync24}" />
+                <ui:Button
+                    Grid.Column="3"
+                    Appearance="Primary"
+                    Click="RefreshButton_Click"
+                    Content="Refresh"
+                    CornerRadius="{StaticResource ButtonCornerRadius}"
+                    Icon="{ui:SymbolIcon ArrowSync24}" />
             </Grid>
         </Border>
 
-        <!-- User grid -->
-        <Border Grid.Row="1"
-                Background="{StaticResource SurfaceBrush}"
-                BorderBrush="{StaticResource BorderBrush}"
-                BorderThickness="1" CornerRadius="10"
-                ClipToBounds="True"
-                Effect="{StaticResource ShadowXs}">
-            <DataGrid x:Name="UserGrid"
-                      AutoGenerateColumns="False"
-                      BorderThickness="0"
-                      CanUserAddRows="False"
-                      IsReadOnly="True">
+        <!--  User grid  -->
+        <Border
+            Grid.Row="1"
+            Background="{StaticResource SurfaceBrush}"
+            BorderBrush="{StaticResource BorderBrush}"
+            BorderThickness="1"
+            ClipToBounds="True"
+            CornerRadius="{StaticResource PanelCornerRadius}"
+            Effect="{StaticResource ShadowXs}">
+            <DataGrid
+                x:Name="UserGrid"
+                AutoGenerateColumns="False"
+                BorderThickness="0"
+                CanUserAddRows="False"
+                IsReadOnly="True">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Full name"   Binding="{Binding FullName}"   Width="*" />
-                    <DataGridTextColumn Header="Username"    Binding="{Binding Username}"   Width="180" />
-                    <DataGridTextColumn Header="Role"        Binding="{Binding Role}"       Width="130" />
-                    <DataGridTextColumn Header="Department"  Binding="{Binding Department}" Width="180" />
-                    <DataGridCheckBoxColumn Header="Active"  Binding="{Binding IsActive}"   Width="80" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding FullName}"
+                        Header="Full name" />
+                    <DataGridTextColumn
+                        Width="180"
+                        Binding="{Binding Username}"
+                        Header="Username" />
+                    <DataGridTextColumn
+                        Width="130"
+                        Binding="{Binding Role}"
+                        Header="Role" />
+                    <DataGridTextColumn
+                        Width="180"
+                        Binding="{Binding Department}"
+                        Header="Department" />
+                    <DataGridCheckBoxColumn
+                        Width="80"
+                        Binding="{Binding IsActive}"
+                        Header="Active" />
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

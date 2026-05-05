@@ -16,13 +16,30 @@
     </ui:FluentWindow.Resources>
 
     <Grid Background="{StaticResource AppBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="36" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="SidebarColumn" Width="272" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
+        <ui:TitleBar
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            Title="DCR Management"
+            ShowMinimize="True"
+            ShowMaximize="True"
+            ShowClose="True"
+            CanMaximize="True"
+            ButtonsBackground="#0B1220"
+            ButtonsForeground="#EAF0F7"
+            Background="#0B1220"
+            Foreground="#EAF0F7" />
+
         <!-- ── SIDEBAR ─────────────────────────────────────────────────── -->
-        <Border Grid.Column="0" Background="{StaticResource SidebarBrush}">
+        <Border Grid.Row="1" Grid.Column="0" Background="{StaticResource SidebarBrush}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="64" />
@@ -43,7 +60,7 @@
                                    Click="ToggleSidebarButton_Click"
                                    Appearance="Primary"
                                    ToolTip="Collapse / expand sidebar"
-                                   CornerRadius="10">
+                                   CornerRadius="{StaticResource IconButtonCornerRadius}">
                             <TextBlock Text="D" Foreground="White" FontSize="20" FontWeight="Bold"
                                        HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </ui:Button>
@@ -52,17 +69,17 @@
                         <StackPanel Grid.Row="1" Margin="0,24,0,0">
                             <ui:Button ToolTip="DCR Requests" Click="DcrListButton_Click"
                                        Width="42" Height="42" Margin="0,0,0,8"
-                                       Appearance="Primary" CornerRadius="10">
+                                       Appearance="Primary" CornerRadius="{StaticResource IconButtonCornerRadius}">
                                 <ui:SymbolIcon Symbol="List24" FontSize="18" />
                             </ui:Button>
                             <ui:Button ToolTip="Create DCR" Click="CreateDcrButton_Click"
                                        Width="42" Height="42" Margin="0,0,0,8"
-                                       Background="Transparent" BorderBrush="#2B3C54" CornerRadius="10">
+                                       Background="Transparent" BorderBrush="#2B3C54" CornerRadius="{StaticResource IconButtonCornerRadius}">
                                 <ui:SymbolIcon Symbol="Add24" FontSize="18" Foreground="#D9E3F0" />
                             </ui:Button>
                             <ui:Button ToolTip="Users" Click="UsersButton_Click"
                                        Width="42" Height="42"
-                                       Background="Transparent" BorderBrush="#2B3C54" CornerRadius="10">
+                                       Background="Transparent" BorderBrush="#2B3C54" CornerRadius="{StaticResource IconButtonCornerRadius}">
                                 <ui:SymbolIcon Symbol="People24" FontSize="18" Foreground="#D9E3F0" />
                             </ui:Button>
                         </StackPanel>
@@ -70,7 +87,7 @@
                         <!-- Sign out -->
                         <ui:Button Grid.Row="2" ToolTip="Sign out" Click="SignOutButton_Click"
                                    Width="42" Height="42"
-                                   Background="Transparent" BorderBrush="#2B3C54" CornerRadius="10">
+                                   Background="Transparent" BorderBrush="#2B3C54" CornerRadius="{StaticResource IconButtonCornerRadius}">
                             <ui:SymbolIcon Symbol="ArrowExit20" FontSize="18" Foreground="#D9E3F0" />
                         </ui:Button>
                     </Grid>
@@ -95,7 +112,7 @@
                     <StackPanel Grid.Row="1" Margin="0,24,0,16">
                         <TextBlock Text="WORKSPACE" Foreground="{StaticResource SidebarMutedBrush}"
                                    FontSize="10" FontWeight="Bold" Margin="0,0,0,8" />
-                        <Border Padding="12,10" CornerRadius="10" Background="{StaticResource SidebarPanelBrush}">
+                        <Border Padding="12,10" CornerRadius="{StaticResource PanelCornerRadius}" Background="{StaticResource SidebarPanelBrush}">
                             <StackPanel>
                                 <TextBlock Text="Engineering Change" Foreground="White" FontWeight="SemiBold" />
                                 <TextBlock Text="DCR workflow" Foreground="#B9C5D4" FontSize="12" Margin="0,2,0,0" />
@@ -110,7 +127,7 @@
 
                         <ui:Button x:Name="DcrListButton" Click="DcrListButton_Click"
                                    Style="{StaticResource SidebarNavButtonSelectedStyle}"
-                                   CornerRadius="8">
+                                   CornerRadius="{StaticResource NavButtonCornerRadius}">
                             <StackPanel Orientation="Horizontal">
                                 <ui:SymbolIcon Symbol="List24" FontSize="16" Margin="0,0,10,0" />
                                 <TextBlock Text="DCR Requests" VerticalAlignment="Center"
@@ -120,7 +137,7 @@
 
                         <ui:Button x:Name="CreateDcrButton" Click="CreateDcrButton_Click"
                                    Style="{StaticResource SidebarNavButtonStyle}"
-                                   CornerRadius="8">
+                                   CornerRadius="{StaticResource NavButtonCornerRadius}">
                             <StackPanel Orientation="Horizontal">
                                 <ui:SymbolIcon Symbol="Add24" FontSize="16" Margin="0,0,10,0" />
                                 <TextBlock Text="Create DCR" VerticalAlignment="Center"
@@ -130,7 +147,7 @@
 
                         <ui:Button x:Name="UsersButton" Click="UsersButton_Click"
                                    Style="{StaticResource SidebarNavButtonStyle}"
-                                   CornerRadius="8">
+                                   CornerRadius="{StaticResource NavButtonCornerRadius}">
                             <StackPanel Orientation="Horizontal">
                                 <ui:SymbolIcon Symbol="People24" FontSize="16" Margin="0,0,10,0" />
                                 <TextBlock Text="Users" VerticalAlignment="Center"
@@ -141,7 +158,7 @@
 
                     <!-- User card -->
                     <StackPanel Grid.Row="3">
-                        <Border Padding="12,10" CornerRadius="10" Background="{StaticResource SidebarPanelBrush}" Margin="0,0,0,8">
+                        <Border Padding="12,10" CornerRadius="{StaticResource PanelCornerRadius}" Background="{StaticResource SidebarPanelBrush}" Margin="0,0,0,8">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="36" />
@@ -160,7 +177,7 @@
                         </Border>
                         <ui:Button Click="SignOutButton_Click"
                                    Style="{StaticResource SidebarNavButtonStyle}"
-                                   CornerRadius="8">
+                                   CornerRadius="{StaticResource NavButtonCornerRadius}">
                             <StackPanel Orientation="Horizontal">
                                 <ui:SymbolIcon Symbol="ArrowExit20" FontSize="15" Margin="0,0,10,0" />
                                 <TextBlock Text="Sign out" VerticalAlignment="Center"
@@ -173,7 +190,7 @@
         </Border>
 
         <!-- ── MAIN CONTENT ─────────────────────────────────────────────── -->
-        <Grid Grid.Column="1" Margin="20">
+        <Grid Grid.Row="1" Grid.Column="1" Margin="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -199,7 +216,7 @@
                     <Border Grid.Column="1"
                             Background="{StaticResource SurfaceMutedBrush}"
                             BorderBrush="{StaticResource BorderBrush}"
-                            BorderThickness="1" CornerRadius="8"
+                            BorderThickness="1" CornerRadius="{StaticResource PanelCornerRadius}"
                             Padding="12,7" VerticalAlignment="Center">
                         <TextBlock Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat={}{0:dd/MM/yyyy}}"
                                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
