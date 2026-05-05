@@ -506,8 +506,23 @@
                                         </StackPanel>
                                         <StackPanel Grid.Column="1">
                                             <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Date" />
-                                            <ui:CalendarDatePicker x:Name="DecisionDatePicker"
-                                                                   IsTodayHighlighted="True" />
+                                            <!-- CalendarDatePicker has no PlaceholderText.
+                                                 Overlay a hint TextBlock; code-behind toggles its Visibility. -->
+                                            <Grid>
+                                                <ui:CalendarDatePicker
+                                                    x:Name="DecisionDatePicker"
+                                                    IsTodayHighlighted="True"
+                                                    HorizontalAlignment="Stretch" />
+                                                <TextBlock
+                                                    x:Name="DecisionDatePlaceholder"
+                                                    Text="Select date…"
+                                                    Foreground="{StaticResource MutedTextBrush}"
+                                                    FontSize="13"
+                                                    Margin="12,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    IsHitTestVisible="False"
+                                                    Visibility="Visible" />
+                                            </Grid>
                                         </StackPanel>
                                     </Grid>
 

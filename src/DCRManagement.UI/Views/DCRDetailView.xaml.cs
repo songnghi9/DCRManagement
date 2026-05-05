@@ -27,6 +27,21 @@ public partial class DCRDetailView : UserControl
         _dcrService = dcrService;
         _workflowService = workflowService;
         _userService = userService;
+
+        // Toggle placeholder visibility when CalendarDatePicker date changes
+        // CalendarDatePicker inherits Button — use DependencyPropertyDescriptor to watch Date
+        DecisionDatePicker.Click += (_, _) =>
+            Dispatcher.InvokeAsync(UpdateDatePlaceholder,
+                System.Windows.Threading.DispatcherPriority.Background);
+        Loaded += (_, _) => UpdateDatePlaceholder();
+    }
+
+    private void UpdateDatePlaceholder()
+    {
+        DecisionDatePlaceholder.Visibility =
+            DecisionDatePicker.Date is null
+                ? Visibility.Visible
+                : Visibility.Collapsed;
     }
 
     // ─── Public API ───────────────────────────────────────────────────────────
