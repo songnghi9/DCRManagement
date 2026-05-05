@@ -7,9 +7,9 @@
     Width="520"
     Height="320"
     MinWidth="420"
+    ExtendsContentIntoTitleBar="True"
     ResizeMode="NoResize"
-    WindowStartupLocation="CenterOwner"
-    ExtendsContentIntoTitleBar="True">
+    WindowStartupLocation="CenterOwner">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -17,22 +17,24 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- Title bar with Close only (no resize for dialogs) -->
-        <ui:TitleBar Grid.Row="0"
-                     Title="Submit DCR for Review"
-                     ShowMinimize="False"
-                     ShowMaximize="False"
-                     ShowClose="True"
-                     CanMaximize="False"
-                     Background="{StaticResource SurfaceBrush}"
-                     Foreground="{StaticResource TextBrush}"
-                     ButtonsBackground="{StaticResource SurfaceBrush}"
-                     ButtonsForeground="{StaticResource MutedTextBrush}" />
+        <!--  Title bar with Close only (no resize for dialogs)  -->
+        <ui:TitleBar
+            Title="Submit DCR for Review"
+            Grid.Row="0"
+            Background="{StaticResource SurfaceBrush}"
+            ButtonsBackground="{StaticResource SurfaceBrush}"
+            ButtonsForeground="{StaticResource MutedTextBrush}"
+            CanMaximize="False"
+            Foreground="{StaticResource TextBrush}"
+            ShowClose="True"
+            ShowMaximize="False"
+            ShowMinimize="False" />
 
-        <!-- Content -->
-        <Border Grid.Row="1"
-                Background="{StaticResource SurfaceBrush}"
-                Padding="24,16,24,24">
+        <!--  Content  -->
+        <Border
+            Grid.Row="1"
+            Padding="24,16,24,24"
+            Background="{StaticResource SurfaceBrush}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -43,40 +45,53 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!-- Section title -->
-                <TextBlock Grid.Row="0"
-                           Text="Assign reviewer and approver"
-                           FontSize="15" FontWeight="SemiBold"
-                           Margin="0,0,0,18" />
+                <!--  Section title  -->
+                <TextBlock
+                    Grid.Row="0"
+                    Margin="0,0,0,18"
+                    FontSize="15"
+                    FontWeight="SemiBold"
+                    Text="Assign reviewer and approver" />
 
-                <!-- Reviewer -->
-                <TextBlock Grid.Row="1" Style="{StaticResource FieldLabelStyle}" Text="Reviewer" />
-                <ComboBox x:Name="ReviewerComboBox"
-                          Grid.Row="2"
-                          DisplayMemberPath="FullName"
-                          SelectedValuePath="Id"
-                          Margin="0,0,0,14" />
+                <!--  Reviewer  -->
+                <TextBlock
+                    Grid.Row="1"
+                    Style="{StaticResource FieldLabelStyle}"
+                    Text="Reviewer" />
+                <ComboBox
+                    x:Name="ReviewerComboBox"
+                    Grid.Row="2"
+                    Margin="0,0,0,14"
+                    DisplayMemberPath="FullName"
+                    SelectedValuePath="Id" />
 
-                <!-- Approver -->
-                <TextBlock Grid.Row="3" Style="{StaticResource FieldLabelStyle}" Text="Approver" />
-                <ComboBox x:Name="ApproverComboBox"
-                          Grid.Row="4"
-                          DisplayMemberPath="FullName"
-                          SelectedValuePath="Id" />
+                <!--  Approver  -->
+                <TextBlock
+                    Grid.Row="3"
+                    Style="{StaticResource FieldLabelStyle}"
+                    Text="Approver" />
+                <ComboBox
+                    x:Name="ApproverComboBox"
+                    Grid.Row="4"
+                    DisplayMemberPath="FullName"
+                    SelectedValuePath="Id" />
 
-                <!-- Actions -->
-                <StackPanel Grid.Row="5"
-                            Orientation="Horizontal"
-                            HorizontalAlignment="Right"
-                            Margin="0,20,0,0">
-                    <Button Content="Cancel"
-                            Click="CancelButton_Click"
-                            Margin="0,0,10,0"
-                            MinWidth="90" />
-                    <Button Content="Submit to Review"
-                            Click="SubmitButton_Click"
-                            Style="{StaticResource PrimaryButtonStyle}"
-                            MinWidth="130" />
+                <!--  Actions  -->
+                <StackPanel
+                    Grid.Row="5"
+                    Margin="0,20,0,0"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+                    <Button
+                        MinWidth="90"
+                        Margin="0,0,10,0"
+                        Click="CancelButton_Click"
+                        Content="Cancel" />
+                    <Button
+                        MinWidth="130"
+                        Click="SubmitButton_Click"
+                        Content="Submit to Review"
+                        Style="{StaticResource PrimaryButtonStyle}" />
                 </StackPanel>
             </Grid>
         </Border>

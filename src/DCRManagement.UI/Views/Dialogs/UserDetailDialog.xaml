@@ -7,9 +7,9 @@
     Width="560"
     Height="460"
     MinWidth="460"
+    ExtendsContentIntoTitleBar="True"
     ResizeMode="NoResize"
-    WindowStartupLocation="CenterOwner"
-    ExtendsContentIntoTitleBar="True">
+    WindowStartupLocation="CenterOwner">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -17,20 +17,22 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <ui:TitleBar Grid.Row="0"
-                     Title="User Detail"
-                     ShowMinimize="False"
-                     ShowMaximize="False"
-                     ShowClose="True"
-                     CanMaximize="False"
-                     Background="{StaticResource SurfaceBrush}"
-                     Foreground="{StaticResource TextBrush}"
-                     ButtonsBackground="{StaticResource SurfaceBrush}"
-                     ButtonsForeground="{StaticResource MutedTextBrush}" />
+        <ui:TitleBar
+            Title="User Detail"
+            Grid.Row="0"
+            Background="{StaticResource SurfaceBrush}"
+            ButtonsBackground="{StaticResource SurfaceBrush}"
+            ButtonsForeground="{StaticResource MutedTextBrush}"
+            CanMaximize="False"
+            Foreground="{StaticResource TextBrush}"
+            ShowClose="True"
+            ShowMaximize="False"
+            ShowMinimize="False" />
 
-        <Border Grid.Row="1"
-                Background="{StaticResource SurfaceBrush}"
-                Padding="24,12,24,24">
+        <Border
+            Grid.Row="1"
+            Padding="24,12,24,24"
+            Background="{StaticResource SurfaceBrush}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -43,25 +45,35 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!-- Title -->
-                <TextBlock Grid.Row="0"
-                           Text="User information"
-                           FontSize="15" FontWeight="SemiBold"
-                           Margin="0,0,0,18" />
+                <!--  Title  -->
+                <TextBlock
+                    Grid.Row="0"
+                    Margin="0,0,0,18"
+                    FontSize="15"
+                    FontWeight="SemiBold"
+                    Text="User information" />
 
-                <!-- Full name -->
-                <TextBlock Grid.Row="1" Style="{StaticResource FieldLabelStyle}" Text="Full name" />
-                <TextBox x:Name="FullNameTextBox"
-                         Grid.Row="2"
-                         Margin="0,0,0,12" />
+                <!--  Full name  -->
+                <TextBlock
+                    Grid.Row="1"
+                    Style="{StaticResource FieldLabelStyle}"
+                    Text="Full name" />
+                <TextBox
+                    x:Name="FullNameTextBox"
+                    Grid.Row="2"
+                    Margin="0,0,0,12" />
 
-                <!-- Email -->
-                <TextBlock Grid.Row="3" Style="{StaticResource FieldLabelStyle}" Text="Email" />
-                <TextBox x:Name="EmailTextBox"
-                         Grid.Row="4"
-                         Margin="0,0,0,12" />
+                <!--  Email  -->
+                <TextBlock
+                    Grid.Row="3"
+                    Style="{StaticResource FieldLabelStyle}"
+                    Text="Email" />
+                <TextBox
+                    x:Name="EmailTextBox"
+                    Grid.Row="4"
+                    Margin="0,0,0,12" />
 
-                <!-- Role + Department -->
+                <!--  Role + Department  -->
                 <Grid Grid.Row="5" Margin="0,0,0,14">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -83,26 +95,30 @@
                     </StackPanel>
                 </Grid>
 
-                <!-- Active checkbox -->
-                <CheckBox x:Name="IsActiveCheckBox"
-                          Grid.Row="6"
-                          Content="Active account"
-                          IsChecked="True"
-                          VerticalAlignment="Top" />
+                <!--  Active checkbox  -->
+                <CheckBox
+                    x:Name="IsActiveCheckBox"
+                    Grid.Row="6"
+                    VerticalAlignment="Top"
+                    Content="Active account"
+                    IsChecked="True" />
 
-                <!-- Actions -->
-                <StackPanel Grid.Row="7"
-                            Orientation="Horizontal"
-                            HorizontalAlignment="Right"
-                            Margin="0,20,0,0">
-                    <Button Content="Cancel"
-                            Click="CancelButton_Click"
-                            Margin="0,0,10,0"
-                            MinWidth="90" />
-                    <Button Content="Save"
-                            Click="OkButton_Click"
-                            Style="{StaticResource PrimaryButtonStyle}"
-                            MinWidth="90" />
+                <!--  Actions  -->
+                <StackPanel
+                    Grid.Row="7"
+                    Margin="0,20,0,0"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+                    <Button
+                        MinWidth="90"
+                        Margin="0,0,10,0"
+                        Click="CancelButton_Click"
+                        Content="Cancel" />
+                    <Button
+                        MinWidth="90"
+                        Click="OkButton_Click"
+                        Content="Save"
+                        Style="{StaticResource PrimaryButtonStyle}" />
                 </StackPanel>
             </Grid>
         </Border>
