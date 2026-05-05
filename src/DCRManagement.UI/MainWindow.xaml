@@ -17,7 +17,7 @@
 
     <Grid Background="{StaticResource AppBackgroundBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="36" />
+            <RowDefinition Height="48" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -36,17 +36,20 @@
             ButtonsBackground="#0B1220"
             ButtonsForeground="#EAF0F7"
             Background="#0B1220"
-            Foreground="#EAF0F7">
+            Foreground="#EAF0F7"
+            MinHeight="48">
 
-            <!-- Page title + subtitle in the left area of TitleBar -->
+            <!-- Page title + subtitle — vertically centered in the 48px TitleBar -->
             <ui:TitleBar.Header>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8,0,0,0">
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            Margin="12,0,0,0">
                     <TextBlock x:Name="PageTitleText"
                                Text="DCR Requests"
                                FontSize="13" FontWeight="SemiBold"
                                Foreground="#EAF0F7"
                                VerticalAlignment="Center" />
-                    <TextBlock Text=" — "
+                    <TextBlock Text="  —  "
                                FontSize="12"
                                Foreground="#8FA3BF"
                                VerticalAlignment="Center" />
