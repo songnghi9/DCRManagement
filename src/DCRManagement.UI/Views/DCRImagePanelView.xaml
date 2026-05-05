@@ -1,49 +1,197 @@
 <UserControl
     x:Class="DCRManagement.UI.Views.DCRImagePanelView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid Background="#FFF4F7FB">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
+
+    <Grid Background="#F4F7FB">
         <Grid.RowDefinitions>
-            <RowDefinition Height="42" />
+            <!-- Toolbar -->
+            <RowDefinition Height="40" />
+            <!-- Main image viewer -->
             <RowDefinition Height="*" />
-            <RowDefinition Height="66" />
+            <!-- Thumbnail strip -->
+            <RowDefinition Height="80" />
         </Grid.RowDefinitions>
-        <DockPanel Background="White" LastChildFill="False">
-            <TextBlock
-                x:Name="TitleText"
-                Margin="12,0,0,0"
-                VerticalAlignment="Center"
-                DockPanel.Dock="Left"
-                FontWeight="SemiBold"
-                Text="Images" />
-            <StackPanel
-                Margin="0,4,10,4"
-                DockPanel.Dock="Right"
-                Orientation="Horizontal">
-                <Button
-                    MinWidth="58"
-                    Margin="0,0,6,0"
-                    Content="Add" />
-                <Button MinWidth="58" Content="Crop" />
-            </StackPanel>
-        </DockPanel>
-        <Border
-            Grid.Row="1"
-            Margin="12"
-            Background="#FFEDF2F8"
-            BorderBrush="#FFAAB6C5"
-            BorderThickness="1"
-            CornerRadius="{StaticResource PanelCornerRadius}">
-            <TextBlock
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                FontSize="18"
-                FontWeight="SemiBold"
-                Text="Image viewer" />
+
+        <!-- ── TOOLBAR ─────────────────────────────────────────────────── -->
+        <Border Grid.Row="0"
+                Background="White"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="0,0,0,1">
+            <DockPanel Margin="10,0" LastChildFill="False">
+
+                <!-- Gallery label -->
+                <TextBlock x:Name="GalleryTitleText"
+                           Text="Before"
+                           FontWeight="SemiBold" FontSize="13"
+                           Foreground="{StaticResource TextBrush}"
+                           VerticalAlignment="Center"
+                           DockPanel.Dock="Left"
+                           Margin="0,0,12,0" />
+
+                <!-- Image count badge -->
+                <Border x:Name="CountBadge"
+                        DockPanel.Dock="Left"
+                        Background="{StaticResource PrimaryBrush}"
+                        CornerRadius="10"
+                        Padding="7,2"
+                        VerticalAlignment="Center">
+                    <TextBlock x:Name="CountText"
+                               Text="0"
+                               FontSize="11" FontWeight="SemiBold"
+                               Foreground="White" />
+                </Border>
+
+                <!-- Right actions -->
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                    <!-- Expand to popup -->
+                    <ui:Button x:Name="ExpandButton"
+                               ToolTip="Expand to full view"
+                               Padding="6,4" MinHeight="28"
+                               CornerRadius="6"
+                               Margin="0,0,4,0"
+                               Click="ExpandButton_Click">
+                        <ui:SymbolIcon Symbol="ArrowExpand20" FontSize="14" />
+                    </ui:Button>
+                    <!-- Delete selected -->
+                    <ui:Button x:Name="DeleteButton"
+                               ToolTip="Delete selected image"
+                               Padding="6,4" MinHeight="28"
+                               CornerRadius="6"
+                               Margin="0,0,4,0"
+                               IsEnabled="False"
+                               Click="DeleteButton_Click">
+                        <ui:SymbolIcon Symbol="Delete24" FontSize="14" />
+                    </ui:Button>
+                    <!-- Paste from clipboard -->
+                    <ui:Button x:Name="PasteButton"
+                               ToolTip="Paste image from clipboard (Ctrl+V)"
+                               Padding="6,4" MinHeight="28"
+                               CornerRadius="6"
+                               Margin="0,0,4,0"
+                               Click="PasteButton_Click">
+                        <ui:SymbolIcon Symbol="ClipboardPaste24" FontSize="14" />
+                    </ui:Button>
+                    <!-- Add from file -->
+                    <ui:Button x:Name="AddButton"
+                               Content="Add"
+                               Appearance="Primary"
+                               Padding="10,4" MinHeight="28"
+                               CornerRadius="6"
+                               Click="AddButton_Click"
+                               Icon="{ui:SymbolIcon Add24}" />
+                </StackPanel>
+            </DockPanel>
         </Border>
-        <ItemsControl
-            x:Name="ThumbnailList"
-            Grid.Row="2"
-            Margin="12,0,12,12" />
+
+        <!-- ── MAIN IMAGE VIEWER ───────────────────────────────────────── -->
+        <Border Grid.Row="1"
+                Margin="8,8,8,4"
+                Background="#EDF2F8"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="{StaticResource PanelCornerRadius}"
+                ClipToBounds="True">
+            <Grid>
+                <!-- Empty state -->
+                <StackPanel x:Name="EmptyState"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Visibility="Visible">
+                    <ui:SymbolIcon Symbol="Image24"
+                                   FontSize="36"
+                                   Foreground="{StaticResource MutedTextBrush}"
+                                   HorizontalAlignment="Center" />
+                    <TextBlock Text="No images"
+                               FontSize="13"
+                               Foreground="{StaticResource MutedTextBrush}"
+                               HorizontalAlignment="Center"
+                               Margin="0,8,0,4" />
+                    <TextBlock Text="Click Add or paste (Ctrl+V)"
+                               FontSize="11"
+                               Foreground="{StaticResource MutedTextBrush}"
+                               HorizontalAlignment="Center" />
+                </StackPanel>
+
+                <!-- Main image — shown when an image is selected -->
+                <Image x:Name="MainImage"
+                       Stretch="Uniform"
+                       RenderOptions.BitmapScalingMode="HighQuality"
+                       Visibility="Collapsed"
+                       MouseLeftButtonDown="MainImage_DoubleClick" />
+
+                <!-- Navigation arrows -->
+                <Button x:Name="PrevButton"
+                        Content="‹"
+                        FontSize="22" FontWeight="Bold"
+                        Width="32" Height="48"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Margin="6,0"
+                        Opacity="0.7"
+                        Visibility="Collapsed"
+                        Click="PrevButton_Click" />
+                <Button x:Name="NextButton"
+                        Content="›"
+                        FontSize="22" FontWeight="Bold"
+                        Width="32" Height="48"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="6,0"
+                        Opacity="0.7"
+                        Visibility="Collapsed"
+                        Click="NextButton_Click" />
+
+                <!-- Image index indicator -->
+                <Border x:Name="IndexBadge"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        Margin="0,0,0,8"
+                        Background="#80000000"
+                        CornerRadius="10"
+                        Padding="10,3"
+                        Visibility="Collapsed">
+                    <TextBlock x:Name="IndexText"
+                               Text="1 / 1"
+                               FontSize="11" FontWeight="SemiBold"
+                               Foreground="White" />
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- ── THUMBNAIL STRIP ─────────────────────────────────────────── -->
+        <ScrollViewer Grid.Row="2"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Disabled"
+                      Margin="8,0,8,8">
+            <ItemsControl x:Name="ThumbnailList">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <!-- Each thumbnail card -->
+                        <Border x:Name="ThumbBorder"
+                                Width="64" Height="64"
+                                Margin="0,4,6,4"
+                                CornerRadius="6"
+                                BorderThickness="2"
+                                BorderBrush="Transparent"
+                                Background="#DDE5EF"
+                                Cursor="Hand"
+                                ClipToBounds="True"
+                                Tag="{Binding Index}"
+                                MouseLeftButtonDown="Thumbnail_Click">
+                            <Image Source="{Binding Thumbnail}"
+                                   Stretch="UniformToFill"
+                                   RenderOptions.BitmapScalingMode="HighQuality" />
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </UserControl>

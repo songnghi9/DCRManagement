@@ -5,9 +5,9 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="Sign in — DCR Management"
     Width="1000"
-    Height="680"
+    Height="720"
     MinWidth="820"
-    MinHeight="560"
+    MinHeight="600"
     ExtendsContentIntoTitleBar="True"
     WindowStartupLocation="CenterScreen">
 
@@ -144,7 +144,7 @@
                         Foreground="{StaticResource TextBrush}"
                         Text="Welcome back" />
                     <TextBlock
-                        Margin="0,6,0,24"
+                        Margin="0,6,0,16"
                         FontSize="14"
                         Foreground="{StaticResource MutedTextBrush}"
                         Text="Sign in to your DCR account" />
