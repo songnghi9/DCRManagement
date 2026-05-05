@@ -19,86 +19,11 @@
     -->
     <DockPanel Background="#F1F5F9">
 
-        <!-- ── TOOLBAR (Top) ─────────────────────────────────────────── -->
+        <!-- ── THUMBNAIL STRIP (Top) ─────────────────────────────────── -->
         <Border DockPanel.Dock="Top"
                 Background="White"
                 BorderBrush="{StaticResource BorderBrush}"
                 BorderThickness="0,0,0,1"
-                Height="40">
-            <DockPanel Margin="12,0" LastChildFill="False">
-
-                <!-- Left: label + count badge -->
-                <StackPanel DockPanel.Dock="Left"
-                            Orientation="Horizontal"
-                            VerticalAlignment="Center">
-                    <TextBlock x:Name="GalleryTitleText"
-                               Text="Before"
-                               FontWeight="SemiBold" FontSize="13"
-                               Foreground="{StaticResource TextBrush}"
-                               VerticalAlignment="Center" />
-                    <Border x:Name="CountBadge"
-                            Margin="8,0,0,0"
-                            Background="{StaticResource PrimaryBrush}"
-                            CornerRadius="10"
-                            Padding="7,2"
-                            VerticalAlignment="Center">
-                        <TextBlock x:Name="CountText"
-                                   Text="0"
-                                   FontSize="11" FontWeight="Bold"
-                                   Foreground="White" />
-                    </Border>
-                </StackPanel>
-
-                <!-- Right: action buttons -->
-                <StackPanel DockPanel.Dock="Right"
-                            Orientation="Horizontal"
-                            VerticalAlignment="Center">
-
-                    <!-- Fullscreen / expand -->
-                    <ui:Button x:Name="ExpandButton"
-                               ToolTip="Fullscreen (double-click image)"
-                               Padding="7,5" MinHeight="28"
-                               CornerRadius="6" Margin="0,0,4,0"
-                               Click="ExpandButton_Click">
-                        <ui:SymbolIcon Symbol="ArrowExpand20" FontSize="14" />
-                    </ui:Button>
-
-                    <!-- Delete selected -->
-                    <ui:Button x:Name="DeleteButton"
-                               ToolTip="Delete selected image"
-                               Padding="7,5" MinHeight="28"
-                               CornerRadius="6" Margin="0,0,4,0"
-                               IsEnabled="False"
-                               Click="DeleteButton_Click">
-                        <ui:SymbolIcon Symbol="Delete24" FontSize="14" />
-                    </ui:Button>
-
-                    <!-- Paste from clipboard -->
-                    <ui:Button x:Name="PasteButton"
-                               ToolTip="Paste from clipboard (Ctrl+V)"
-                               Padding="7,5" MinHeight="28"
-                               CornerRadius="6" Margin="0,0,6,0"
-                               Click="PasteButton_Click">
-                        <ui:SymbolIcon Symbol="ClipboardPaste24" FontSize="14" />
-                    </ui:Button>
-
-                    <!-- Add from file — primary -->
-                    <ui:Button x:Name="AddButton"
-                               Content="Add"
-                               Appearance="Primary"
-                               Padding="12,5" MinHeight="28"
-                               CornerRadius="6"
-                               Click="AddButton_Click"
-                               Icon="{ui:SymbolIcon Add24}" />
-                </StackPanel>
-            </DockPanel>
-        </Border>
-
-        <!-- ── THUMBNAIL STRIP (Bottom) ─────────────────────────────── -->
-        <Border DockPanel.Dock="Bottom"
-                Background="White"
-                BorderBrush="{StaticResource BorderBrush}"
-                BorderThickness="0,1,0,0"
                 Height="80">
             <ScrollViewer HorizontalScrollBarVisibility="Auto"
                           VerticalScrollBarVisibility="Disabled"
@@ -132,7 +57,74 @@
             </ScrollViewer>
         </Border>
 
-        <!-- ── IMAGE VIEWER (Fill — remaining space) ─────────────────── -->
+        <!-- ── TOOLBAR (Bottom) ──────────────────────────────────────── -->
+        <Border DockPanel.Dock="Bottom"
+                Background="White"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="0,1,0,0"
+                Height="40">
+            <DockPanel Margin="12,0" LastChildFill="False">
+
+                <!-- Left: label + count badge -->
+                <StackPanel DockPanel.Dock="Left"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center">
+                    <TextBlock x:Name="GalleryTitleText"
+                               Text="Before"
+                               FontWeight="SemiBold" FontSize="13"
+                               Foreground="{StaticResource TextBrush}"
+                               VerticalAlignment="Center" />
+                    <Border x:Name="CountBadge"
+                            Margin="8,0,0,0"
+                            Background="{StaticResource PrimaryBrush}"
+                            CornerRadius="10"
+                            Padding="7,2"
+                            VerticalAlignment="Center">
+                        <TextBlock x:Name="CountText"
+                                   Text="0"
+                                   FontSize="11" FontWeight="Bold"
+                                   Foreground="White" />
+                    </Border>
+                </StackPanel>
+
+                <!-- Right: action buttons -->
+                <StackPanel DockPanel.Dock="Right"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center">
+                    <ui:Button x:Name="ExpandButton"
+                               ToolTip="Fullscreen (double-click image)"
+                               Padding="7,5" MinHeight="28"
+                               CornerRadius="6" Margin="0,0,4,0"
+                               Click="ExpandButton_Click">
+                        <ui:SymbolIcon Symbol="ArrowExpand20" FontSize="14" />
+                    </ui:Button>
+                    <ui:Button x:Name="DeleteButton"
+                               ToolTip="Delete selected image"
+                               Padding="7,5" MinHeight="28"
+                               CornerRadius="6" Margin="0,0,4,0"
+                               IsEnabled="False"
+                               Click="DeleteButton_Click">
+                        <ui:SymbolIcon Symbol="Delete24" FontSize="14" />
+                    </ui:Button>
+                    <ui:Button x:Name="PasteButton"
+                               ToolTip="Paste from clipboard (Ctrl+V)"
+                               Padding="7,5" MinHeight="28"
+                               CornerRadius="6" Margin="0,0,6,0"
+                               Click="PasteButton_Click">
+                        <ui:SymbolIcon Symbol="ClipboardPaste24" FontSize="14" />
+                    </ui:Button>
+                    <ui:Button x:Name="AddButton"
+                               Content="Add"
+                               Appearance="Primary"
+                               Padding="12,5" MinHeight="28"
+                               CornerRadius="6"
+                               Click="AddButton_Click"
+                               Icon="{ui:SymbolIcon Add24}" />
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- ── IMAGE VIEWER (Fill) ───────────────────────────────────── -->
         <Border Background="#E8EFF7"
                 BorderBrush="{StaticResource BorderBrush}"
                 BorderThickness="0"
