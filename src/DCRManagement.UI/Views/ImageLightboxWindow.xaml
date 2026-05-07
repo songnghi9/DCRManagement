@@ -61,22 +61,34 @@
                        Stretch="Uniform"
                        RenderOptions.BitmapScalingMode="HighQuality"
                        Margin="16" />
-                <Button x:Name="PrevBtn" Content="‹"
-                        FontSize="32" FontWeight="Bold"
-                        Width="44" Height="64"
-                        HorizontalAlignment="Left" VerticalAlignment="Center"
-                        Margin="8,0" Opacity="0.75"
-                        Background="#40FFFFFF" Foreground="White"
-                        BorderThickness="0"
-                        Click="PrevBtn_Click" />
-                <Button x:Name="NextBtn" Content="›"
-                        FontSize="32" FontWeight="Bold"
-                        Width="44" Height="64"
-                        HorizontalAlignment="Right" VerticalAlignment="Center"
-                        Margin="8,0" Opacity="0.75"
-                        Background="#40FFFFFF" Foreground="White"
-                        BorderThickness="0"
-                        Click="NextBtn_Click" />
+                <ui:Button x:Name="PrevBtn"
+                           HorizontalAlignment="Left" VerticalAlignment="Center"
+                           Margin="8,0"
+                           Width="36" Height="60"
+                           Padding="0"
+                           CornerRadius="10"
+                           Background="#50FFFFFF"
+                           Foreground="White"
+                           BorderThickness="0"
+                           Opacity="0.85"
+                           Click="PrevBtn_Click">
+                    <ui:SymbolIcon Symbol="ChevronLeft24" FontSize="18" />
+                </ui:Button>
+
+                <ui:Button x:Name="NextBtn"
+                           HorizontalAlignment="Right" VerticalAlignment="Center"
+                           Margin="8,0"
+                           Width="36" Height="60"
+                           Padding="0"
+                           CornerRadius="10"
+                           Background="#50FFFFFF"
+                           Foreground="White"
+                           BorderThickness="0"
+                           Opacity="0.85"
+                           Click="NextBtn_Click">
+                    <ui:SymbolIcon Symbol="ChevronRight24" FontSize="18" />
+                </ui:Button>
+
             </Grid>
 
             <!-- Side-by-side mode -->

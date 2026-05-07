@@ -140,22 +140,32 @@
                 </ScrollViewer>
 
                 <!-- Prev / Next for Before -->
-                <Button x:Name="BeforePrev" Content="‹"
-                        FontSize="28" FontWeight="Bold"
-                        Width="36" Height="56"
-                        HorizontalAlignment="Left" VerticalAlignment="Center"
-                        Margin="6,0" Opacity="0.75"
-                        Background="#40FFFFFF" Foreground="White"
-                        BorderThickness="0"
-                        Click="BeforePrev_Click" />
-                <Button x:Name="BeforeNext" Content="›"
-                        FontSize="28" FontWeight="Bold"
-                        Width="36" Height="56"
-                        HorizontalAlignment="Right" VerticalAlignment="Center"
-                        Margin="6,0" Opacity="0.75"
-                        Background="#40FFFFFF" Foreground="White"
-                        BorderThickness="0"
-                        Click="BeforeNext_Click" />
+                <ui:Button x:Name="BeforePrev"
+                           HorizontalAlignment="Left" VerticalAlignment="Center"
+                           Margin="6,0"
+                           Width="32" Height="52"
+                           Padding="0"
+                           CornerRadius="8"
+                           Background="#50FFFFFF"
+                           Foreground="White"
+                           BorderThickness="0"
+                           Opacity="0.85"
+                           Click="BeforePrev_Click">
+                    <ui:SymbolIcon Symbol="ChevronLeft24" FontSize="16" />
+                </ui:Button>
+                <ui:Button x:Name="BeforeNext"
+                           HorizontalAlignment="Right" VerticalAlignment="Center"
+                           Margin="6,0"
+                           Width="32" Height="52"
+                           Padding="0"
+                           CornerRadius="8"
+                           Background="#50FFFFFF"
+                           Foreground="White"
+                           BorderThickness="0"
+                           Opacity="0.85"
+                           Click="BeforeNext_Click">
+                    <ui:SymbolIcon Symbol="ChevronRight24" FontSize="16" />
+                </ui:Button>
             </Grid>
 
             <!-- ── SPLITTER ── -->
@@ -195,22 +205,32 @@
                 </ScrollViewer>
 
                 <!-- Prev / Next for After -->
-                <Button x:Name="AfterPrev" Content="‹"
-                        FontSize="28" FontWeight="Bold"
-                        Width="36" Height="56"
-                        HorizontalAlignment="Left" VerticalAlignment="Center"
-                        Margin="6,0" Opacity="0.75"
-                        Background="#40FFFFFF" Foreground="White"
-                        BorderThickness="0"
-                        Click="AfterPrev_Click" />
-                <Button x:Name="AfterNext" Content="›"
-                        FontSize="28" FontWeight="Bold"
-                        Width="36" Height="56"
-                        HorizontalAlignment="Right" VerticalAlignment="Center"
-                        Margin="6,0" Opacity="0.75"
-                        Background="#40FFFFFF" Foreground="White"
-                        BorderThickness="0"
-                        Click="AfterNext_Click" />
+                <ui:Button x:Name="AfterPrev"
+                           HorizontalAlignment="Left" VerticalAlignment="Center"
+                           Margin="6,0"
+                           Width="32" Height="52"
+                           Padding="0"
+                           CornerRadius="8"
+                           Background="#50FFFFFF"
+                           Foreground="White"
+                           BorderThickness="0"
+                           Opacity="0.85"
+                           Click="AfterPrev_Click">
+                    <ui:SymbolIcon Symbol="ChevronLeft24" FontSize="16" />
+                </ui:Button>
+                <ui:Button x:Name="AfterNext"
+                           HorizontalAlignment="Right" VerticalAlignment="Center"
+                           Margin="6,0"
+                           Width="32" Height="52"
+                           Padding="0"
+                           CornerRadius="8"
+                           Background="#50FFFFFF"
+                           Foreground="White"
+                           BorderThickness="0"
+                           Opacity="0.85"
+                           Click="AfterNext_Click">
+                    <ui:SymbolIcon Symbol="ChevronRight24" FontSize="16" />
+                </ui:Button>
             </Grid>
         </Grid>
 

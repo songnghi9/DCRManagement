@@ -197,22 +197,34 @@
                 </ScrollViewer>
 
                 <!-- Prev / Next -->
-                <Button x:Name="PrevButton" Content="‹"
-                        FontSize="26" FontWeight="Bold"
-                        Width="34" Height="56"
-                        HorizontalAlignment="Left" VerticalAlignment="Center"
-                        Margin="6,0" Opacity="0.7"
-                        Background="#60FFFFFF" Foreground="{StaticResource TextBrush}"
-                        BorderThickness="0" Visibility="Collapsed"
-                        Click="PrevButton_Click" />
-                <Button x:Name="NextButton" Content="›"
-                        FontSize="26" FontWeight="Bold"
-                        Width="34" Height="56"
-                        HorizontalAlignment="Right" VerticalAlignment="Center"
-                        Margin="6,0" Opacity="0.7"
-                        Background="#60FFFFFF" Foreground="{StaticResource TextBrush}"
-                        BorderThickness="0" Visibility="Collapsed"
-                        Click="NextButton_Click" />
+                <ui:Button x:Name="PrevButton"
+                           HorizontalAlignment="Left" VerticalAlignment="Center"
+                           Margin="6,0"
+                           Width="32" Height="52"
+                           Padding="0"
+                           CornerRadius="8"
+                           Background="#60FFFFFF"
+                           Foreground="{StaticResource TextBrush}"
+                           BorderThickness="0"
+                           Opacity="0.85"
+                           Visibility="Collapsed"
+                           Click="PrevButton_Click">
+                    <ui:SymbolIcon Symbol="ChevronLeft24" FontSize="16" />
+                </ui:Button>
+                <ui:Button x:Name="NextButton"
+                           HorizontalAlignment="Right" VerticalAlignment="Center"
+                           Margin="6,0"
+                           Width="32" Height="52"
+                           Padding="0"
+                           CornerRadius="8"
+                           Background="#60FFFFFF"
+                           Foreground="{StaticResource TextBrush}"
+                           BorderThickness="0"
+                           Opacity="0.85"
+                           Visibility="Collapsed"
+                           Click="NextButton_Click">
+                    <ui:SymbolIcon Symbol="ChevronRight24" FontSize="16" />
+                </ui:Button>
 
                 <!-- Index badge -->
                 <Border x:Name="IndexBadge"
