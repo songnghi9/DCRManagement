@@ -142,29 +142,29 @@
                 <!-- Prev / Next for Before -->
                 <ui:Button x:Name="BeforePrev"
                            HorizontalAlignment="Left" VerticalAlignment="Center"
-                           Margin="6,0"
-                           Width="32" Height="52"
+                           Margin="10,0"
+                           Width="44" Height="44"
                            Padding="0"
-                           CornerRadius="8"
-                           Background="#50FFFFFF"
-                           Foreground="White"
-                           BorderThickness="0"
-                           Opacity="0.85"
+                           CornerRadius="999"
+                           Background="#CCFFFFFF"
+                           Foreground="#888888"
+                           BorderBrush="#CCCCCC"
+                           BorderThickness="1.5"
                            Click="BeforePrev_Click">
-                    <ui:SymbolIcon Symbol="ChevronLeft24" FontSize="16" />
+                    <ui:SymbolIcon Symbol="ChevronLeft24" FontSize="15" />
                 </ui:Button>
                 <ui:Button x:Name="BeforeNext"
                            HorizontalAlignment="Right" VerticalAlignment="Center"
-                           Margin="6,0"
-                           Width="32" Height="52"
+                           Margin="10,0"
+                           Width="44" Height="44"
                            Padding="0"
-                           CornerRadius="8"
-                           Background="#50FFFFFF"
-                           Foreground="White"
-                           BorderThickness="0"
-                           Opacity="0.85"
+                           CornerRadius="999"
+                           Background="#CCFFFFFF"
+                           Foreground="#888888"
+                           BorderBrush="#CCCCCC"
+                           BorderThickness="1.5"
                            Click="BeforeNext_Click">
-                    <ui:SymbolIcon Symbol="ChevronRight24" FontSize="16" />
+                    <ui:SymbolIcon Symbol="ChevronRight24" FontSize="15" />
                 </ui:Button>
             </Grid>
 
@@ -207,29 +207,29 @@
                 <!-- Prev / Next for After -->
                 <ui:Button x:Name="AfterPrev"
                            HorizontalAlignment="Left" VerticalAlignment="Center"
-                           Margin="6,0"
-                           Width="32" Height="52"
+                           Margin="10,0"
+                           Width="44" Height="44"
                            Padding="0"
-                           CornerRadius="8"
-                           Background="#50FFFFFF"
-                           Foreground="White"
-                           BorderThickness="0"
-                           Opacity="0.85"
+                           CornerRadius="999"
+                           Background="#CCFFFFFF"
+                           Foreground="#888888"
+                           BorderBrush="#CCCCCC"
+                           BorderThickness="1.5"
                            Click="AfterPrev_Click">
-                    <ui:SymbolIcon Symbol="ChevronLeft24" FontSize="16" />
+                    <ui:SymbolIcon Symbol="ChevronLeft24" FontSize="15" />
                 </ui:Button>
                 <ui:Button x:Name="AfterNext"
                            HorizontalAlignment="Right" VerticalAlignment="Center"
-                           Margin="6,0"
-                           Width="32" Height="52"
+                           Margin="10,0"
+                           Width="44" Height="44"
                            Padding="0"
-                           CornerRadius="8"
-                           Background="#50FFFFFF"
-                           Foreground="White"
-                           BorderThickness="0"
-                           Opacity="0.85"
+                           CornerRadius="999"
+                           Background="#CCFFFFFF"
+                           Foreground="#888888"
+                           BorderBrush="#CCCCCC"
+                           BorderThickness="1.5"
                            Click="AfterNext_Click">
-                    <ui:SymbolIcon Symbol="ChevronRight24" FontSize="16" />
+                    <ui:SymbolIcon Symbol="ChevronRight24" FontSize="15" />
                 </ui:Button>
             </Grid>
         </Grid>

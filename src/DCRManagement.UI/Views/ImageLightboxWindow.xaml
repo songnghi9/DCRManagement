@@ -63,30 +63,30 @@
                        Margin="16" />
                 <ui:Button x:Name="PrevBtn"
                            HorizontalAlignment="Left" VerticalAlignment="Center"
-                           Margin="8,0"
-                           Width="36" Height="60"
+                           Margin="10,0"
+                           Width="44" Height="44"
                            Padding="0"
-                           CornerRadius="10"
-                           Background="#50FFFFFF"
-                           Foreground="White"
-                           BorderThickness="0"
-                           Opacity="0.85"
+                           CornerRadius="999"
+                           Background="#DDFFFFFF"
+                           Foreground="#666666"
+                           BorderBrush="#BBBBBB"
+                           BorderThickness="1.5"
                            Click="PrevBtn_Click">
-                    <ui:SymbolIcon Symbol="ChevronLeft24" FontSize="18" />
+                    <ui:SymbolIcon Symbol="ChevronLeft24" FontSize="15" />
                 </ui:Button>
 
                 <ui:Button x:Name="NextBtn"
                            HorizontalAlignment="Right" VerticalAlignment="Center"
-                           Margin="8,0"
-                           Width="36" Height="60"
+                           Margin="10,0"
+                           Width="44" Height="44"
                            Padding="0"
-                           CornerRadius="10"
-                           Background="#50FFFFFF"
-                           Foreground="White"
-                           BorderThickness="0"
-                           Opacity="0.85"
+                           CornerRadius="999"
+                           Background="#DDFFFFFF"
+                           Foreground="#666666"
+                           BorderBrush="#BBBBBB"
+                           BorderThickness="1.5"
                            Click="NextBtn_Click">
-                    <ui:SymbolIcon Symbol="ChevronRight24" FontSize="18" />
+                    <ui:SymbolIcon Symbol="ChevronRight24" FontSize="15" />
                 </ui:Button>
 
             </Grid>
