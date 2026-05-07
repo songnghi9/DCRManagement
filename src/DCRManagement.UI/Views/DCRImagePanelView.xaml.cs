@@ -1,70 +1,87 @@
-using DCRManagement.Application.Services;
-using Microsoft.Extensions.DependencyInjection;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Wpf.Ui.Controls;
 
 namespace DCRManagement.UI.Views;
 
-// ── Thumbnail view model ──────────────────────────────────────────────────────
+// ── Tile view model ───────────────────────────────────────────────────────────
 
-public sealed record ImageThumbVm
+public sealed class ImageTileVm : System.ComponentModel.INotifyPropertyChanged
 {
-    public int       Index     { get; init; }
-    public int       ImageId   { get; init; }   // DB id (0 = not yet saved)
-    public string    FileName  { get; init; } = string.Empty;
-    public BitmapImage Thumbnail { get; init; } = null!;
-    public byte[]    FullData  { get; init; } = [];  // full-res bytes
+    private bool _isSelected;
+    private double _tileSize = 140;
+
+    public int         Index        { get; set; }
+    public string      FileName     { get; init; } = string.Empty;
+    public BitmapImage Thumbnail    { get; init; } = null!;
+    public byte[]      FullData     { get; init; } = [];
+    public string      DisplayIndex => (Index + 1).ToString();
+
+    public double TileSize
+    {
+        get => _tileSize;
+        set { _tileSize = value; OnPropertyChanged(nameof(TileSize)); }
+    }
+
+    public bool IsSelected
+    {
+        get => _isSelected;
+        set { _isSelected = value; OnPropertyChanged(nameof(IsSelected)); }
+    }
+
+    public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
+    private void OnPropertyChanged(string name) =>
+        PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(name));
 }
 
 // ── UserControl ───────────────────────────────────────────────────────────────
 
 public partial class DCRImagePanelView : UserControl
 {
-    private readonly List<ImageThumbVm> _images = [];
-    private int _selectedIndex = -1;
+    private readonly List<ImageTileVm> _tiles = [];
+    private int    _selectedIndex = -1;
+    private double _tileSize      = 140;
 
-    // Raised when images are added/removed so DCRDetailView can mark dirty
+    /// <summary>Raised when images are added/removed — parent can mark dirty.</summary>
     public event EventHandler? ImagesChanged;
 
-    public DCRImagePanelView()
-    {
-        InitializeComponent();
-        KeyDown += OnKeyDown;
-        Focusable = true;
-    }
-
-    // ── Public API ────────────────────────────────────────────────────────────
-
+    /// <summary>Gallery label shown in the toolbar (e.g. "Before" / "After").</summary>
     public string GalleryTitle
     {
         get => GalleryTitleText.Text;
         set => GalleryTitleText.Text = value;
     }
 
-    /// <summary>Load images from byte arrays (called by DCRDetailView after DB load).</summary>
-    public void LoadImages(IEnumerable<(string FileName, byte[] Data)> items)
+    public DCRImagePanelView()
     {
-        _images.Clear();
-        int idx = 0;
-        foreach (var (name, data) in items)
-            _images.Add(BuildVm(idx++, 0, name, data));
-
-        Refresh();
-        SelectImage(0);
+        InitializeComponent();
+        Focusable = true;
+        KeyDown  += OnKeyDown;
     }
 
-    /// <summary>Returns all current images as (FileName, Data) pairs for saving.</summary>
+    // ── Public API ────────────────────────────────────────────────────────────
+
+    /// <summary>Load images from byte arrays (called after DB load).</summary>
+    public void LoadImages(IEnumerable<(string FileName, byte[] Data)> items)
+    {
+        _tiles.Clear();
+        int i = 0;
+        foreach (var (name, data) in items)
+            _tiles.Add(BuildTile(i++, name, data));
+        Refresh();
+        Select(0);
+    }
+
+    /// <summary>Returns all current images for saving.</summary>
     public IReadOnlyList<(string FileName, byte[] Data)> GetImages() =>
-        _images.Select(v => (v.FileName, v.FullData)).ToList();
+        _tiles.Select(t => (t.FileName, t.FullData)).ToList();
 
     public void ClearImages()
     {
-        _images.Clear();
+        _tiles.Clear();
         Refresh();
     }
 
@@ -79,75 +96,108 @@ public partial class DCRImagePanelView : UserControl
             Multiselect = true
         };
         if (ofd.ShowDialog() != true) return;
-
         foreach (var path in ofd.FileNames)
         {
-            try
-            {
-                var data = File.ReadAllBytes(path);
-                AddImageBytes(Path.GetFileName(path), data);
-            }
+            try { AddBytes(System.IO.Path.GetFileName(path), File.ReadAllBytes(path)); }
             catch { /* skip bad files */ }
         }
     }
 
-    private void PasteButton_Click(object sender, RoutedEventArgs e) => PasteFromClipboard();
+    private void PasteButton_Click(object sender, RoutedEventArgs e) => PasteClipboard();
 
-    private void DeleteButton_Click(object sender, RoutedEventArgs e)
-    {
-        if (_selectedIndex < 0 || _selectedIndex >= _images.Count) return;
-        _images.RemoveAt(_selectedIndex);
-        Refresh();
-        SelectImage(Math.Min(_selectedIndex, _images.Count - 1));
-        ImagesChanged?.Invoke(this, EventArgs.Empty);
-    }
+    private void DeleteButton_Click(object sender, RoutedEventArgs e) => DeleteSelected();
 
     private void ExpandButton_Click(object sender, RoutedEventArgs e)
     {
-        if (_images.Count == 0) return;
-        OpenLightbox(_selectedIndex);
+        // Find sibling DCRImagePanelView (Before/After) for side-by-side
+        var sibling = FindSiblingPanel();
+        var lb = new ImageLightboxWindow(_tiles, _selectedIndex, sibling?._tiles);
+        lb.Owner = Window.GetWindow(this);
+        lb.ShowDialog();
     }
 
-    // ── Navigation ────────────────────────────────────────────────────────────
+    private void ZoomSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        _tileSize = e.NewValue;
+        foreach (var t in _tiles) t.TileSize = _tileSize;
+    }
 
-    private void PrevButton_Click(object sender, RoutedEventArgs e) =>
-        SelectImage(_selectedIndex - 1);
+    // ── Tile interaction ──────────────────────────────────────────────────────
 
-    private void NextButton_Click(object sender, RoutedEventArgs e) =>
-        SelectImage(_selectedIndex + 1);
-
-    private void Thumbnail_Click(object sender, MouseButtonEventArgs e)
+    private void Tile_Click(object sender, MouseButtonEventArgs e)
     {
         if (sender is FrameworkElement fe && fe.Tag is int idx)
-            SelectImage(idx);
+        {
+            Select(idx);
+            if (e.ClickCount >= 2)
+            {
+                var lb = new ImageLightboxWindow(_tiles, idx, null);
+                lb.Owner = Window.GetWindow(this);
+                lb.ShowDialog();
+            }
+        }
     }
 
-    private void MainImage_DoubleClick(object sender, MouseButtonEventArgs e)
+    private void TileDelete_Click(object sender, RoutedEventArgs e)
     {
-        if (e.ClickCount >= 2) OpenLightbox(_selectedIndex);
+        if (sender is FrameworkElement fe && fe.Tag is int idx)
+        {
+            e.Handled = true;
+            _tiles.RemoveAt(idx);
+            Refresh();
+            Select(Math.Min(idx, _tiles.Count - 1));
+            ImagesChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
+
+    // ── Keyboard ──────────────────────────────────────────────────────────────
 
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-        if (e.Key == Keys.Left  || e.Key == Keys.Up)   { SelectImage(_selectedIndex - 1); e.Handled = true; }
-        if (e.Key == Keys.Right || e.Key == Keys.Down)  { SelectImage(_selectedIndex + 1); e.Handled = true; }
-        if (e.Key == Keys.Delete)                        { DeleteButton_Click(sender, e);   e.Handled = true; }
-        if (e.Key == Keys.V && Keyboard.Modifiers == ModifierKeys.Control)
-        { PasteFromClipboard(); e.Handled = true; }
+        switch (e.Key)
+        {
+            case Key.Left:
+            case Key.Up:
+                Select(_selectedIndex - 1);
+                e.Handled = true;
+                break;
+            case Key.Right:
+            case Key.Down:
+                Select(_selectedIndex + 1);
+                e.Handled = true;
+                break;
+            case Key.Delete:
+                DeleteSelected();
+                e.Handled = true;
+                break;
+            case Key.V when Keyboard.Modifiers == ModifierKeys.Control:
+                PasteClipboard();
+                e.Handled = true;
+                break;
+            case Key.Enter:
+            case Key.Space:
+                if (_selectedIndex >= 0)
+                {
+                    var lb = new ImageLightboxWindow(_tiles, _selectedIndex, null);
+                    lb.Owner = Window.GetWindow(this);
+                    lb.ShowDialog();
+                }
+                e.Handled = true;
+                break;
+        }
     }
 
     // ── Core helpers ──────────────────────────────────────────────────────────
 
-    private void AddImageBytes(string fileName, byte[] data)
+    private void AddBytes(string fileName, byte[] data)
     {
-        var vm = BuildVm(_images.Count, 0, fileName, data);
-        _images.Add(vm);
+        _tiles.Add(BuildTile(_tiles.Count, fileName, data));
         Refresh();
-        SelectImage(_images.Count - 1);
+        Select(_tiles.Count - 1);
         ImagesChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    private void PasteFromClipboard()
+    private void PasteClipboard()
     {
         if (!Clipboard.ContainsImage()) return;
         try
@@ -157,116 +207,84 @@ public partial class DCRImagePanelView : UserControl
             enc.Frames.Add(BitmapFrame.Create(src));
             using var ms = new MemoryStream();
             enc.Save(ms);
-            AddImageBytes($"Paste_{DateTime.Now:yyyyMMdd_HHmmss}.png", ms.ToArray());
+            AddBytes($"Paste_{DateTime.Now:yyyyMMdd_HHmmss}.png", ms.ToArray());
         }
         catch { /* ignore */ }
     }
 
-    private void SelectImage(int index)
+    private void DeleteSelected()
     {
-        if (_images.Count == 0) { _selectedIndex = -1; UpdateMainViewer(); return; }
-        _selectedIndex = Math.Max(0, Math.Min(index, _images.Count - 1));
-        UpdateMainViewer();
-        HighlightThumbnail(_selectedIndex);
+        if (_selectedIndex < 0 || _selectedIndex >= _tiles.Count) return;
+        _tiles.RemoveAt(_selectedIndex);
+        Refresh();
+        Select(Math.Min(_selectedIndex, _tiles.Count - 1));
+        ImagesChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    private void UpdateMainViewer()
+    private void Select(int index)
     {
-        bool hasImages = _images.Count > 0 && _selectedIndex >= 0;
-
-        EmptyState.Visibility  = hasImages ? Visibility.Collapsed : Visibility.Visible;
-        MainImage.Visibility   = hasImages ? Visibility.Visible   : Visibility.Collapsed;
-        PrevButton.Visibility  = hasImages && _images.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
-        NextButton.Visibility  = hasImages && _images.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
-        IndexBadge.Visibility  = hasImages && _images.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
-        DeleteButton.IsEnabled = hasImages;
-
-        if (!hasImages) { MainImage.Source = null; return; }
-
-        var vm = _images[_selectedIndex];
-        MainImage.Source = vm.Thumbnail;   // use full-res for main view
-        IndexText.Text   = $"{_selectedIndex + 1} / {_images.Count}";
+        foreach (var t in _tiles) t.IsSelected = false;
+        if (_tiles.Count == 0) { _selectedIndex = -1; UpdateDeleteButton(); return; }
+        _selectedIndex = Math.Max(0, Math.Min(index, _tiles.Count - 1));
+        _tiles[_selectedIndex].IsSelected = true;
+        UpdateDeleteButton();
     }
 
-    private void HighlightThumbnail(int index)
-    {
-        // Walk ItemsControl visual tree to update border colors
-        for (int i = 0; i < ThumbnailList.Items.Count; i++)
-        {
-            var container = ThumbnailList.ItemContainerGenerator.ContainerFromIndex(i);
-            if (container is not ContentPresenter cp) continue;
-            if (VisualTreeHelper.GetChildrenCount(cp) == 0) continue;
-            var border = VisualTreeHelper.GetChild(cp, 0) as Border;
-            if (border is null) continue;
-            border.BorderBrush = i == index
-                ? (Brush)FindResource("PrimaryBrush")
-                : Brushes.Transparent;
-        }
-    }
+    private void UpdateDeleteButton() =>
+        DeleteButton.IsEnabled = _selectedIndex >= 0 && _tiles.Count > 0;
 
     private void Refresh()
     {
-        // Rebuild index on each vm
-        for (int i = 0; i < _images.Count; i++)
+        // Re-index
+        for (int i = 0; i < _tiles.Count; i++)
         {
-            var old = _images[i];
-            _images[i] = old with { Index = i };
+            _tiles[i].Index    = i;
+            _tiles[i].TileSize = _tileSize;
         }
 
-        ThumbnailList.ItemsSource = null;
-        ThumbnailList.ItemsSource = _images;
+        bool hasImages = _tiles.Count > 0;
+        EmptyState.Visibility = hasImages ? Visibility.Collapsed : Visibility.Visible;
+        ImageGrid.Visibility  = hasImages ? Visibility.Visible   : Visibility.Collapsed;
 
-        CountText.Text = _images.Count.ToString();
-        CountBadge.Background = _images.Count > 0
-            ? (Brush)FindResource("PrimaryBrush")
-            : (Brush)FindResource("MutedTextBrush");
+        ImageGrid.ItemsSource = null;
+        ImageGrid.ItemsSource = _tiles;
+
+        CountText.Text = _tiles.Count.ToString();
+        CountBadge.Background = _tiles.Count > 0
+            ? (System.Windows.Media.Brush)FindResource("PrimaryBrush")
+            : (System.Windows.Media.Brush)FindResource("MutedTextBrush");
     }
 
-    // ── Lightbox popup ────────────────────────────────────────────────────────
-
-    private void OpenLightbox(int startIndex)
+    /// <summary>
+    /// Finds the sibling DCRImagePanelView in the same parent Grid
+    /// (used for side-by-side fullscreen).
+    /// </summary>
+    private DCRImagePanelView? FindSiblingPanel()
     {
-        if (_images.Count == 0) return;
-        var lb = new ImageLightboxWindow(_images, startIndex);
-        lb.Owner = Window.GetWindow(this);
-        lb.ShowDialog();
+        if (Parent is not System.Windows.Controls.Panel panel) return null;
+        return panel.Children.OfType<DCRImagePanelView>()
+                              .FirstOrDefault(p => p != this);
     }
 
     // ── Factory ───────────────────────────────────────────────────────────────
 
-    private static ImageThumbVm BuildVm(int index, int dbId, string fileName, byte[] data)
-    {
-        var bmp = LoadBitmap(data);
-        return new ImageThumbVm
-        {
-            Index     = index,
-            ImageId   = dbId,
-            FileName  = fileName,
-            Thumbnail = bmp,
-            FullData  = data
-        };
-    }
-
-    private static BitmapImage LoadBitmap(byte[] data)
+    private ImageTileVm BuildTile(int index, string fileName, byte[] data)
     {
         var bmp = new BitmapImage();
         bmp.BeginInit();
-        bmp.StreamSource    = new MemoryStream(data);
-        bmp.CacheOption     = BitmapCacheOption.OnLoad;
-        bmp.CreateOptions   = BitmapCreateOptions.None;
+        bmp.StreamSource  = new MemoryStream(data);
+        bmp.CacheOption   = BitmapCacheOption.OnLoad;
+        bmp.CreateOptions = BitmapCreateOptions.None;
         bmp.EndInit();
         bmp.Freeze();
-        return bmp;
-    }
-}
 
-// ── Keyboard key alias (avoid System.Windows.Forms dependency) ────────────────
-file static class Keys
-{
-    public const Key Left   = Key.Left;
-    public const Key Right  = Key.Right;
-    public const Key Up     = Key.Up;
-    public const Key Down   = Key.Down;
-    public const Key Delete = Key.Delete;
-    public const Key V      = Key.V;
+        return new ImageTileVm
+        {
+            Index    = index,
+            FileName = fileName,
+            Thumbnail = bmp,
+            FullData  = data,
+            TileSize  = _tileSize
+        };
+    }
 }
