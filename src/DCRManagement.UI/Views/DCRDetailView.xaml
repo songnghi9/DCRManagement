@@ -20,7 +20,7 @@
             -->
             <Border
                 Grid.Row="0"
-                Height="68"
+                Height="45"
                 Background="{StaticResource SurfaceMutedBrush}"
                 BorderBrush="{StaticResource BorderBrush}"
                 BorderThickness="0,0,0,1">
@@ -80,7 +80,7 @@
                             Click="EditButton_Click"
                             Content="Edit"
                             CornerRadius="{StaticResource ButtonCornerRadius}"
-                            Icon="{ui:SymbolIcon Edit24}" />
+                            Icon="{ui:SymbolIcon Edit28}" />
                         <ui:Button
                             x:Name="SubmitButton"
                             Margin="8,0,0,0"
@@ -118,9 +118,10 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <!--  Form strip — fixed-width narrow cols, wider cols for Drawing/Machine
-                          Change log no: 130  Category: 130  Drawing no: *  Machine Model: *
-                          Raised by: 160  Raised date: 110
+                    <!--
+                        Form strip — fixed-width narrow cols, wider cols for Drawing/Machine
+                        Change log no: 130  Category: 130  Drawing no: *  Machine Model: *
+                        Raised by: 160  Raised date: 110
                     -->
                     <Border
                         Grid.Row="0"
@@ -130,12 +131,18 @@
                         BorderThickness="0,0,0,1">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="130" />  <!-- Change log no. -->
-                                <ColumnDefinition Width="130" />  <!-- Category -->
-                                <ColumnDefinition Width="*" />    <!-- Drawing no. -->
-                                <ColumnDefinition Width="*" />    <!-- Machine Model -->
-                                <ColumnDefinition Width="160" />  <!-- Raised by -->
-                                <ColumnDefinition Width="110" />  <!-- Raised date -->
+                                <ColumnDefinition Width="130" />  
+                                <!--  Change log no.  -->
+                                <ColumnDefinition Width="130" />  
+                                <!--  Category  -->
+                                <ColumnDefinition Width="*" />    
+                                <!--  Drawing no.  -->
+                                <ColumnDefinition Width="*" />    
+                                <!--  Machine Model  -->
+                                <ColumnDefinition Width="160" />  
+                                <!--  Raised by  -->
+                                <ColumnDefinition Width="110" />  
+                                <!--  Raised date  -->
                             </Grid.ColumnDefinitions>
 
                             <!--  Change log no. — read-only  -->
@@ -165,16 +172,14 @@
                             <!--  Drawing no. — flexible width  -->
                             <StackPanel Grid.Column="2" Margin="0,0,8,0">
                                 <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Drawing no." />
-                                <ui:TextBox x:Name="DrawingNoTextBox"
-                                            PlaceholderText="e.g. 12100520"/>
+                                <ui:TextBox x:Name="DrawingNoTextBox" PlaceholderText="e.g. 12100520" />
                             </StackPanel>
 
                             <!--  Machine Model — flexible width  -->
                             <StackPanel Grid.Column="3" Margin="0,0,8,0">
                                 <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Machine Model" />
-                                <ui:TextBox x:Name="MachineTextBox"
-                                            PlaceholderText="e.g. JSV6-EMU" />
-                                            
+                                <ui:TextBox x:Name="MachineTextBox" PlaceholderText="e.g. JSV6-EMU" />
+
                             </StackPanel>
 
                             <!--  Raised by — read-only  -->
@@ -254,7 +259,8 @@
                         <Border
                             Grid.Column="0"
                             Margin="0,0,1,0"
-                            Style="{StaticResource ImageCanvasStyle}" CornerRadius="2,2,2,2">
+                            CornerRadius="2,2,2,2"
+                            Style="{StaticResource ImageCanvasStyle}">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="42" />
@@ -347,11 +353,11 @@
                                         <TextBox
                                             x:Name="LeadTimeMemoBox"
                                             Height="64"
-                                            Padding="10,8"
+                                            Padding="10,8,10,8"
                                             VerticalContentAlignment="Top"
                                             AcceptsReturn="True"
                                             TextWrapping="Wrap"
-                                            VerticalScrollBarVisibility="Auto" />
+                                            VerticalScrollBarVisibility="Auto" Grid.IsSharedSizeScope="True" />
                                     </StackPanel>
 
                                     <!--  2. Safety  -->
@@ -412,13 +418,13 @@
 
                                     <!--  Saving + Cost metrics  -->
                                     <Grid Margin="0,4,0,0">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
 
                                         <!--  Saving  -->
-                                        <StackPanel Grid.Column="0" Margin="0,0,6,0">
+                                        <StackPanel Grid.Row="0" Margin="0,0,0,12">
                                             <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Saving" />
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
@@ -429,7 +435,7 @@
                                                     x:Name="SavingTextBox"
                                                     Grid.Column="0"
                                                     Margin="0,0,4,0"
-                                                    PlaceholderText="0"/>
+                                                    PlaceholderText="0" />
                                                 <ComboBox
                                                     x:Name="SavingCurrencyComboBox"
                                                     Grid.Column="1"
@@ -443,7 +449,7 @@
                                         </StackPanel>
 
                                         <!--  Cost  -->
-                                        <StackPanel Grid.Column="1">
+                                        <StackPanel Grid.Row="1">
                                             <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Cost" />
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
@@ -477,7 +483,7 @@
 
                                 <!--  ── DCR Decision ──  -->
                                 <StackPanel>
-                                    <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="DCR Decision" />
+                                    <!--<TextBlock Style="{StaticResource SectionHeaderStyle}" Text="DCR Decision" />-->
 
                                     <!--  Suggestion  -->
                                     <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Suggestion" />
@@ -501,7 +507,7 @@
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
 
-                                        <!-- Col 0: Decision ComboBox -->
+                                        <!--  Col 0: Decision ComboBox  -->
                                         <StackPanel Grid.Column="0" Margin="0,0,6,0">
                                             <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Decision" />
                                             <ComboBox x:Name="ConsultantDecisionComboBox">
@@ -512,29 +518,29 @@
                                             </ComboBox>
                                         </StackPanel>
 
-                                        <!-- Col 1: Date — CalendarDatePicker same height as ComboBox -->
+                                        <!--  Col 1: Date — CalendarDatePicker same height as ComboBox  -->
                                         <StackPanel Grid.Column="1">
                                             <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Date" />
-                                            <!-- Grid overlay: CalendarDatePicker + placeholder TextBlock -->
+                                            <!--  Grid overlay: CalendarDatePicker + placeholder TextBlock  -->
                                             <Grid MinHeight="36">
-                                                <!-- CalendarDatePicker fills the cell — icon pinned to right -->
+                                                <!--  CalendarDatePicker fills the cell — icon pinned to right  -->
                                                 <ui:CalendarDatePicker
                                                     x:Name="DecisionDatePicker"
+                                                    MinHeight="36"
+                                                    Padding="0,0,8,0"
                                                     HorizontalAlignment="Stretch"
                                                     HorizontalContentAlignment="Right"
-                                                    Padding="0,0,8,0"
-                                                    MinHeight="36"
                                                     IsTodayHighlighted="True" />
-                                                <!-- Placeholder text — left-aligned, does not block clicks -->
+                                                <!--  Placeholder text — left-aligned, does not block clicks  -->
                                                 <TextBlock
                                                     x:Name="DecisionDatePlaceholder"
-                                                    Text="Select date…"
+                                                    Margin="12,0,32,0"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
                                                     FontSize="13"
                                                     Foreground="{StaticResource MutedTextBrush}"
-                                                    Margin="12,0,32,0"
-                                                    VerticalAlignment="Center"
-                                                    HorizontalAlignment="Left"
                                                     IsHitTestVisible="False"
+                                                    Text="Select date…"
                                                     Visibility="Visible" />
                                             </Grid>
                                         </StackPanel>
@@ -618,7 +624,7 @@
                             VerticalAlignment="Center"
                             DockPanel.Dock="Left"
                             FontWeight="SemiBold"
-                            Text="Approval / Comments" />
+                            Text="Approval / Comments" Margin="0,0,5,0" />
                         <ui:Button
                             x:Name="ToggleApprovalButton"
                             Click="ToggleApprovalButton_Click"

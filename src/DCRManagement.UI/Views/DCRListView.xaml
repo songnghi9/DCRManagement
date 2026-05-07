@@ -179,20 +179,20 @@
                         Click="EditButton_Click"
                         Content="Edit"
                         CornerRadius="{StaticResource ButtonCornerRadius}"
-                        Icon="{ui:SymbolIcon Edit24}" />
+                        Icon="{ui:SymbolIcon Edit28}" />
                     <ui:Button
                         MinWidth="110"
                         Appearance="Primary"
                         Click="CreateButton_Click"
                         Content="New DCR"
                         CornerRadius="{StaticResource ButtonCornerRadius}"
-                        Icon="{ui:SymbolIcon Add24}" />
+                        Icon="{ui:SymbolIcon AddCircle20}" />
                 </StackPanel>
             </Grid>
         </Border>
 
         <!--  ── Selection summary bar (shown when rows are checked) ──  -->
-        <Border
+        <!--<Border
             x:Name="SelectionBar"
             Grid.Row="1"
             Margin="0,0,0,10"
@@ -230,7 +230,7 @@
                         CornerRadius="{StaticResource ButtonCornerRadius}" />
                 </StackPanel>
             </DockPanel>
-        </Border>
+        </Border>-->
 
         <!--  ── DCR DataGrid ──  -->
         <Border
@@ -272,9 +272,9 @@
                         CanUserResize="False"
                         CanUserSort="False"
                         CellStyle="{StaticResource CheckBoxCellStyle}">
-                        <DataGridTemplateColumn.HeaderTemplate>
+                        <!--<DataGridTemplateColumn.HeaderTemplate>
                             <DataTemplate>
-                                <!--  Select-all checkbox in header  -->
+                                --><!--  Select-all checkbox in header  --><!--
                                 <CheckBox
                                     x:Name="SelectAllCheckBox"
                                     HorizontalAlignment="Center"
@@ -282,7 +282,7 @@
                                     Click="SelectAllCheckBox_Click"
                                     ToolTip="Select / deselect all" />
                             </DataTemplate>
-                        </DataGridTemplateColumn.HeaderTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>-->
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox

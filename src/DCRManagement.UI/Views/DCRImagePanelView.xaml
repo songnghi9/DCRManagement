@@ -5,209 +5,287 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Focusable="True">
 
-    <!--
-    ┌─ Image grid (Fill) ─────────────────────────────────────────────┐
-    │  [img][img][img]                                                 │
-    │  [img][img]                                                      │
-    │  (WrapPanel, tile size controlled by ZoomSlider)                │
-    ├─ Toolbar (Bottom, 44px) ────────────────────────────────────────┤
-    │  [Title][●N]  [🔍─────────────] [⛶][🗑][📋][+ Add]           │
-    └─────────────────────────────────────────────────────────────────┘
-    -->
-    <DockPanel Background="#EEF3F9">
+    <Grid>
+        <Grid.RowDefinitions>
+            <!-- Toolbar row -->
+            <RowDefinition Height="40" />
+            <!-- Content area -->
+            <RowDefinition Height="*" />
+            <!-- Thumbnail strip -->
+            <RowDefinition x:Name="ThumbStripRow" Height="76" />
+        </Grid.RowDefinitions>
 
-        <!-- ══ TOOLBAR — DockPanel.Dock=Bottom ══════════════════════════ -->
-        <Border DockPanel.Dock="Bottom"
+        <!-- ══ TOOLBAR ════════════════════════════════════════════════════════ -->
+        <Border Grid.Row="0"
                 Background="White"
                 BorderBrush="{StaticResource BorderBrush}"
-                BorderThickness="0,1,0,0"
-                Height="44">
-            <DockPanel Margin="10,0" LastChildFill="False" VerticalAlignment="Center">
+                BorderThickness="0,0,0,1">
+            <DockPanel Margin="8,0" LastChildFill="False" VerticalAlignment="Center">
 
-                <!-- Left: gallery label + count badge -->
-                <StackPanel DockPanel.Dock="Left"
-                            Orientation="Horizontal"
-                            VerticalAlignment="Center">
+                <!-- Left: label + count + view-mode tabs -->
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
+
+                    <!-- Gallery label -->
                     <TextBlock x:Name="GalleryTitleText"
                                Text="Before"
                                FontWeight="SemiBold" FontSize="13"
                                Foreground="{StaticResource TextBrush}"
                                VerticalAlignment="Center" />
+
+                    <!-- Count badge -->
                     <Border x:Name="CountBadge"
-                            Margin="7,0,0,0"
+                            Margin="6,0,12,0"
                             Background="{StaticResource PrimaryBrush}"
                             CornerRadius="10" Padding="7,2"
                             VerticalAlignment="Center">
-                        <TextBlock x:Name="CountText"
-                                   Text="0" FontSize="11" FontWeight="Bold"
-                                   Foreground="White" />
+                        <TextBlock x:Name="CountText" Text="0"
+                                   FontSize="11" FontWeight="Bold" Foreground="White" />
                     </Border>
+
+                    <!-- View-mode tabs -->
+                    <Border x:Name="TabSingle"
+                            CornerRadius="5" Padding="7,3" Margin="0,0,3,0"
+                            BorderThickness="1" BorderBrush="{StaticResource BorderStrongBrush}"
+                            Cursor="Hand" MouseLeftButtonDown="TabSingle_Click">
+                        <ui:SymbolIcon Symbol="Image24" FontSize="13" />
+                    </Border>
+                    <Border x:Name="TabGrid2"
+                            CornerRadius="5" Padding="7,3" Margin="0,0,3,0"
+                            BorderThickness="1" BorderBrush="{StaticResource BorderStrongBrush}"
+                            Cursor="Hand" MouseLeftButtonDown="TabGrid2_Click">
+                        <ui:SymbolIcon Symbol="Grid24" FontSize="13" />
+                    </Border>
+                    <Border x:Name="TabGrid3"
+                            CornerRadius="5" Padding="7,3" Margin="0,0,3,0"
+                            BorderThickness="1" BorderBrush="{StaticResource BorderStrongBrush}"
+                            Cursor="Hand" MouseLeftButtonDown="TabGrid3_Click">
+                        <ui:SymbolIcon Symbol="Apps24" FontSize="13" />
+                    </Border>
+                    <Border x:Name="TabStrip"
+                            CornerRadius="5" Padding="7,3" Margin="0,0,8,0"
+                            BorderThickness="1" BorderBrush="{StaticResource BorderStrongBrush}"
+                            Cursor="Hand" MouseLeftButtonDown="TabStrip_Click">
+                        <ui:SymbolIcon Symbol="TextAlignLeft24" FontSize="13" />
+                    </Border>
+
+                    <!-- Selection hint -->
+                    <TextBlock x:Name="SelectionHint"
+                               FontSize="11" Foreground="{StaticResource PrimaryBrush}"
+                               VerticalAlignment="Center"
+                               Visibility="Collapsed" />
                 </StackPanel>
 
                 <!-- Right: zoom + actions -->
-                <StackPanel DockPanel.Dock="Right"
-                            Orientation="Horizontal"
-                            VerticalAlignment="Center">
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
 
-                    <!-- Zoom icon -->
-                    <ui:SymbolIcon Symbol="ZoomIn24" FontSize="14"
-                                   Foreground="{StaticResource MutedTextBrush}"
-                                   VerticalAlignment="Center"
-                                   Margin="0,0,4,0" />
+                    <!-- Zoom out -->
+                    <ui:Button Click="ZoomOut_Click" Padding="5,4" MinHeight="26"
+                               CornerRadius="5" Margin="0,0,2,0" ToolTip="Zoom out (-)">
+                        <ui:SymbolIcon Symbol="ZoomOut24" FontSize="12" />
+                    </ui:Button>
 
-                    <!-- Zoom slider: 80–320px tile size -->
+                    <!-- Zoom slider -->
                     <Slider x:Name="ZoomSlider"
-                            Width="90"
-                            Minimum="80" Maximum="320" Value="140"
-                            TickFrequency="20"
-                            IsSnapToTickEnabled="True"
-                            VerticalAlignment="Center"
-                            Margin="0,0,10,0"
-                            ValueChanged="ZoomSlider_ValueChanged"
-                            ToolTip="Tile size" />
+                            Width="80" Minimum="20" Maximum="300" Value="100"
+                            TickFrequency="25" IsSnapToTickEnabled="True"
+                            VerticalAlignment="Center" Margin="2,0"
+                            ValueChanged="ZoomSlider_ValueChanged" />
+
+                    <!-- Zoom in -->
+                    <ui:Button Click="ZoomIn_Click" Padding="5,4" MinHeight="26"
+                               CornerRadius="5" Margin="2,0,4,0" ToolTip="Zoom in (+)">
+                        <ui:SymbolIcon Symbol="ZoomIn24" FontSize="12" />
+                    </ui:Button>
+
+                    <!-- Zoom % label -->
+                    <TextBlock x:Name="ZoomLabel" Text="100%"
+                               FontSize="11" Foreground="{StaticResource MutedTextBrush}"
+                               VerticalAlignment="Center" Width="36" Margin="0,0,4,0" />
+
+                    <!-- Fit / Actual -->
+                    <ui:Button Click="ZoomFit_Click" Content="Fit"
+                               Padding="7,4" MinHeight="26" CornerRadius="5"
+                               Margin="0,0,2,0" ToolTip="Fit to window" />
+                    <ui:Button Click="ZoomActual_Click" Content="1:1"
+                               Padding="7,4" MinHeight="26" CornerRadius="5"
+                               Margin="0,0,6,0" ToolTip="Actual size" />
 
                     <!-- Separator -->
-                    <Border Width="1" Height="20"
-                            Background="{StaticResource BorderBrush}"
-                            Margin="0,0,8,0" VerticalAlignment="Center" />
+                    <Border Width="1" Height="18" Background="{StaticResource BorderBrush}"
+                            Margin="0,0,6,0" VerticalAlignment="Center" />
 
-                    <!-- Fullscreen / side-by-side -->
-                    <ui:Button x:Name="ExpandButton"
-                               ToolTip="Fullscreen / side-by-side view"
-                               Padding="7,5" MinHeight="30" CornerRadius="6"
-                               Margin="0,0,4,0"
-                               Click="ExpandButton_Click">
-                        <ui:SymbolIcon Symbol="ArrowExpand20" FontSize="14" />
+                    <!-- Side-by-side fullscreen -->
+                    <ui:Button Click="FullscreenSideBySide_Click"
+                               ToolTip="Before / After side-by-side fullscreen"
+                               Padding="7,4" MinHeight="26" CornerRadius="5"
+                               Margin="0,0,3,0">
+                        <ui:SymbolIcon Symbol="SplitHorizontal24" FontSize="13" />
                     </ui:Button>
 
-                    <!-- Delete selected -->
-                    <ui:Button x:Name="DeleteButton"
-                               ToolTip="Delete selected image"
-                               Padding="7,5" MinHeight="30" CornerRadius="6"
-                               Margin="0,0,4,0"
-                               IsEnabled="False"
-                               Click="DeleteButton_Click">
-                        <ui:SymbolIcon Symbol="Delete24" FontSize="14" />
+                    <!-- Single fullscreen -->
+                    <ui:Button x:Name="ExpandButton" Click="ExpandButton_Click"
+                               ToolTip="Fullscreen viewer"
+                               Padding="7,4" MinHeight="26" CornerRadius="5"
+                               Margin="0,0,3,0">
+                        <ui:SymbolIcon Symbol="ArrowExpand20" FontSize="13" />
                     </ui:Button>
 
-                    <!-- Paste from clipboard -->
-                    <ui:Button x:Name="PasteButton"
+                    <!-- Toggle thumb strip -->
+                    <ui:Button Click="ToggleThumbStrip_Click"
+                               ToolTip="Toggle thumbnail strip"
+                               Padding="7,4" MinHeight="26" CornerRadius="5"
+                               Margin="0,0,3,0">
+                        <ui:SymbolIcon Symbol="PanelBottom20" FontSize="13" />
+                    </ui:Button>
+
+                    <!-- Delete -->
+                    <ui:Button x:Name="DeleteButton" Click="DeleteButton_Click"
+                               ToolTip="Delete selected"
+                               Padding="7,4" MinHeight="26" CornerRadius="5"
+                               Margin="0,0,3,0" IsEnabled="False">
+                        <ui:SymbolIcon Symbol="Delete24" FontSize="13" />
+                    </ui:Button>
+
+                    <!-- Paste -->
+                    <ui:Button Click="PasteButton_Click"
                                ToolTip="Paste from clipboard (Ctrl+V)"
-                               Padding="7,5" MinHeight="30" CornerRadius="6"
-                               Margin="0,0,6,0"
-                               Click="PasteButton_Click">
-                        <ui:SymbolIcon Symbol="ClipboardPaste24" FontSize="14" />
+                               Padding="7,4" MinHeight="26" CornerRadius="5"
+                               Margin="0,0,4,0">
+                        <ui:SymbolIcon Symbol="ClipboardPaste24" FontSize="13" />
                     </ui:Button>
 
-                    <!-- Add from file -->
-                    <ui:Button x:Name="AddButton"
-                               Content="Add"
-                               Appearance="Primary"
-                               Padding="12,5" MinHeight="30" CornerRadius="6"
-                               Click="AddButton_Click"
-                               Icon="{ui:SymbolIcon Add24}" />
+                    <!-- Add -->
+                    <ui:Button x:Name="AddButton" Click="AddButton_Click"
+                               Content="Add" Appearance="Primary"
+                               Padding="12,4" MinHeight="26" CornerRadius="5"
+                               Icon="{ui:SymbolIcon AddCircle20}" />
                 </StackPanel>
             </DockPanel>
         </Border>
 
-        <!-- ══ IMAGE GRID — Fill ══════════════════════════════════════════ -->
-        <ScrollViewer VerticalScrollBarVisibility="Auto"
-                      HorizontalScrollBarVisibility="Disabled"
-                      Padding="8,8,8,4">
-            <Grid>
+        <!-- ══ CONTENT AREA ═══════════════════════════════════════════════════ -->
+        <Grid Grid.Row="1" Background="#EEF3F9">
+
+            <!-- ── SINGLE VIEW ── -->
+            <Grid x:Name="SingleViewPanel">
                 <!-- Empty state -->
                 <StackPanel x:Name="EmptyState"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            MinHeight="160"
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
                             Visibility="Visible">
-                    <ui:SymbolIcon Symbol="Image24" FontSize="44"
+                    <ui:SymbolIcon Symbol="Image24" FontSize="48"
                                    Foreground="{StaticResource MutedTextBrush}"
                                    HorizontalAlignment="Center" />
-                    <TextBlock Text="No images"
-                               FontSize="13"
+                    <TextBlock Text="No images" FontSize="14"
                                Foreground="{StaticResource MutedTextBrush}"
-                               HorizontalAlignment="Center"
-                               Margin="0,10,0,4" />
-                    <TextBlock Text="Click Add or paste (Ctrl+V)"
-                               FontSize="11"
+                               HorizontalAlignment="Center" Margin="0,12,0,4" />
+                    <TextBlock Text="Click Add or paste (Ctrl+V)" FontSize="11"
                                Foreground="{StaticResource MutedTextBrush}"
                                HorizontalAlignment="Center" />
                 </StackPanel>
 
-                <!-- Tile grid — WrapPanel so tiles reflow on resize -->
-                <ItemsControl x:Name="ImageGrid"
+                <!-- Main image scroll -->
+                <ScrollViewer x:Name="MainScrollViewer"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto"
                               Visibility="Collapsed">
+                    <Image x:Name="MainImage"
+                           Stretch="None"
+                           RenderOptions.BitmapScalingMode="HighQuality"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           MouseLeftButtonDown="MainImage_DoubleClick" />
+                </ScrollViewer>
+
+                <!-- Prev / Next -->
+                <Button x:Name="PrevButton" Content="‹"
+                        FontSize="26" FontWeight="Bold"
+                        Width="34" Height="56"
+                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Margin="6,0" Opacity="0.7"
+                        Background="#60FFFFFF" Foreground="{StaticResource TextBrush}"
+                        BorderThickness="0" Visibility="Collapsed"
+                        Click="PrevButton_Click" />
+                <Button x:Name="NextButton" Content="›"
+                        FontSize="26" FontWeight="Bold"
+                        Width="34" Height="56"
+                        HorizontalAlignment="Right" VerticalAlignment="Center"
+                        Margin="6,0" Opacity="0.7"
+                        Background="#60FFFFFF" Foreground="{StaticResource TextBrush}"
+                        BorderThickness="0" Visibility="Collapsed"
+                        Click="NextButton_Click" />
+
+                <!-- Index badge -->
+                <Border x:Name="IndexBadge"
+                        HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                        Margin="0,0,0,8" Background="#80000000"
+                        CornerRadius="10" Padding="10,3" Visibility="Collapsed">
+                    <TextBlock x:Name="IndexText" Text="1 / 1"
+                               FontSize="11" FontWeight="SemiBold" Foreground="White" />
+                </Border>
+            </Grid>
+
+            <!-- ── GRID VIEW (2 or 3 cols) ── -->
+            <ScrollViewer x:Name="GridViewPanel"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled"
+                          Visibility="Collapsed" Padding="4">
+                <WrapPanel x:Name="GridWrap" Orientation="Horizontal" />
+            </ScrollViewer>
+
+            <!-- ── STRIP VIEW ── -->
+            <ScrollViewer x:Name="StripViewPanel"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Disabled"
+                          Visibility="Collapsed" Padding="8,4">
+                <StackPanel x:Name="StripStack" Orientation="Horizontal"
+                            VerticalAlignment="Center" />
+            </ScrollViewer>
+        </Grid>
+
+        <!-- ══ THUMBNAIL STRIP ════════════════════════════════════════════════ -->
+        <Border x:Name="ThumbStripBorder"
+                Grid.Row="2"
+                Background="White"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="0,1,0,0">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Disabled"
+                          Margin="6,0">
+                <ItemsControl x:Name="ThumbnailList">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal" />
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Width="{Binding TileSize}"
-                                    Height="{Binding TileSize}"
-                                    Margin="4"
-                                    CornerRadius="8"
-                                    BorderThickness="2"
-                                    BorderBrush="Transparent"
-                                    Background="#D6E4F0"
-                                    Cursor="Hand"
-                                    ClipToBounds="True"
-                                    Tag="{Binding Index}"
-                                    MouseLeftButtonDown="Tile_Click">
-                                <Grid>
+                            <Grid Margin="0,4,6,4">
+                                <!-- Thumb border -->
+                                <Border Width="60" Height="60"
+                                        CornerRadius="6"
+                                        BorderThickness="2"
+                                        BorderBrush="Transparent"
+                                        Background="#D6E4F0"
+                                        ClipToBounds="True"
+                                        Cursor="Hand"
+                                        Tag="{Binding Index}"
+                                        MouseLeftButtonDown="Thumbnail_Click">
                                     <Image Source="{Binding Thumbnail}"
                                            Stretch="UniformToFill"
                                            RenderOptions.BitmapScalingMode="HighQuality" />
-
-                                    <!-- Selected ring -->
-                                    <Border BorderThickness="3"
-                                            CornerRadius="8"
-                                            BorderBrush="{StaticResource PrimaryBrush}">
-                                        <Border.Style>
-                                            <Style TargetType="Border">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Border.Style>
-                                    </Border>
-
-                                    <!-- Index badge bottom-left -->
-                                    <Border HorizontalAlignment="Left"
-                                            VerticalAlignment="Bottom"
-                                            Margin="5"
-                                            Background="#80000000"
-                                            CornerRadius="4"
-                                            Padding="5,2">
-                                        <TextBlock Text="{Binding DisplayIndex}"
-                                                   FontSize="10" FontWeight="Bold"
-                                                   Foreground="White" />
-                                    </Border>
-
-                                    <!-- Delete button top-right -->
-                                    <Button HorizontalAlignment="Right"
-                                            VerticalAlignment="Top"
-                                            Margin="5"
-                                            Width="22" Height="22"
-                                            Background="#CCDC2626"
-                                            Foreground="White"
-                                            BorderThickness="0"
-                                            FontSize="11" FontWeight="Bold"
-                                            Content="✕"
-                                            Tag="{Binding Index}"
-                                            Click="TileDelete_Click" />
-                                </Grid>
-                            </Border>
+                                </Border>
+                                <!-- Multi-select checkbox -->
+                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                          HorizontalAlignment="Left" VerticalAlignment="Top"
+                                          Margin="2" Width="14" Height="14"
+                                          Checked="ThumbCheckBox_Changed"
+                                          Unchecked="ThumbCheckBox_Changed" />
+                            </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-            </Grid>
-        </ScrollViewer>
+            </ScrollViewer>
+        </Border>
 
-    </DockPanel>
+    </Grid>
 </UserControl>
