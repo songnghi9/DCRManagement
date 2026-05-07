@@ -6,15 +6,15 @@ namespace DCRManagement.UI.Views;
 
 public partial class ImageLightboxWindow : FluentWindow
 {
-    private readonly IReadOnlyList<ImageTileVm> _primary;
-    private readonly IReadOnlyList<ImageTileVm>? _secondary;  // sibling gallery (Before/After)
+    private readonly IReadOnlyList<ImageThumbVm> _primary;
+    private readonly IReadOnlyList<ImageThumbVm>? _secondary;  // sibling gallery (Before/After)
     private int  _current;
     private bool _sideBySide;
 
     public ImageLightboxWindow(
-        IReadOnlyList<ImageTileVm> primary,
+        IReadOnlyList<ImageThumbVm> primary,
         int startIndex,
-        IReadOnlyList<ImageTileVm>? secondary)
+        IReadOnlyList<ImageThumbVm>? secondary = null)
     {
         InitializeComponent();
         _primary   = primary;

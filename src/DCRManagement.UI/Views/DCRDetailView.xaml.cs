@@ -21,6 +21,10 @@ public partial class DCRDetailView : UserControl
     public event EventHandler? CloseRequested;
     public event EventHandler? DataChanged;
 
+    // Expose panels so SideBySideWindow can find them via FindParent
+    public DCRImagePanelView BeforePanel => BeforeImagePanel;
+    public DCRImagePanelView AfterPanel  => AfterImagePanel;
+
     public DCRDetailView(DCRService dcrService, WorkflowService workflowService, UserService userService)
     {
         InitializeComponent();
@@ -35,7 +39,19 @@ public partial class DCRDetailView : UserControl
             typeof(Wpf.Ui.Controls.CalendarDatePicker));
         dpd?.AddValueChanged(DecisionDatePicker, (_, _) => UpdateDateDisplay());
 
-        Loaded += (_, _) => UpdateDateDisplay();    }
+        Loaded += OnLoaded;
+    }
+
+    private void OnLoaded(object sender, RoutedEventArgs e)
+    {
+        UpdateDateDisplay();
+
+        // Wire up gallery panels
+        BeforeImagePanel.GalleryTitle = "Before";
+        AfterImagePanel.GalleryTitle  = "After";
+        BeforeImagePanel.SiblingPanel = AfterImagePanel;
+        AfterImagePanel.SiblingPanel  = BeforeImagePanel;
+    }
 
     private void UpdateDateDisplay()
     {
